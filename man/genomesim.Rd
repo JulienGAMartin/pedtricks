@@ -1,0 +1,85 @@
+\name{genomesim}
+\alias{genomesim}
+\title{A function to simulate QTL and/or SNP data.}
+\description{
+  Simulates a chromosome of arbitrary length with arbitrary numbers, types, and spacings of genetic loci over arbitrary pedigrees.
+}
+\usage{
+genomesim(pedigree, founders=NULL, positions=NULL, initHe=NULL, 
+             mutationType=NULL, mutationRate=NULL, phenotyped=NULL, 
+             founderHaplotypes=NULL, genotyped=NULL, returnG='n',
+             initFreqs=NULL)
+}
+\arguments{
+  \item{pedigree}{A pedigree}
+  \item{founders}{A vector of indicator variables denoting founder status (1=founder, 0=non-founder)}
+  \item{positions}{Genome locations in cM for markers}
+  \item{initHe}{Initial levels of expected heterozygosity}
+  \item{mutationType}{A vector of locus types - see details}
+  \item{mutationRate}{A vector of mutation rates}
+  \item{founderHaplotypes}{A matrix or dataframe containing founder haplotypes}
+  \item{phenotyped}{A vector of IDs of those individuals for which to return phenotypic data}
+  \item{genotyped}{A vector of IDs of those individuals for which to return genotypic data}
+  \item{returnG}{If 'y' then genotypic data for all loci (including \code{cIAM} loci) will be returned.}
+  \item{initFreqs}{A list of allele frequencies for all loci.  If \code{initFreqs} is specified, it will override information from \code{initHe}.  \code{extractA} from package \code{MasterBayes} can be used to obtain obtain \code{initFreqs} form a sample of genotypes.  For \code{cIAM} loci, allele names in \code{initFreqs} should be allelic substitution effects.}
+}
+\details{
+  Valid mutation types are `Micro', `Dom', `dIAM' and `cIAM', for microsatellite, dominant (AFLP), discrete infinite alleles mutation model loci (SNPs), and continuous infinite alleles mutation model loci (polymorphisms effecting phenotypic variation).  cIAM loci have mutational allelic substitution effects taken drawn from a normal distribution with mean 0 and variance 1.
+}
+\value{
+  \item{Phenotypes}{A vector of phenotypes.  Calculated as the sum of all allelic effects.  Scaling is currently left to be done post-hoc.}
+  \item{MarkerData}{A vector of marker genotypes, i.e. alleles at all loci except those designated `cIAM'}
+}
+\references{Morrissey, M.B, and A.J. Wilson, 2009. pedantics, an R package for pedigree-based genetic simulation, and pedigree manipulation, characterisation, and viewing. Molecular Ecology Resources.}
+\author{Michael Morrissey \email{michael.morrissey@st-andrews.ac.uk}}
+\seealso{\code{\link{phensim}}}
+\examples{
+testData<-as.data.frame(matrix(c(
+1,	NA,	NA,	1,	1,	1,	2,	2,
+2,	NA,	NA,	1,	1,	1,	2,	2,
+3,	NA,	NA,	1,	1,	1,	2,	2,
+4,	NA,	NA,	1,	0,	1,	2,	2,
+5,	NA,	NA,	1,	0,	1,	2,	2,
+6,	1,	4,	0,	-1,	2,	3,	3,
+7,	1,	4,	0,	-1,	2,	3,	3,
+8,	1,	4,	0,	-1,	2,	3,	3,
+9,	1,	4,	0,	-1,	2,	3,	3,
+10,	2,	5,	0,	-1,	2,	3,	3,
+11,	2,	5,	0,	-1,	2,	3,	3,
+12,	2,	5,	0,	-1,	2,	3,	3,
+13,	2,	5,	0,	-1,	2,	3,	3,
+14,	3,	5,	0,	-1,	2,	3,	3,
+15,	3,	5,	0,	-1,	2,	3,	3,
+16,	3,	5,	0,	-1,	2,	3,	3,
+17,	3,	5,	0,	-1,	2,	3,	3),
+17,8,byrow=TRUE))
+
+names(testData)<-c("id","dam","sire","founder","sex",
+                                   "cohort","first","last")
+pedigree<-as.data.frame(cbind(testData$id,testData$dam,
+                                            testData$sire))
+for(x in 1:3) pedigree[,x]<-as.factor(pedigree[,x])
+names(pedigree)<-c("id","dam","sire")
+pedigree
+
+##make up some microsatellite and gene allele frquencies:
+sampleGenotypes<-as.data.frame(matrix(c(
+                   1,2,-1.32,0.21,2,1,0.21,0.21),2,4,byrow=TRUE))
+testFreqs<-extractA(sampleGenotypes)
+
+## note that alleles at the gene locus are given as their
+## allelic substitution effects:
+testFreqs
+
+## simulate data for these indivdiuals based on a single QTL 
+## with two equally alleles with balanced frequencies in the 
+## founders, linked (2 cM) to a highly  polymorphic microsatellite:
+genomesim(pedigree=pedigree,founders=testData$founder,positions=c(0,2),
+     mutationType=c('Micro','cIAM'),mutationRate=c(0,0),
+     initFreqs=testFreqs,returnG='y')
+## since we specified returnG='y', we can check that 
+## the phenotypes add up to the
+## allelic substitution effects for the second locus.
+
+}
+\keyword{datagen}

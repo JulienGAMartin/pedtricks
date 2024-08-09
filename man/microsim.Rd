@@ -1,0 +1,64 @@
+\name{microsim}
+\alias{microsim}
+\title{Simulates microsatellite data across a pedigree.}
+\description{
+  Uses a pedgiree with parents identified for all non-founding
+individuas and simulates microsatellite genotypes
+}
+\usage{
+microsim(pedigree, genFreqs = NULL, genotypesSample = NULL, 
+        knownGenotypes = NULL,records = NULL, eRate1 = 0, 
+        eRate2 = 0, eRate3 = 0)
+}
+\arguments{
+  \item{pedigree}{A pedigree}
+  \item{genFreqs}{(optional) A list of allele frequencies, can be produced with \code{extractA} in \code{MasterBayes}}
+  \item{genotypesSample}{(required if \code{genFreqs} is not supplied) a sample of genotypes from which to estimate population allele frequencies}
+  \item{knownGenotypes}{(not yet implemented) a data frame of genotypes for (potentially a subset) of founder individuals}
+  \item{records}{Record availability, see details.}
+  \item{eRate1}{The rate of genotypic substitution errors, i.e., when a true genotype at a given locus is replaced by a pair of alleles selected at random based on the population allele frequencies}
+  \item{eRate2}{The rate of allelic substitution errors, i.e. when an allele is erroneously replaced at a given locus by an allele chosen at random based on the population allele frequencies}
+  \item{eRate3}{The rate of large allele dropouts, simulated by setting the value of the larger allele at a locus to the value of the smaller allele}
+}
+\details{
+  Error rates and data availability rates can be specified as either (1) single values to be applied to all individuals and all loci, (2) as a vector the same length as the number of loci, representing locus-specific rates to be applied uniformly to all individuals, or (3) as data frames with rows for each individual and columns for each locus.  In the third option, observed patterns of data availability can be simulated by supplying 0s and 1s for missing and available individual genotypes, respectively.
+}
+\value{
+  \item{trueGenotypes}{A data frame of true genotypes}
+  \item{observedGenotypes}{A data frame of plausible observed genotypes, given specified patterns of missingness and errors.}
+}
+\references{Morrissey et al. 2007. Journal of Evolutionary Biology 20:2309-2321., Morrissey, M.B, and A.J. Wilson, 2009. pedantics, an R package for pedigree-based genetic simulation, and pedigree manipulation, characterisation, and viewing. Molecular Ecology Resources.}
+\author{Michael Morrissey \email{michael.morrissey@ed.ac.uk}}
+\examples{
+pedigree<-as.data.frame(matrix(c(
+"m1",	NA,	NA,
+"m2",	NA,	NA,
+"m3",	NA,	NA,
+"d4",	NA,	NA,
+"d5",	NA,	NA,
+"o6",	"m1",	"d4",
+"o7",	"m1",	"d4",
+"o8",	"m1",	"d4",
+"o9",	"m1",	"d4",
+"o10",	"m2",	"d5",
+"o11",	"m2",	"d5",
+"o12",	"m2",	"d5",
+"o13",	"m2",	"d5",
+"o14",	"m3",	"d5",
+"o15",	"m3",	"d5",
+"o16",	"m3",	"d5",
+"o17",	"m3",	"d5"),17,3,byrow=TRUE))
+names(pedigree)<-c("id","dam","sire")
+for(x in 1:3) pedigree[,x]<-as.factor(pedigree[,x])
+
+## some sample genotypes, very simple, two markers with He = 0.5
+sampleGenotypes<-as.data.frame(matrix(c(
+                   1,2,1,2,2,1,2,1),2,4,byrow=TRUE))
+## locus names
+names(sampleGenotypes)<-c("loc1a","loc1b","loc2a","loc2b")
+
+## simulate some genotypes
+microsim(pedigree=pedigree,genotypesSample=sampleGenotypes)
+
+}
+\keyword{datagen}

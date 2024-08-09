@@ -1,12 +1,23 @@
-Package: pedtricks
-Title: What the Package Does (One Line, Title Case)
-Version: 0.0.0.9000
-Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
-Encoding: UTF-8
-Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.1
+Package: pedantix
+Type: Package
+Title: Functions to Facilitate Power and Sensitivity Analyses for
+        Genetic Studies of Natural Populations
+Version: 1.0.0
+Date: 2024-06-25
+Depends: 
+    R (>= 4.0),
+    MCMCglmm,
+    kinship2,
+    grid,
+    genetics
+Imports: mvtnorm
+Author: Michael Morrissey
+Maintainer: Julien Martin <julien.martin@uottawa.ca>
+Description: Functions for sensitivity and power analysis, for calculating statistics describing pedigrees from wild populations, and for viewing pedigrees.
+License: GPL-3
+LazyLoad: yes
+Packaged:  2023-05-15 14:23:57 UTC; Julien Martin
+Repository: CRAN
+Date/Publication: 2023-05-15 14:23:57 UTC
+NeedsCompilation: yes
+LazyData: true

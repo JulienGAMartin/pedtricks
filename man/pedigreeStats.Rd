@@ -1,0 +1,79 @@
+\name{pedigreeStats}
+\alias{pedigreeStats}
+\title{Calculates a range of statistics of pedigrees.}
+\description{
+  Statistics are those that will hopefully be useful for describing pedigrees to be used in quantitative genetic analyses of natural populations.  This module will be most useful when cohort affinities for all individuals can be provided.  All outputs are produced in a numerical form as well as in graphical summaries.
+}
+\usage{
+pedigreeStats(Ped, cohorts = NULL, dat = NULL, 
+              retain='informative', graphicalReport = "y",
+              includeA=TRUE,lowMem=FALSE,grContrast=FALSE)
+}
+\arguments{
+  \item{Ped}{A pedigree}
+  \item{cohorts}{(Optional) Cohort affinities for members of the pedigree}
+  \item{dat}{(Optional) Available data based upon which the pedigree can be pruned for just informative individuals}
+  \item{retain}{The default value ('informative') results in pedigree being pruned to only those indivduals who's records contribute to estimation of quantitative genetic parameters with respect to the available data specified in \code{dat}.  Otherwise, specifying a value of 'ancestors' will result in the inclusion of all ancestors of phenotyped individuals.}
+  \item{graphicalReport}{Controls whether or not grphical output is produced.}
+  \item{includeA}{If TRUE, additive genetic relatedness matrix is returned.}
+  \item{lowMem}{If TRUE, then stats based on calculation of A are not performed.}
+  \item{grContrast}{If TRUE, then uglier shades of red and blue are used to denote male and female statistics in graphical reports, but these colours provide better contrast in greyscale.}
+}
+\value{
+  \item{totalMaternities}{Total number of maternities defined by the pedigree.}
+  \item{totalPaternities}{Total number of paternities defined by the pedigree.}
+  \item{totalFullSibs}{Total number of pair-wise full sib relationships defined by the pedigree.}
+  \item{totalMaternalSibs}{Total number of pair-wise maternal sib relationships defined by the pedigree.  To get the number of maternal half sibs, subtract totalFullSibs.}
+  \item{totalPaternalSibs}{Total number of pair-wise paternal sib relationships defined by the pedigree.  To get the number of paternal half sibs, subtract totalFullSibs.}
+  \item{totalMaternalGrandmothers}{Total number of maternal grandmothers defined by the pedigree.}
+  \item{totalMaternalGrandfathers}{Total number of maternal grandfathers defined by the pedigree.}
+  \item{totalPaternalGrandmothers}{Total number of paternal grandmothers defined by the pedigree.}
+  \item{totalPaternalGrandfathers}{Total number of paternal grandfathers defined by the pedigree.}
+  \item{pedigreeDepth}{The pedidigree pedth, i.e. maximum number of ancestral generations, for each individual.}
+  \item{inbreedingCoefficients}{Individual inbreeding coefficients}
+  \item{maternalSibships}{Sibship size of each individual appearing the the dam column of the pedigree.}
+  \item{paternalSibships}{Sibship size of each individual appearing the the sire column of the pedigree.}
+  \item{cumulativeRelatedness}{Proportion of pair-wise relatedness values less than values ranging from 0 to 1.}
+  \item{relatednessCategories}{Discretized distribution of relatedness.}
+  \item{analyzedPedigree}{Returns the pedigree.}
+
+
+  \item{sampleSizesByCohort}{(Optional) Numer of individuals belonging to each cohort.}
+  \item{maternitiesByCohort}{(Optional) Number of assigned maternities by offspring cohort.}
+  \item{paternitiesByCohort}{(Optional) Number of assigned paternities by offspring cohort.}
+  \item{fullSibsByCohort}{(Optional) Number of pair-wise full sib relationships by cohort - note the sum of these need not be equal to totalFullSibs in pedigrees of long-lived organisms.}
+  \item{maternalSibsByCohort}{(Optional) Number of pair-wise maternal sib relationships by cohort - note the sum of these need not be equal to totalMaternalSibs in pedigrees of long-lived organisms.}
+  \item{paternalSibsByCohort}{(Optional) Number of pair-wise paternal sib relationships by cohort - note the sum of these need not be equal to totalPaternalSibs in pedigrees of long-lived organisms.}
+  \item{maternalGrandmothersByCohort}{(Optional) Numbers of maternal grandmother assignments by offspring cohort.}
+  \item{maternalGrandfathersByCohort}{(Optional) Numbers of maternal grandmother assignments by offspring cohort.}
+  \item{paternalGrandmothersByCohort}{(Optional) Numbers of paternal grandfather assignments by offspring cohort.}
+  \item{paternalGrandfathersByCohort}{(Optional) Numbers of paternal grandfather assignments by offspring cohort.}
+  \item{cumulativePedigreeDepth}{(Optional) Distributions of pedigree depth by cohort.}
+  \item{meanRelatednessAmongCohorts}{(Optional) Mean relatedness among cohorts.}
+  \item{cohorts}{(Optional) Returns cohort designations.}
+
+  Graphical summaries of a number of these summary statistics are printed to the console when \code{graphicalReports=='y'}.
+}
+
+
+\references{Morrissey, M.B, and A.J. Wilson, 2009. pedantics, an R package for pedigree-based genetic simulation, and pedigree manipulation, characterisation, and viewing. Molecular Ecology Resources.}
+\author{Michael Morrissey \email{michael.morrissey@ed.ac.uk}}
+\seealso{\code{\link{fixPedigree}}}
+\examples{
+
+\dontrun{
+
+data(gryphons)
+pedigree<-gryphons[,1:3]
+
+gryphonsPedigreeSummary<-pedigreeStats(pedigree,
+                       cohorts=gryphons$cohort,graphicalReport='n')
+
+gryphonsPedigreeSummary$totalMaternities
+gryphonsPedigreeSummary$totalPaternities
+
+gryphonsPedigreeSummary$maternitiesByCohort
+gryphonsPedigreeSummary$paternitiesByCohort
+
+}
+}
