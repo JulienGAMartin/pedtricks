@@ -5,13 +5,13 @@ Authors@R: c(
     person("Julien", "Martin", , "julien.martin@uottawa.ca", role = c("aut", "cre"),
            comment = c(ORCID = "YOUR-ORCID-ID")),
     person("Matthew", "Wolak", , "mew0099@auburn.edu", role = c("aut"),
-           comment = c(ORCID = "YOUR-ORCID-ID")),
+           comment = c(ORCID = "0000-0002-7962-0071")),
     person("Susan", "Johnston", , "Susan.Johnston@ed.ac.uk", role = c("aut"),
            comment = c(ORCID = "YOUR-ORCID-ID"))
            )
 Description: Functions for sensitivity and power analysis,
   for calculating statistics describing pedigrees from wild populations,
-  and for viewing pedigrees.
+  and for visualizing pedigrees.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
