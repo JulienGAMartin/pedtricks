@@ -10,6 +10,8 @@ used in quantitative genetic analysis, as well as for many of the
 functions in pedantics.}
 \usage{
 fix_ped(Ped, dat = NULL)
+
+fixPedigree(Ped, dat = NULL)
 }
 \arguments{
 \item{Ped}{An ordered pedigree with 3 columns: id, dam, sire}

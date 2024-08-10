@@ -24,6 +24,26 @@ draw_ped(
   sexColours = c("red", "blue"),
   ...
 )
+
+drawPedigree(
+  Ped,
+  cohorts = NULL,
+  sex = NULL,
+  dat = NULL,
+  dots = "n",
+  plotfull = "y",
+  writeCohortLabels = "n",
+  links = "all",
+  sexInd = c(0, 1),
+  dotSize = 0.001,
+  dataDots = "n",
+  dataDots.cex = 2,
+  cohortLabs.cex = 1,
+  retain = "informative",
+  focal = NULL,
+  sexColours = c("red", "blue"),
+  ...
+)
 }
 \arguments{
 \item{Ped}{An ordered pedigree with 3 columns: id, dam, sire}

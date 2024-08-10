@@ -255,3 +255,6 @@ micro_sim <-
 
     list(trueGenotypes = trueMicroGenotypes, observedGenotypes = observedMicroGenotypes)
   }
+
+#' @rdname micro_sim
+microsim <- micro_sim

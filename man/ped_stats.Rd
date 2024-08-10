@@ -13,6 +13,15 @@ ped_stats(
   includeA = TRUE,
   lowMem = FALSE
 )
+
+pedigreeStats(
+  Ped,
+  cohorts = NULL,
+  dat = NULL,
+  retain = "informative",
+  includeA = TRUE,
+  lowMem = FALSE
+)
 }
 \arguments{
 \item{Ped}{A pedigree}
@@ -70,14 +79,14 @@ Statistics are those that will hopefully be useful for describing pedigrees to b
 data(gryphons)
 pedigree <- gryphons[, 1:3]
 
-gryphonsPedigreeSummary <- pedigreeStats(pedigree,
-  cohorts = gryphons$cohort, graphicalReport = "n"
-)
+gryphons_ped_stats <- ped_stats(pedigree,
+  cohorts = gryphons$cohort)
 
-gryphonsPedigreeSummary$totalMaternities
-gryphonsPedigreeSummary$totalPaternities
+gryphons_ped_stats$totalMaternities
+gryphons_ped_stats$paternitiesByCohort
 
-gryphonsPedigreeSummary$maternitiesByCohort
-gryphonsPedigreeSummary$paternitiesByCohort
+summary(gryphons_ped_stats)
+
+plot(gryphons_ped_stats)
 }
 }

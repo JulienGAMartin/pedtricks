@@ -270,3 +270,6 @@ draw_ped <- function(
     grid.text(names(table(cohorts)), x = rep(0.05, length(table(cohorts))), y = plotHeight - as.numeric(names(table(scaledCohorts))), gp = gpar(cex = cohortLabs.cex))
   }
 }
+
+#' @rdname draw_ped
+drawPedigree <- draw_ped

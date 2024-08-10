@@ -87,3 +87,6 @@ fix_ped <- function(Ped, dat = NULL) {
   for (x in 1:3) fixedPedigree[, x] <- as.factor(fixedPedigree[, x])
   fixedPedigree
 }
+
+#' @rdname fix_ped
+fixPedigree <- fix_ped

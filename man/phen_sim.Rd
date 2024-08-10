@@ -2,9 +2,22 @@
 % Please edit documentation in R/phen_sim.R
 \name{phen_sim}
 \alias{phen_sim}
+\alias{phensim}
 \title{A function to simulated phenotypic data}
 \usage{
 phen_sim(
+  pedigree,
+  traits = 1,
+  randomA = NULL,
+  randomE = NULL,
+  parentalA = NULL,
+  parentalE = NULL,
+  sampled = NULL,
+  records = NULL,
+  returnAllEffects = FALSE
+)
+
+phensim(
   pedigree,
   traits = 1,
   randomA = NULL,

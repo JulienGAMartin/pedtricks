@@ -251,3 +251,6 @@
 
     output
   }
+
+#' @rdname phen_sim
+phensim <- phen_sim

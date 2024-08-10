@@ -2,9 +2,21 @@
 % Please edit documentation in R/micro_sim.R
 \name{micro_sim}
 \alias{micro_sim}
+\alias{microsim}
 \title{Simulates microsatellite data across a pedigree.}
 \usage{
 micro_sim(
+  pedigree,
+  genFreqs = NULL,
+  genotypesSample = NULL,
+  knownGenotypes = NULL,
+  records = NULL,
+  eRate1 = 0,
+  eRate2 = 0,
+  eRate3 = 0
+)
+
+microsim(
   pedigree,
   genFreqs = NULL,
   genotypesSample = NULL,

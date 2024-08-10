@@ -2,9 +2,24 @@
 % Please edit documentation in R/genome_sim.R
 \name{genome_sim}
 \alias{genome_sim}
+\alias{genomesim}
 \title{A function to simulate QTL and/or SNP data.}
 \usage{
 genome_sim(
+  pedigree,
+  founders = NULL,
+  positions = NULL,
+  initHe = NULL,
+  mutationType = NULL,
+  mutationRate = NULL,
+  phenotyped = NULL,
+  founderHaplotypes = NULL,
+  genotyped = NULL,
+  returnG = "n",
+  initFreqs = NULL
+)
+
+genomesim(
   pedigree,
   founders = NULL,
   positions = NULL,

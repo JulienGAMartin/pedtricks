@@ -4,9 +4,19 @@
 \name{pedtricks-package}
 \alias{pedtricks}
 \alias{pedtricks-package}
-\title{pedtricks: What the Package Does (One Line, Title Case)}
+\title{pedtricks: Functions to visualize, summarize and simulate data from pedigrees}
 \description{
-What the package does (one paragraph).
+Functions for sensitivity and power analysis, for calculating statistics describing pedigrees from wild populations, and for viewing pedigrees.
+}
+\details{
+\itemize{
+\item \code{pedigreeStats()} and \code{pedStatSummary()} have been replaced by \code{ped_stats()} with a \code{summary()} and \code{plot()} methods to simplify the workflow and allow to get the plots without running the statistics each time
+\item \code{makePedigreeFactor()} and \code{makePedigreeNumeric()} have been combined in \code{convert_ped()} which convert a pedigree to numeric or factor
+\item \code{fixPedigree()} is now \code{fix_ped()}
+\item \code{genomesim()}, \code{microsim()} and \code{phensim()} have been renamed as \code{genome_sim()}, \code{micro_sim()} and \code{phen_sim()}
+}
+
+For backward compatibility with code using \code{pedantics} older names are still usable but not recommended.
 }
 \author{
 \strong{Maintainer}: Julien Martin \email{julien.martin@uottawa.ca} (\href{https://orcid.org/YOUR-ORCID-ID}{ORCID})
@@ -14,7 +24,7 @@ What the package does (one paragraph).
 Authors:
 \itemize{
   \item Matthew Wolak \email{mew0099@auburn.edu} (\href{https://orcid.org/YOUR-ORCID-ID}{ORCID})
-  \item Susan Gordon \email{Susan.Johnston@ed.ac.uk} (\href{https://orcid.org/YOUR-ORCID-ID}{ORCID})
+  \item Susan Johnston \email{Susan.Johnston@ed.ac.uk} (\href{https://orcid.org/YOUR-ORCID-ID}{ORCID})
 }
 
 }

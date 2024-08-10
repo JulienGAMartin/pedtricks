@@ -2,7 +2,7 @@
 % Please edit documentation in R/ped_stats_summary.R
 \name{plot.ped_stats}
 \alias{plot.ped_stats}
-\title{Plot output from pedigreeStats}
+\title{Plot output from ped_stats}
 \usage{
 \method{plot}{ped_stats}(x, lowMem = FALSE, grContrast = FALSE, ...)
 }
@@ -27,6 +27,7 @@ thresholds.
 }
 \description{
 Generates a manageable summary of pedigree-wide statistics
-reported by pedigreeStats, either for a single pedigree or
+reported by ped_stats, either for a single pedigree or
 for a comparison between pedigrees
 }
+\keyword{plot}

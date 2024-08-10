@@ -321,3 +321,6 @@ if(all.equal(original.order,1:length(original.order))==FALSE&is.null(initFreqs)=
 
   output
 }
+
+#' @rdname genome_sim
+genomesim <- genome_sim

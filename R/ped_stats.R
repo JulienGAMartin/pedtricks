@@ -52,15 +52,16 @@
 #' data(gryphons)
 #' pedigree <- gryphons[, 1:3]
 #'
-#' gryphonsPedigreeSummary <- pedigreeStats(pedigree,
-#'   cohorts = gryphons$cohort, graphicalReport = "n"
-#' )
+#' gryphons_ped_stats <- ped_stats(pedigree,
+#'   cohorts = gryphons$cohort)
 #'
-#' gryphonsPedigreeSummary$totalMaternities
-#' gryphonsPedigreeSummary$totalPaternities
+#' gryphons_ped_stats$totalMaternities
+#' gryphons_ped_stats$paternitiesByCohort
+#' 
+#' summary(gryphons_ped_stats)
 #'
-#' gryphonsPedigreeSummary$maternitiesByCohort
-#' gryphonsPedigreeSummary$paternitiesByCohort
+#' plot(gryphons_ped_stats)
+
 #' }
 #' @export
 #'
@@ -446,3 +447,6 @@ ped_stats <-
     class(results) <- "ped_stats"
     results
   }
+
+#' @rdname ped_stats
+pedigreeStats <- ped_stats

@@ -1,15 +1,17 @@
 Package: pedtricks
-Title: What the Package Does (One Line, Title Case)
+Title: Functions to visualize, summarize and simulate data from pedigrees
 Version: 0.1.0.0000
 Authors@R: c(
     person("Julien", "Martin", , "julien.martin@uottawa.ca", role = c("aut", "cre"),
            comment = c(ORCID = "YOUR-ORCID-ID")),
     person("Matthew", "Wolak", , "mew0099@auburn.edu", role = c("aut"),
            comment = c(ORCID = "YOUR-ORCID-ID")),
-    person("Susan", "Gordon", , "Susan.Johnston@ed.ac.uk", role = c("aut"),
+    person("Susan", "Johnston", , "Susan.Johnston@ed.ac.uk", role = c("aut"),
            comment = c(ORCID = "YOUR-ORCID-ID"))
            )
-Description: What the package does (one paragraph).
+Description: Functions for sensitivity and power analysis,
+  for calculating statistics describing pedigrees from wild populations,
+  and for viewing pedigrees.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
