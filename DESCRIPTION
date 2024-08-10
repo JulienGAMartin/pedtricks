@@ -8,7 +8,8 @@ Authors@R: c(
            comment = c(ORCID = "0000-0002-7962-0071")),
     person("Susan", "Johnston", , "Susan.Johnston@ed.ac.uk", role = c("aut"),
            comment = c(ORCID = "YOUR-ORCID-ID")),
-    person("Michael", "Morrissey", , "michael.morrissey@st-andrews.ac.uk", role = c("aut"),
+    person("Michael", "Morrissey", , "michael.morrissey@st-andrews.ac.uk",
+           role = c("aut"),
            comment = c(ORCID = "0000-0001-6209-0177"))
            )
 Description: Functions for sensitivity and power analysis,
