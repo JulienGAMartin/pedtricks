@@ -8,7 +8,7 @@
 #' Functions also exist to plot various types of pedgiree links associated with
 #' focal individuals.
 #'
-#'
+#' @aliases drawPedigree
 #' @param Ped  An ordered pedigree with 3 columns: id, dam, sire
 #' @param cohorts An optional numeric vector of the same length as the pedigree
 #'   designating, for example cohort afinities or birth years
@@ -33,21 +33,21 @@
 #'
 #' @author Michael Morrissey \email{michael.morrissey@@st-andrews.ac.uk}
 #'
-#' @seealso \code{\link{fixPedigree}} to prepare pedigrees that may not explicitly contain records for all individuals (i.e., where founding individuals may only appear in the dam or sire column).)
+#' @seealso \code{\link{fix_ped}} to prepare pedigrees that may not explicitly contain records for all individuals (i.e., where founding individuals may only appear in the dam or sire column).)
 #'
 #' @examples
 #' data(gryphons)
-#' pedigree <- fixPedigree(gryphons[, 1:3])
+#' pedigree <- fix_ped(gryphons[, 1:3])
 #'
 #' ## draw the gryphon pedigree by pedigree depth
-#' drawPedigree(pedigree)
+#' draw_ped(pedigree)
 #'
 #' ## draw the gryphon pedigree by cohort
-#' drawPedigree(pedigree,cohorts=gryphons$cohort,writeCohortLabels='y',
+#' draw_ped(pedigree,cohorts=gryphons$cohort,writeCohortLabels='y',
 #'   cohortLabs.cex=1)
 #'
 #' ## draw the gryphon pedigree by cohort with only maternal links
-#' drawPedigree(pedigree, cohorts = gryphons$cohort, links = "mums")
+#' draw_ped(pedigree, cohorts = gryphons$cohort, links = "mums")
 #'
 #' ## draw the gryphon pedigree by cohort with colour only for those
 #' ## indiduals that are informative relative to the quantitative
@@ -57,52 +57,20 @@
 #' ## colour coded by sex:
 #' dataAvailability <- (gryphons$cohort >= (max(gryphons$cohort) - 1)) + 0
 #'
-#' drawPedigree(pedigree,cohorts=gryphons$cohort,sex=gryphons$sex,
+#' draw_ped(pedigree,cohorts=gryphons$cohort,sex=gryphons$sex,
 #'   dots='y',dat=dataAvailability,writeCohortLabels='y',dataDots='y')
 #'
 #' @keywords plot
 #' @export
 
 
-drawPedigree <- function(
+draw_ped <- function(
     Ped, cohorts = NULL, sex = NULL, dat = NULL, dots = "n", plotfull = "y",
     writeCohortLabels = "n", links = "all", sexInd = c(0, 1), dotSize = 0.001,
     dataDots = "n", dataDots.cex = 2, cohortLabs.cex = 1,
     retain = "informative", focal = NULL,
     sexColours = c("red", "blue"), ...) {
   for (x in 1:3) Ped[, x] <- as.character(Ped[, x])
-
-  "prune" <- function(pedigree, keep, make.base = FALSE) {
-    ind.keep <- keep
-    nind <- length(ind.keep) + 1
-    while (length(ind.keep) != nind) {
-      nind <- length(ind.keep)
-      ind.keep <- union(na.omit(unlist(pedigree[, 2:3][match(ind.keep, pedigree[, 1]), ])), ind.keep)
-    }
-    pedigree <- pedigree[sort(match(ind.keep, pedigree[, 1])), ]
-    if (make.base) {
-      if (any(match(pedigree[, 2], pedigree[, 1]) > match(pedigree[, 1], pedigree[, 1]), na.rm = T)) {
-        stop("Dams appearing after their offspring: use fixPedigree")
-      }
-      if (any(match(pedigree[, 3], pedigree[, 1]) > match(pedigree[, 1], pedigree[, 1]), na.rm = T)) {
-        stop("Sires appearing after their offspring: use fixPedigree")
-      }
-      phenotyped <- pedigree[, 1] %in% keep
-      delete <- rep(FALSE, dim(pedigree)[1])
-      for (i in 1:dim(pedigree)[1]) {
-        nlinks <- phenotyped[i] + sum(pedigree[, 2] %in% pedigree[, 1][i]) + sum(pedigree[, 3] %in% pedigree[, 1][i]) + sum(is.na(pedigree[i, ][2:3]) == FALSE)
-        if (nlinks < 2 & phenotyped[i] == FALSE) {
-          pedigree[, 2][which(pedigree[, 2] == pedigree[, 1][i])] <- NA
-          pedigree[, 3][which(pedigree[, 3] == pedigree[, 1][i])] <- NA
-          delete[i] <- TRUE
-        }
-      }
-      if (any(delete)) {
-        pedigree <- pedigree[-which(delete), ]
-      }
-    }
-    pedigree
-  }
 
   names(Ped)[1] <- "id"
   if (names(Ped)[2] != "dam" | names(Ped)[3] != "sire") {

@@ -4,7 +4,7 @@
 #' Prepares a pedigree to conform with requirements of many softwares
 #' used in quantitative genetic analysis, as well as for many of the
 #' functions in pedantics.
-#'
+#' @aliases fixPedigree
 #' @param Ped An ordered pedigree with 3 columns: id, dam, sire
 #' @param dat An optional data frame, the same length as the pedigree
 #'
@@ -12,7 +12,7 @@
 #'   Returns a pedigree in which all individuals that exsit in the dam
 #' and sire columns are represented by their own record lines, occurring
 #' before the records of their first offspring.  If data are supplied,
-#' then fixPedigree will return a dataframe, the first two columns are
+#' then fix_ped will return a dataframe, the first two columns are
 #' the 'fixed' pedigree, and the following columns of which contain
 #' appropriately reordered data.
 #'
@@ -34,7 +34,7 @@
 #' ), 10, 3, byrow = TRUE))
 #' names(pedigree) <- c("id", "dam", "sire")
 #' pedigree
-#' fixedPedigree <- fixPedigree(Ped = pedigree)
+#' fixedPedigree <- fix_ped(Ped = pedigree)
 #' fixedPedigree
 #'
 #' @keywords manipulation
@@ -42,7 +42,7 @@
 #' @export
 
 
-fixPedigree <- function(Ped, dat = NULL) {
+fix_ped <- function(Ped, dat = NULL) {
   if (is.null(dat) == FALSE && is.null(dim(dat)) == FALSE && length(Ped[, 1]) != length(dat[, 1])) {
     cat(paste("Pedigree and cohorts differ in length.", "\n"))
     flush.console()
@@ -68,10 +68,7 @@ fixPedigree <- function(Ped, dat = NULL) {
   names(IDs) <- "id"
   IDs$dam <- Ped$dam[match(IDs$id, Ped$id)]
   IDs$sire <- Ped$sire[match(IDs$id, Ped$id)]
-  orderPed <- function(ped) {
-    reorder <- ped[order(kindepth(ped[, 1], ped[, 2], ped[, 3]), decreasing = FALSE), ]
-    return(reorder)
-  }
+
   fixedPedigree <- orderPed(IDs)
   if (is.null(dat) == FALSE) {
     if (names(dat)[1] == "id" | names(dat)[1] == "ID" | names(dat)[1] == "ids" | names(dat)[1] == "IDS") {
