@@ -1,398 +1,232 @@
-#' ggpedigree: Plot a pedigree
-#' @param pedigree A data frame of id, dam and sire
-#' @param cohort Default NULL. An optional vector assigning a cohort to each id.
-#'   If NULL then uses kindepth function in kinship2 to assign IDs to cohorts.
-#' @param sex Default NULL. An optional vector assigning a sex to each id
-#' @param family Default NULL. An optional vector assigning a family to each id
-#'   (NOT WORKING YET)
-#' @param id.labels logical. Default FALSE. Print the IDs on the pedigree.
-#' @param remove.singletons logical. Default TRUE. Remove IDs with no offspring
-#'   or parents assigned.
-#' @param colour.parent.lines logical. Default TRUE. Colours lines based on
-#'   maternal and paternal links.
-#' @param print.cohort.labels logical. Default TRUE. Prints cohort ideas on left
-#'   hand side of plot.
-#' @param plot.unk.cohort logical. Default TRUE. Show IDs of unknown cohort.
-#' @param single.cohort.x.shuffle logical. Default TRUE. Randomly assign left to
-#'   right position of IDs.
-#' @param randomise.x logical. Default TRUE.
-#' @param return.plot.tables logical. Default FALSE. Returns an object with the
+#' ggpedigree: Pedigree plotting tool for complex pedigrees.
+#' @param ids A vector of individual identifiers
+#' @param mothers A vector of mothers corresponding to ids. Missing values are 0
+#'   or NA.
+#' @param fathers A vector of fathers corresponding to ids. Missing values are 0
+#'   or NA.
+#' @param cohort integer. Default NULL. An optional vector assigning a cohort to
+#'   each id. If NULL, then `kinship2::kindepth` is used to assign cohorts to
+#'   ids.
+#' @param id_labels logical. Default FALSE. Print the ids on the pedigree plot.
+#' @param remove_singletons logical. Default TRUE. Remove ids with no relatives
+#'   i.e., no offspring or parents assigned.
+#' @param plot_unknown_cohort logical. Default TRUE. Plots ids of unknown
+#'   cohorts. These are plotted in an "Unknown" cohort at the top of the
+#'   pedigree. Be aware that any mothers and fathers of these individuals will
+#'   be plotted below them.
+#' @param randomise_x logical. Default TRUE. Randomise the position of
+#'   individuals within each cohort.
+#' @param print_cohort_labels logical. Default TRUE. Prints cohort levels on the
+#'   left hand side of plot.
+#' @param return_plot_tables logical. Default FALSE. Returns an object with the
 #'   line and point data used for the plot.
-#' @param suppress.plot logical. Default FALSE. Print plot or not.
-#' @param line.col.mother line colour for mother
-#' @param line.col.father line colour for father
-#' @param line.alpha line alpha for plot
-#' @param point.size  point size
-#' @param point.colour point colour
-#' @param point.alpha point alpha
-#' @param gg.theme extra theme information for ggplot
-#' @param xlab x axis label
-#' @param ylab y axis label
-#' @param bg.colour background colour
-#' @param plot.margin plot margin dimensions
-#' @param axis.text.colour axis text colour
-#'
+#' @param suppress_plot logical. Default FALSE. Will stop the plot from being
+#'   output e.g., if using return_plot_tables to retrieve the plot objects.
+#' @param line_col_mother Default = "#E41A1C". Line colour for maternal links.
+#' @param line_col_father Default = "#377EB8". Line colour for paternal links.
+#' @param line_alpha Default = 0.3. Line alpha (transparency) value for maternal
+#'   and paternal links.
+#' @param point_size Default = 1. Point size for ids.
+#' @param point_colour Default = "black". Point colour for ids.
+#' @param point_alpha Default = 1. Point alpha for ids.
+#' @param xlab Default = blank. x-axis label.
+#' @param ylab  Default = blank. y-axis label
+#' @param gg_theme Alternate theme information specified as a ggplot::theme()
+#'   object.
+#' @import dplyr
+#' @import kinship2
+#' @import ggplot2
+#' @import tidyr
 #' @keywords plot
-#'
 #' @export
 
 
-ggpedigree <- function(pedigree,
+ggpedigree <- function(ids = NULL,
+                       mothers = NULL,
+                       fathers = NULL,
                        cohort = NULL,
-                       sex = NULL,
-                       family = NULL,
-                       id.labels = FALSE,
-                       remove.singletons = TRUE,
-                       colour.parent.lines = TRUE,
-                       print.cohort.labels = TRUE,
-                       plot.unk.cohort = TRUE,
-                       single.cohort.x.shuffle = TRUE,
-                       randomise.x = TRUE,
-                       return.plot.tables = FALSE,
-                       suppress.plot = FALSE,
-                       line.col.mother = "#E41A1C",
-                       line.col.father = "#377EB8",
-                       line.alpha = 0.3,
-                       point.size = 2,
-                       point.colour = "black",
-                       point.alpha = 1,
-                       gg.theme = NULL,
+                       id_labels = FALSE,
+                       remove_singletons = TRUE,
+                       plot_unknown_cohort = TRUE,
+                       randomise_x_coordinates = FALSE,
+                       print_cohort_labels = TRUE,
+                       return_plot_tables = FALSE,
+                       suppress_plot = FALSE,
+                       line_col_mother = "#E41A1C",
+                       line_col_father = "#377EB8",
+                       line_alpha = 0.3,
+                       point_size = 1,
+                       point_colour = "black",
+                       point_alpha = 1,
                        xlab = "",
                        ylab = "",
-                       bg.colour = "ivory",
-                       plot.margin = c(1.5, 1.5, 1.5, 1.5),
-                       axis.text.colour = "darkgrey") {
-  ped <- pedigree
-
-  # ~~ Format the pedigree to have ID, MOTHER, FATHER columns and recode NA to 0.
-
-  pednamevec <- c("ID", "ANIMAL", "MUM", "MOM", "MOTHER", "DAM", "DAD", "POP", "FATHER", "SIRE")
-
-  names(ped)[which(toupper(names(ped)) %in% pednamevec)] <- toupper(names(ped)[which(toupper(names(ped)) %in% pednamevec)])
+                       gg_theme = NULL) {
 
 
-  if (!any(c("ID", "ANIMAL") %in% names(ped))) stop(ped.name.rules())
-  if (!any(c("MUM", "MOM", "MOTHER", "DAM") %in% names(ped))) stop(ped.name.rules())
-  if (!any(c("DAD", "POP", "FATHER", "SIRE") %in% names(ped))) stop(ped.name.rules())
+  # Format the pedigree to have ID, MOTHER, FATHER columns and recode NA to 0.
 
-  names(ped)[which(names(ped) %in% c("ID", "ANIMAL"))] <- "ID"
-  names(ped)[which(names(ped) %in% c("MUM", "MOM", "MOTHER", "DAM"))] <- "MOTHER"
-  names(ped)[which(names(ped) %in% c("DAD", "POP", "FATHER", "SIRE"))] <- "FATHER"
+  ped <- data.frame(ID = as.character(ids),
+                    MOTHER = as.character(mothers),
+                    FATHER = as.character(fathers))
 
-  for (i in which(names(ped) %in% c("ID", "MOTHER", "FATHER"))) ped[, i] <- as.character(ped[, i])
-  for (i in which(names(ped) %in% c("ID", "MOTHER", "FATHER"))) ped[which(is.na(ped[, i])), i] <- 0
+  for (i in 1:3) ped[which(is.na(ped[, i])), i] <- 0
 
-  # ~~ Check that ID has not been duplicated
+  # Check that ids have not been duplicated
 
-  if (is.null(family)) if (any(as.numeric(names(table(table(ped$ID)))) > 1)) stop("Duplicated values in ID column")
-  if (!is.null(family)) if (any(as.numeric(names(table(table(paste(ped$Family, ped$ID))))) > 1)) stop("Duplicated values in ID column")
+  if(any(tabulate(factor(ped$ID)) > 1)) stop("Duplicated values in ids")
 
-  # ~~ Create a baseped object
+  # Check that cohort is an integer
 
-  baseped <- ped[, c("ID", "MOTHER", "FATHER")]
-  baseped$MOTHER[is.na(baseped$MOTHER)] <- 0
-  baseped$FATHER[is.na(baseped$FATHER)] <- 0
+  if(!is.null(cohort)) if(!is.integer(cohort)) stop("Cohort must be an integer")
 
-  # ~~ Add in parents that are not in the ID part as founders
+  # Add in parents that are not in ids as founders
 
-  if (any(!baseped$FATHER %in% baseped$ID)) {
-    dadtab <- data.frame(
-      ID = baseped[which(!baseped$FATHER %in% baseped$ID), "FATHER"],
-      MOTHER = 0, FATHER = 0
-    )
-  }
-  if (any(!baseped$MOTHER %in% baseped$ID)) {
-    mumtab <- data.frame(
-      ID = baseped[which(!baseped$MOTHER %in% baseped$ID), "MOTHER"],
-      MOTHER = 0, FATHER = 0
-    )
+  baseped <- rbind(data.frame(ID = ped[which(!ped$FATHER %in% ped$ID), "FATHER"],
+                              MOTHER = 0,
+                              FATHER = 0),
+                   data.frame(ID = ped[which(!ped$MOTHER %in% ped$ID), "MOTHER"],
+                              MOTHER = 0,
+                              FATHER = 0),
+                   ped)
+
+  baseped <- unique(subset(baseped, ID != 0))
+
+  # Remove Singletons
+
+  if (remove_singletons) {
+    singleton_vec <- which(baseped$MOTHER == 0 & baseped$FATHER == 0 & !baseped$ID %in% c(baseped$MOTHER, baseped$FATHER))
+    if (length(singleton_vec) > 0) baseped <- baseped[-singleton_vec, ]
   }
 
-  dadtab <- unique(subset(dadtab, ID != 0))
-  mumtab <- unique(subset(mumtab, ID != 0))
-
-  baseped <- rbind(dadtab, mumtab, baseped)
-  rm(dadtab, mumtab)
-
-  # ~~ Determine cohorts and add to the ped data.frame if not specified
+  # Determine cohorts and add to the baseped data.frame if not specified
 
   if (is.null(cohort)) {
-    cohortvec <- data.frame(
-      ID = baseped[, 1],
-      graphCohort = kindepth(
-        baseped[, "ID"],
-        baseped[, "FATHER"],
-        baseped[, "MOTHER"]
-      )
-    )
+    cohortvec <- data.frame(ID = baseped[, "ID"],
+                            Cohort = kindepth(baseped[,"ID"], baseped[,"FATHER"], baseped[,"MOTHER"]))
+  } else {
+    cohortvec <- data.frame(ID = as.character(ids), Cohort = cohort)
   }
 
+  suppressMessages(baseped <- left_join(baseped, cohortvec))
 
-  if (!is.null(cohort)) cohortvec <- data.frame(ID = ped[, "ID"], graphCohort = cohort)
+  # Collate information for axis labels and plotting unknown cohort individuals
 
-  # ~~ Recode the sex information
+  cohort_order <- sort(unique(as.numeric(baseped$Cohort)))
+  cohort_labels <- min(cohort_order):max(cohort_order)
 
-  if (!is.null(sex)) {
-    sextab <- data.frame(ID = ped$ID, graphSex = sex)
-    head(sextab)
-    sextab$graphSex <- toupper(sextab$graphSex)
+  if (plot_unknown_cohort) {
+    baseped$Cohort[which(is.na(baseped$Cohort))] <- min(cohort_order) - 1
 
-    if (any(!sextab$graphSex %in% c("M", "F", "MALE", "FEMALE", "UNKNOWN", "U", "-9", NA))) stop(sex.name.rules())
-
-    sextab$graphSex[which(sextab$graphSex %in% c("M", "MALE"))] <- 3
-    sextab$graphSex[which(sextab$graphSex %in% c("F", "FEMALE"))] <- 1
-    sextab$graphSex[which(sextab$graphSex %in% c("UNKNOWN", "U", -9))] <- 2
-    sextab$graphSex[which(is.na(sextab$graphSex))] <- 2
+    if (length(which(baseped$Cohort == min(cohort_order) - 1)) > 0) {
+      cohort_order <- c(min(cohort_order) - 1, cohort_order)
+      cohort_labels <- c("Unknown", cohort_labels)
+    }
   }
 
-  # ~~ Remove Singletons
+  if(!print_cohort_labels) cohort_labels <- rep("", length(cohort_order))
 
-  if (remove.singletons == TRUE) {
-    singleton.vec <- which(baseped$MOTHER == 0 & baseped$FATHER == 0 & !baseped$ID %in% c(baseped$MOTHER, baseped$FATHER))
+  # Assign x coordinates
 
-    if (length(singleton.vec) > 0) baseped <- baseped[-singleton.vec, ]
+  baseped$xcoord <- NA
+
+  for(i in unique(baseped$Cohort)){
+
+    x <- which(baseped$Cohort == i)
+
+    if(length(x) > 1){
+      if(randomise_x_coordinates){
+        baseped$xcoord[x] <- sample(seq(0, 1, 1/(length(x)-1)))
+      } else {
+        baseped$xcoord[x] <- seq(0, 1, 1/(length(x)-1))
+
+      }
+    } else {
+      baseped$xcoord[x] <- 0.5
+    }
+
   }
 
-  # ~~ Melt baseped and get rid of connections where value = 0 (means parental connection is unknown)
+  # Pivot ped and get rid of connections where value = 0 (means parental connection is unknown)
 
-  baseped2 <- melt(baseped, id.vars = c("ID"), measure.vars = c("MOTHER", "FATHER"))
+  baseped2 <- pivot_longer(ped, cols = c("MOTHER", "FATHER"), names_to = "ParentSex", values_to = "ParentID")
 
-  baseped2 <- subset(baseped2, value != 0)
+  baseped2 <- subset(baseped2, ParentID != 0)
 
-  names(baseped2)[which(names(baseped2) == "value")] <- "Parent.ID"
-
-  # ~~ Create a group vector for parent/offspring relationship
+  # Create a group vector for parent/offspring relationship
 
   baseped2$Group <- 1:nrow(baseped2)
 
-  # ~~ Melt to create a single line per ID with Group specified
+  # Pivot again to create a single line per ID with Group specified
 
-  baseped2$ID <- as.character(baseped2$ID)
-  baseped3 <- melt(baseped2, id.vars = "Group", measure.vars = c("ID", "Parent.ID"))
-  baseped3[1:10, ]
+  baseped3 <- pivot_longer(baseped2, cols = c("ID", "ParentID"), names_to = "Relationship", values_to = "ID")
 
-  names(baseped3)[which(names(baseped3) == "value")] <- "ID"
+  # Add cohort information
 
+  suppressMessages(baseped3 <- left_join(baseped3, subset(baseped, select = c(ID, Cohort, xcoord))))
 
+  # baseped3 is used for the parental links. Create baseped4 which is a unique
+  # value for each individual to avoid overplotting.
 
-  # ~~ Add cohort and sex information
+  baseped4 <- droplevels(unique(subset(baseped3, select = c(ID, xcoord, Cohort))))
 
-  suppressMessages(baseped3 <- join(baseped3, cohortvec))
-  if (!is.null(sex)) {
-    suppressMessages(baseped3 <- join(baseped3, sextab))
-    baseped3$graphSex[which(is.na(baseped3$graphSex))] <- 2
+  # Plot the pedigrees
+
+  if (is.null(gg_theme)) {
+    gg_theme <- theme(
+      axis.text.x = element_blank(),
+      axis.text.y = element_text(colour = "black"),
+      axis.ticks.y = element_blank(),
+      axis.ticks.x = element_blank(),
+      panel.grid = element_blank(),
+      plot.background = element_rect(fill = "white"),
+      panel.background = element_blank(),
+      legend.position = "none",
+      plot.margin = unit(c(0.5, 0.5, 0.5, 0.5), units = "cm")
+    )
   }
 
-  if (is.null(sex)) baseped3$graphSex <- 1
+  if (!suppress_plot) {
 
-  # ~~ Add parental colour information
+    p <- ggplot() +
+      geom_line(data = baseped3, aes(x = xcoord,
+                                     y = -Cohort,
+                                     group = Group,
+                                     colour = ParentSex), alpha = line_alpha) +
+      scale_y_continuous(
+        breaks = -seq(min(cohort_order), max(cohort_order), 1),
+        labels = cohort_labels
+      ) +
+      scale_colour_manual(values = c(line_col_father, line_col_mother)) +
+      labs(x = xlab, y = ylab) +
+      gg_theme
 
-  baseped2 <- unique(subset(baseped2, select = c(Group, variable)))
-  names(baseped2) <- c("Group", "graphParent")
-  suppressMessages(baseped3 <- join(baseped3, baseped2))
+    if (id_labels) {
 
+      print(p +
+              geom_text(
+                data = baseped4, aes(x = xcoord, y = -Cohort, label = ID),
+                size = point_size, colour = point_colour, alpha = point_alpha
+              ))
 
-  baseped3$graphColour <- "black"
-  if (colour.parent.lines == TRUE) {
-    baseped3$graphColour[which(baseped3$graphParent == "MOTHER")] <- line.col.mother
-    baseped3$graphColour[which(baseped3$graphParent == "FATHER")] <- line.col.father
-  }
+    } else {
 
-
-  # ~~ Generate X coordinates
-
-  generateXcoord <- function(size, range = c(0, 1)) {
-    if (size %% 2 != 0 & size != 1) { # Check if size is odd
-      newsize <- size - 1
-      interval <- diff(range) / newsize
-      x <- seq(range[1], range[2], interval)
-    }
-
-    if (size %% 2 == 0) { # Check if size is even
-      interval <- diff(range) / size
-      x <- seq(range[1], range[2], interval)[-size - 1] + diff(seq(range[1], range[2], interval)) / 2
-    }
-
-    if (size == 1) x <- 0.5
-
-    x
-  }
-
-  xcoords <- NULL
-
-  for (i in unique(baseped3$graphCohort)) {
-    if (!is.na(i)) {
-      # Extract the number of Unique IDs per cohort and generate X coords
-      ids <- unique(baseped3$ID[which(baseped3$graphCohort == i)])
-      newx <- generateXcoord(length(ids))
-
-      # Append to xcoords
-      if (randomise.x == TRUE) {
-        xcoords <- rbind(
-          xcoords,
-          data.frame(
-            ID = ids,
-            xpos = sample(newx, size = length(newx), replace = F),
-            graphCohort = i
-          )
-        )
-      } else {
-        xcoords <- rbind(
-          xcoords,
-          data.frame(
-            ID = ids,
-            xpos = newx,
-            graphCohort = i
-          )
-        )
-
-        rm(ids, newx)
-      }
+      print(p +
+              geom_point(
+                data = baseped4, aes(x = xcoord, y = -Cohort),
+                size = point_size, colour = point_colour, alpha = point_alpha
+              ))
     }
 
 
-    if (is.na(i)) {
-      # Extract the number of Unique IDs per cohort and generate X coords
-      ids <- unique(baseped3$ID[which(is.na(baseped3$graphCohort))])
-      newx <- generateXcoord(length(ids))
-
-
-      if (randomise.x == TRUE) {
-        # Append to xcoords
-        xcoords <- rbind(
-          xcoords,
-          data.frame(
-            ID = ids,
-            xpos = sample(newx, size = length(newx), replace = F),
-            graphCohort = i
-          )
-        )
-      } else {
-        xcoords <- rbind(
-          xcoords,
-          data.frame(
-            ID = ids,
-            xpos = newx,
-            graphCohort = i
-          )
-        )
-      }
-
-
-      rm(ids, newx)
-    }
   }
 
-  # ~~ Merge with baseped3
+  # Create a return object if return.plot.tables
 
-  suppressMessages(baseped3 <- join(baseped3, xcoords))
-
-  head(baseped3)
-
-  if (single.cohort.x.shuffle == TRUE) {
-    xedit <- data.frame(Count = tapply(xcoords$graphCohort, xcoords$graphCohort, length))
-    xedit$graphCohort <- row.names(xedit)
-    xedit <- subset(xedit, Count == 1)
-    xedit$xpos <- generateXcoord(size = nrow(xedit), range = c(0.25, 0.75))
-    xedit
-
-    for (i in 1:nrow(xedit)) {
-      baseped3[which(baseped3$graphCohort == xedit$graphCohort[i]), "xpos"] <- xedit$xpos[i]
-    }
-  }
-
-  # ~~ Collate information for axis labels and plotting unknown cohort individuals
-
-  cohort.order <- sort(unique(baseped3$graphCohort))
-  cohort.labels <- min(cohort.order):max(cohort.order)
-
-  if (plot.unk.cohort == TRUE) {
-    baseped3$graphCohort[which(is.na(baseped3$graphCohort))] <- min(cohort.order) - 1
-
-    if (length(which(baseped3$graphCohort == min(cohort.order) - 1)) > 0) {
-      cohort.order <- c(min(cohort.order) - 1, cohort.order)
-      cohort.labels <- c("Unknown", cohort.labels)
-    }
-  }
-
-  if (print.cohort.labels == FALSE) cohort.labels <- rep("", length(cohort.order))
-
-
-  # ~~ baseped3 is used for the parental links. Create baseped4 which is a unique value for
-  #   each individual to avoid overplotting.
-
-  baseped4 <- droplevels(unique(subset(baseped3, select = c(ID, graphSex, xpos, graphCohort))))
-
-
-  # ~~ Create a return object if return.plot.tables == TRUE
-
-  if (return.plot.tables == TRUE) {
+  if (return_plot_tables) {
     return(list(
       LinePlotFrame = baseped3,
       PointPlotFrame = baseped4
     ))
   }
 
-  # ~~ Plot the pedigrees
-
-  if (is.null(gg.theme)) {
-    gg.theme <- theme(
-      axis.text.x = element_blank(),
-      axis.text.y = element_text(colour = axis.text.colour),
-      axis.ticks.y = element_blank(),
-      axis.ticks.x = element_blank(),
-      panel.grid = element_blank(),
-      plot.background = element_rect(fill = bg.colour),
-      panel.background = element_blank(),
-      legend.position = "none",
-      plot.margin = unit(plot.margin, units = "cm")
-    )
-  }
-
-
-  if (suppress.plot == FALSE) {
-    p <- ggplot() +
-      geom_line(data = baseped3, aes(x = xpos, y = -graphCohort, group = Group, colour = graphColour), alpha = line.alpha) +
-      scale_y_continuous(
-        breaks = -seq(min(cohort.order), max(cohort.order), 1),
-        labels = cohort.labels
-      ) +
-      scale_colour_identity() +
-      labs(x = xlab, y = ylab) +
-      gg.theme
-
-
-
-    if (id.labels == FALSE) {
-      print(p +
-        geom_point(
-          data = baseped4, aes(x = xpos, y = -graphCohort, shape = factor(graphSex)),
-          size = point.size, colour = point.colour, alpha = point.alpha
-        ))
-    }
-
-    if (id.labels == TRUE) {
-      print(p +
-        geom_text(
-          data = baseped4, aes(x = xpos, y = -graphCohort, label = ID),
-          size = point.size, colour = point.colour, alpha = point.alpha
-        ))
-    }
-  }
-}
-
-
-
-ped.name.rules <- function() {
-  writeLines("Pedigree object should contain the following columns:
-ID should be named ID or ANIMAL
-Mother should be MOTHER, MUM, MOM or DAM
-Father should be FATHER, DAD, POP or SIRE")
-}
-
-sex.name.rules <- function() {
-  writeLines("Sex should be defined as follows:
-Females should be F or Female
-Males should be M or Male,
-Unknown should be NA, U, -9, Unk")
 }

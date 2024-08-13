@@ -2,95 +2,87 @@
 % Please edit documentation in R/ggpedigree.R
 \name{ggpedigree}
 \alias{ggpedigree}
-\title{ggpedigree: Plot a pedigree}
+\title{ggpedigree: Pedigree plotting tool for complex pedigrees.}
 \usage{
 ggpedigree(
-  pedigree,
+  ids = NULL,
+  mothers = NULL,
+  fathers = NULL,
   cohort = NULL,
-  sex = NULL,
-  family = NULL,
-  id.labels = FALSE,
-  remove.singletons = TRUE,
-  colour.parent.lines = TRUE,
-  print.cohort.labels = TRUE,
-  plot.unk.cohort = TRUE,
-  single.cohort.x.shuffle = TRUE,
-  randomise.x = TRUE,
-  return.plot.tables = FALSE,
-  suppress.plot = FALSE,
-  line.col.mother = "#E41A1C",
-  line.col.father = "#377EB8",
-  line.alpha = 0.3,
-  point.size = 2,
-  point.colour = "black",
-  point.alpha = 1,
-  gg.theme = NULL,
+  id_labels = FALSE,
+  remove_singletons = TRUE,
+  plot_unknown_cohort = TRUE,
+  randomise_x_coordinates = FALSE,
+  print_cohort_labels = TRUE,
+  return_plot_tables = FALSE,
+  suppress_plot = FALSE,
+  line_col_mother = "#E41A1C",
+  line_col_father = "#377EB8",
+  line_alpha = 0.3,
+  point_size = 1,
+  point_colour = "black",
+  point_alpha = 1,
   xlab = "",
   ylab = "",
-  bg.colour = "ivory",
-  plot.margin = c(1.5, 1.5, 1.5, 1.5),
-  axis.text.colour = "darkgrey"
+  gg_theme = NULL
 )
 }
 \arguments{
-\item{pedigree}{A data frame of id, dam and sire}
+\item{ids}{A vector of individual identifiers}
 
-\item{cohort}{Default NULL. An optional vector assigning a cohort to each id.
-If NULL then uses kindepth function in kinship2 to assign IDs to cohorts.}
+\item{mothers}{A vector of mothers corresponding to ids. Missing values are 0
+or NA.}
 
-\item{sex}{Default NULL. An optional vector assigning a sex to each id}
+\item{fathers}{A vector of fathers corresponding to ids. Missing values are 0
+or NA.}
 
-\item{family}{Default NULL. An optional vector assigning a family to each id
-(NOT WORKING YET)}
+\item{cohort}{integer. Default NULL. An optional vector assigning a cohort to
+each id. If NULL, then \code{kinship2::kindepth} is used to assign cohorts to
+ids.}
 
-\item{id.labels}{logical. Default FALSE. Print the IDs on the pedigree.}
+\item{id_labels}{logical. Default FALSE. Print the ids on the pedigree plot.}
 
-\item{remove.singletons}{logical. Default TRUE. Remove IDs with no offspring
-or parents assigned.}
+\item{remove_singletons}{logical. Default TRUE. Remove ids with no relatives
+i.e., no offspring or parents assigned.}
 
-\item{colour.parent.lines}{logical. Default TRUE. Colours lines based on
-maternal and paternal links.}
+\item{plot_unknown_cohort}{logical. Default TRUE. Plots ids of unknown
+cohorts. These are plotted in an "Unknown" cohort at the top of the
+pedigree. Be aware that any mothers and fathers of these individuals will
+be plotted below them.}
 
-\item{print.cohort.labels}{logical. Default TRUE. Prints cohort ideas on left
-hand side of plot.}
+\item{print_cohort_labels}{logical. Default TRUE. Prints cohort levels on the
+left hand side of plot.}
 
-\item{plot.unk.cohort}{logical. Default TRUE. Show IDs of unknown cohort.}
-
-\item{single.cohort.x.shuffle}{logical. Default TRUE. Randomly assign left to
-right position of IDs.}
-
-\item{randomise.x}{logical. Default TRUE.}
-
-\item{return.plot.tables}{logical. Default FALSE. Returns an object with the
+\item{return_plot_tables}{logical. Default FALSE. Returns an object with the
 line and point data used for the plot.}
 
-\item{suppress.plot}{logical. Default FALSE. Print plot or not.}
+\item{suppress_plot}{logical. Default FALSE. Will stop the plot from being
+output e.g., if using return_plot_tables to retrieve the plot objects.}
 
-\item{line.col.mother}{line colour for mother}
+\item{line_col_mother}{Default = "#E41A1C". Line colour for maternal links.}
 
-\item{line.col.father}{line colour for father}
+\item{line_col_father}{Default = "#377EB8". Line colour for paternal links.}
 
-\item{line.alpha}{line alpha for plot}
+\item{line_alpha}{Default = 0.3. Line alpha (transparency) value for maternal
+and paternal links.}
 
-\item{point.size}{point size}
+\item{point_size}{Default = 1. Point size for ids.}
 
-\item{point.colour}{point colour}
+\item{point_colour}{Default = "black". Point colour for ids.}
 
-\item{point.alpha}{point alpha}
+\item{point_alpha}{Default = 1. Point alpha for ids.}
 
-\item{gg.theme}{extra theme information for ggplot}
+\item{xlab}{Default = blank. x-axis label.}
 
-\item{xlab}{x axis label}
+\item{ylab}{Default = blank. y-axis label}
 
-\item{ylab}{y axis label}
+\item{gg_theme}{Alternate theme information specified as a ggplot::theme()
+object.}
 
-\item{bg.colour}{background colour}
-
-\item{plot.margin}{plot margin dimensions}
-
-\item{axis.text.colour}{axis text colour}
+\item{randomise_x}{logical. Default TRUE. Randomise the position of
+individuals within each cohort.}
 }
 \description{
-ggpedigree: Plot a pedigree
+ggpedigree: Pedigree plotting tool for complex pedigrees.
 }
 \keyword{plot}
