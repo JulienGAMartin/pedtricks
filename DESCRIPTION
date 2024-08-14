@@ -7,7 +7,7 @@ Authors@R: c(
     person("Matthew", "Wolak", , "mew0099@auburn.edu", role = c("aut"),
            comment = c(ORCID = "0000-0002-7962-0071")),
     person("Susan", "Johnston", , "Susan.Johnston@ed.ac.uk", role = c("aut"),
-           comment = c(ORCID = "YOUR-ORCID-ID")),
+           comment = c(ORCID = "0000-0002-5623-8902")),
     person("Michael", "Morrissey", , "michael.morrissey@st-andrews.ac.uk",
            role = c("aut"),
            comment = c(ORCID = "0000-0001-6209-0177"))
@@ -23,4 +23,4 @@ LazyData: true
 LazyLoad: yes
 Depends: 
     R (>= 4.0)
-Imports: ggplot2, plyr, kinship2, reshape2, mvtnorm, MCMCglmm, genetics
+Imports: ggplot2, dplyr, kinship2, tidyr, mvtnorm, MCMCglmm, genetics

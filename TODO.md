@@ -2,8 +2,13 @@
 
 - document and fix the plot function for ped_stats
 
-- replace draw_ped by ggpedigree
 - convert plots from plot.ped_stats to ggplot format
-- optimize ggpedigree
-- add functions to plot relatedness matrix
 - add ORCID for all of us
+- add functions to plot relatedness matrix
+
+
+ggpedigree.R
+- replace draw_ped by ggpedigree - make sure functionality matches
+- optimize ggpedigree x-coordinates (similar to PedView programme)
+- add sex information (took this out temporarily)
+- add data checks e.g. are vectors the same length etc.
