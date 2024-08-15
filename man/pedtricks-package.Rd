@@ -24,7 +24,7 @@ For backward compatibility with code using \code{pedantics} older names are stil
 Authors:
 \itemize{
   \item Matthew Wolak \email{mew0099@auburn.edu} (\href{https://orcid.org/0000-0002-7962-0071}{ORCID})
-  \item Susan Johnston \email{Susan.Johnston@ed.ac.uk} (\href{https://orcid.org/YOUR-ORCID-ID}{ORCID})
+  \item Susan Johnston \email{Susan.Johnston@ed.ac.uk} (\href{https://orcid.org/0000-0002-5623-8902}{ORCID})
   \item Michael Morrissey \email{michael.morrissey@st-andrews.ac.uk} (\href{https://orcid.org/0000-0001-6209-0177}{ORCID})
 }
 

@@ -7,6 +7,17 @@
 #' @param cohort integer. Default NULL. An optional vector assigning a cohort to
 #'   each id. If NULL, then `kinship2::kindepth` is used to assign cohorts to
 #'   ids.
+#' @param sex integer or character. Default NULL. An optional vector assigning a
+#'   sex to each id. This can be any value, but the first level numerically or
+#'   alphabetically (e.g. 0 or "F") will be plotted with a circle (traditionally
+#'   denoting a female) and the second level will be plotted with a square
+#'   (traditionally denoting a male). Any negative values, NA values, or third
+#'   alphabetically values will be plotted with a triangle. NOTE: These can be
+#'   overridden by specifying `sex.female` or `sex.male` values.
+#' @param sex.female integer or character. Default NULL. Indicates the value
+#'   used in `sex` for females. Will be plotted as circles.
+#' @param sex.male integer or character. Default NULL. Indicates the value used
+#'   in `sex` for males. Will be plotted as squares.
 #' @param id_labels logical. Default FALSE. Print the ids on the pedigree plot.
 #' @param remove_singletons logical. Default TRUE. Remove ids with no relatives
 #'   i.e., no offspring or parents assigned.
@@ -45,6 +56,9 @@ ggpedigree <- function(ids = NULL,
                        mothers = NULL,
                        fathers = NULL,
                        cohort = NULL,
+                       sex = NULL,
+                       sex.female = NULL,
+                       sex.male = NULL,
                        id_labels = FALSE,
                        remove_singletons = TRUE,
                        plot_unknown_cohort = TRUE,
@@ -62,6 +76,28 @@ ggpedigree <- function(ids = NULL,
                        ylab = "",
                        gg_theme = NULL) {
 
+  # Check that ids have not been duplicated
+
+  if(any(tabulate(factor(ids)) > 1)) stop("Duplicated values in ids")
+
+  # Check that cohort is an integer
+
+  if(!is.null(cohort)) if(!is.integer(cohort)) stop("Cohort must be an integer")
+
+  # Check that ids, mother, father, cohort (if specified) and sex (if specified) are the same length
+
+  if(length(na.omit(unique(c(length(ids),
+                             length(mothers),
+                             length(fathers),
+                             ifelse(is.null(cohort), NA, length(cohort)),
+                             ifelse(is.null(sex), NA, length(sex)))))) > 1){
+    stop("ids, mothers, fathers, cohort (if specified), and sex (if specified) must be the same length.")
+  }
+
+  # if sex.female is defined, check that sex.male is defined, and vice versa
+
+  if(!is.null(sex.female) &  is.null(sex.male)) stop("if sex.female is defined, sex.male must also be defined (and vice versa)")
+  if( is.null(sex.female) & !is.null(sex.male)) stop("if sex.female is defined, sex.male must also be defined (and vice versa)")
 
   # Format the pedigree to have ID, MOTHER, FATHER columns and recode NA to 0.
 
@@ -71,13 +107,7 @@ ggpedigree <- function(ids = NULL,
 
   for (i in 1:3) ped[which(is.na(ped[, i])), i] <- 0
 
-  # Check that ids have not been duplicated
 
-  if(any(tabulate(factor(ped$ID)) > 1)) stop("Duplicated values in ids")
-
-  # Check that cohort is an integer
-
-  if(!is.null(cohort)) if(!is.integer(cohort)) stop("Cohort must be an integer")
 
   # Add in parents that are not in ids as founders
 
@@ -169,6 +199,46 @@ ggpedigree <- function(ids = NULL,
 
   baseped4 <- droplevels(unique(subset(baseped3, select = c(ID, xcoord, Cohort))))
 
+  # If sex is defined, make a data.frame with sex information.
+
+  if(!is.null(sex)){
+
+    sextab <- data.frame(ID = as.character(ids),
+                         SEX = sex)
+
+    if(!is.null(sex.female)){
+
+      sex2 <- data.frame(SEX = c(sex.female, sex.male),
+                         GraphSEX = c(1, 2))
+
+      suppressMessages(sextab <- left_join(sextab, sex2))
+      sextab$GraphSEX[which(is.na(sextab$GraphSEX))] <- 3
+
+      sextab$SEX <- as.character(sextab$GraphSEX)
+      sextab$GraphSEX <- NULL
+
+      suppressMessages(baseped4 <- left_join(baseped, sextab))
+
+    } else {
+
+      suppressWarnings(x <- na.omit(unique(sex[as.numeric(sex) < 0])))
+
+      sexlevels <- sort(unique(sex))
+
+      sexlevels <- sexlevels[-which(sexlevels %in% x)]
+      if(length(x) > 0) sexlevels <- c(sexlevels, x)
+
+      suppressMessages(baseped4 <- left_join(baseped, sextab))
+      baseped4$SEX <- factor(baseped4$SEX, levels = sexlevels)
+
+    }
+
+  } else {
+
+    baseped4$SEX <- "1"
+
+  }
+
   # Plot the pedigrees
 
   if (is.null(gg_theme)) {
@@ -206,15 +276,18 @@ ggpedigree <- function(ids = NULL,
               geom_text(
                 data = baseped4, aes(x = xcoord, y = -Cohort, label = ID),
                 size = point_size, colour = point_colour, alpha = point_alpha
-              ))
+              )
+      )
 
     } else {
 
       print(p +
               geom_point(
-                data = baseped4, aes(x = xcoord, y = -Cohort),
+                data = baseped4, aes(x = xcoord, y = -Cohort, shape = SEX),
                 size = point_size, colour = point_colour, alpha = point_alpha
-              ))
+              ) +
+              scale_shape_manual(values = c(16, 15, 17))
+      )
     }
 
 

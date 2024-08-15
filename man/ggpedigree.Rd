@@ -9,6 +9,9 @@ ggpedigree(
   mothers = NULL,
   fathers = NULL,
   cohort = NULL,
+  sex = NULL,
+  sex.female = NULL,
+  sex.male = NULL,
   id_labels = FALSE,
   remove_singletons = TRUE,
   plot_unknown_cohort = TRUE,
@@ -39,6 +42,20 @@ or NA.}
 \item{cohort}{integer. Default NULL. An optional vector assigning a cohort to
 each id. If NULL, then \code{kinship2::kindepth} is used to assign cohorts to
 ids.}
+
+\item{sex}{integer or character. Default NULL. An optional vector assigning a
+sex to each id. This can be any value, but the first level numerically or
+alphabetically (e.g. 0 or "F") will be plotted with a circle (traditionally
+denoting a female) and the second level will be plotted with a square
+(traditionally denoting a male). Any negative values, NA values, or third
+alphabetically values will be plotted with a triangle. NOTE: These can be
+overridden by specifying \code{sex.female} or \code{sex.male} values.}
+
+\item{sex.female}{integer or character. Default NULL. Indicates the value
+used in \code{sex} for females. Will be plotted as circles.}
+
+\item{sex.male}{integer or character. Default NULL. Indicates the value used
+in \code{sex} for males. Will be plotted as squares.}
 
 \item{id_labels}{logical. Default FALSE. Print the ids on the pedigree plot.}
 
