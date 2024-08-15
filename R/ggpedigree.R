@@ -13,10 +13,10 @@
 #'   denoting a female) and the second level will be plotted with a square
 #'   (traditionally denoting a male). Any negative values, NA values, or third
 #'   alphabetically values will be plotted with a triangle. NOTE: These can be
-#'   overridden by specifying `sex.female` or `sex.male` values.
-#' @param sex.female integer or character. Default NULL. Indicates the value
+#'   overridden by specifying `sex_female` or `sex_male` values.
+#' @param sex_female integer or character. Default NULL. Indicates the value
 #'   used in `sex` for females. Will be plotted as circles.
-#' @param sex.male integer or character. Default NULL. Indicates the value used
+#' @param sex_male integer or character. Default NULL. Indicates the value used
 #'   in `sex` for males. Will be plotted as squares.
 #' @param id_labels logical. Default FALSE. Print the ids on the pedigree plot.
 #' @param remove_singletons logical. Default TRUE. Remove ids with no relatives
@@ -57,8 +57,8 @@ ggpedigree <- function(ids = NULL,
                        fathers = NULL,
                        cohort = NULL,
                        sex = NULL,
-                       sex.female = NULL,
-                       sex.male = NULL,
+                       sex_female = NULL,
+                       sex_male = NULL,
                        id_labels = FALSE,
                        remove_singletons = TRUE,
                        plot_unknown_cohort = TRUE,
@@ -94,10 +94,10 @@ ggpedigree <- function(ids = NULL,
     stop("ids, mothers, fathers, cohort (if specified), and sex (if specified) must be the same length.")
   }
 
-  # if sex.female is defined, check that sex.male is defined, and vice versa
+  # if sex_female is defined, check that sex_male is defined, and vice versa
 
-  if(!is.null(sex.female) &  is.null(sex.male)) stop("if sex.female is defined, sex.male must also be defined (and vice versa)")
-  if( is.null(sex.female) & !is.null(sex.male)) stop("if sex.female is defined, sex.male must also be defined (and vice versa)")
+  if(!is.null(sex_female) &  is.null(sex_male)) stop("if sex_female is defined, sex_male must also be defined (and vice versa)")
+  if( is.null(sex_female) & !is.null(sex_male)) stop("if sex_female is defined, sex_male must also be defined (and vice versa)")
 
   # Format the pedigree to have ID, MOTHER, FATHER columns and recode NA to 0.
 
@@ -206,9 +206,9 @@ ggpedigree <- function(ids = NULL,
     sextab <- data.frame(ID = as.character(ids),
                          SEX = sex)
 
-    if(!is.null(sex.female)){
+    if(!is.null(sex_female)){
 
-      sex2 <- data.frame(SEX = c(sex.female, sex.male),
+      sex2 <- data.frame(SEX = c(sex_female, sex_male),
                          GraphSEX = c(1, 2))
 
       suppressMessages(sextab <- left_join(sextab, sex2))
