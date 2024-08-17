@@ -3,7 +3,7 @@ Title: Functions to visualize, summarize and simulate data from pedigrees
 Version: 0.1.0.0000
 Authors@R: c(
     person("Julien", "Martin", , "julien.martin@uottawa.ca", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID")),
+           comment = c(ORCID = "0000-0001-7726-6809")),
     person("Matthew", "Wolak", , "mew0099@auburn.edu", role = c("aut"),
            comment = c(ORCID = "0000-0002-7962-0071")),
     person("Susan", "Johnston", , "Susan.Johnston@ed.ac.uk", role = c("aut"),
