@@ -252,5 +252,19 @@
     output
   }
 
-#' @rdname phen_sim
-phensim <- phen_sim
+#' @rdname pedantics-deprecated
+#' @section \code{phensim}: the function has just been renamed with no other changes for the moment
+#' @export
+phensim <- function(
+  pedigree, traits = 1, randomA = NULL, randomE = NULL,
+  parentalA = NULL, parentalE = NULL, sampled = NULL, records = NULL,
+  returnAllEffects = FALSE) {
+  .Deprecated(genome_sim,
+    msg = "this function from pedantics is deprecated, please use the new 'phen_sim()' instead",
+  )
+  phen_sim(
+    pedigree, traits, randomA, randomE,
+  parentalA, parentalE, sampled, records,
+  returnAllEffects
+  )
+}

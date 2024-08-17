@@ -1,7 +1,7 @@
 #' Converts a pedigree with individuals specified as factors to a numeric
 #' pedigree
 #'
-#' Some internal \code{pedantics} modules require that pedigrees be
+#' Some internal \code{pedtricks} modules require that pedigrees be
 #' specified only by numerical values, or including numerical values
 #' for missing data. This function provides the conversion to numeric but also
 #' back to factors if needed
@@ -11,7 +11,7 @@
 #' @param sire Sire codes - pass \code{using as.character()}
 #' @param dam Dam codes - pass \code{using as.character()}
 #' @param missingVal the indicator that should be substituted for missing values
-#' @param key A dataframe, as produced by \code{makePedigreeNumeric}, specifying factor codes for numeric values in is, sire, and dam
+#' @param key A dataframe, as produced by \code{convert_ped}, specifying factor codes for numeric values in id, sire, and dam
 #'
 #' @return
 #'   \item{numericPedigree}{The factor pedigree in numeric form}
@@ -82,4 +82,31 @@ convert_ped <- function(
     names(ped) <- c("id", "sire", "dam")
     return(ped)
   }
+}
+
+
+#' @rdname pedantics-deprecated
+#' @section \code{makePedigreeFactor}: the function is now a special case of the \code{convert_ped} function when type is factor
+#' @export
+makemakePedigreeFactor <- function(
+    id, sire, dam, key = NULL) {
+  .Deprecated(convert_ped,
+    msg = "this function from pedantics is deprecated, please use the new 'convert_ped()' instead",
+  )
+  convert_ped(
+    type = "factor", id, sire, dam, key
+  )
+}
+
+#' @rdname pedantics-deprecated
+#' @section \code{makePedigreeNumeric}: the function is now a special case of the \code{convert_ped} function when type is numeric
+#' @export
+makePedigreeNumeric <- function(
+    id, sire, dam, missingVal = NA) {
+  .Deprecated(convert_ped,
+    msg = "this function from pedantics is deprecated, please use the new 'convert_ped()' instead",
+  )
+  convert_ped(
+    type = "numeric", id, sire, dam, missingVal
+  )
 }

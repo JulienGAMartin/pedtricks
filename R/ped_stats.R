@@ -448,5 +448,11 @@ ped_stats <-
     results
   }
 
-#' @rdname ped_stats
-pedigreeStats <- ped_stats
+#' @rdname pedantics-deprecated
+#' @section \code{pedigreeStats}: the function has been simplified but only the functionality are still available via \code{ped_stats} and its summary and plot methods
+#' @export
+pedigreeStat <- function() {
+  .Deprecated(ped_stats,
+    msg = "this function from pedantics is deprecated and not working anymore. Please use 'ped_stats()' instead",
+  )
+}

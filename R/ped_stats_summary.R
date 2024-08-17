@@ -51,8 +51,14 @@ summary.ped_stats <- function(object, ...) {
   data.frame(sumData)
 }
 
-#' @rdname summary.ped_stats
-pedStatSummary <- summary.ped_stats
+#' @rdname pedantics-deprecated
+#' @section \code{pedStatSummary}: the function has been simplified but only the functionality are still available via \code{ped_stats} and its summary and plot methods
+#' @export
+pedStatSummary <- function() {
+  .Deprecated(summary.ped_stats,
+    msg = "this function from pedantics is deprecated and not working anymore. Please use 'ped_stats()' with its summary instead",
+  )
+}
 
 #' Plot output from ped_stats
 #'

@@ -256,5 +256,14 @@ micro_sim <-
     list(trueGenotypes = trueMicroGenotypes, observedGenotypes = observedMicroGenotypes)
   }
 
-#' @rdname micro_sim
-microsim <- micro_sim
+#' @rdname pedantics-deprecated
+#' @section \code{microsim}: the function has just been renamed with no other changes for the moment
+#' @export
+microsim <- function(pedigree, genFreqs = NULL, genotypesSample = NULL, knownGenotypes = NULL, records = NULL, eRate1 = 0, eRate2 = 0, eRate3 = 0) {
+  .Deprecated(genome_sim,
+    msg = "this function from pedantics is deprecated, please use the new 'micro_sim()' instead",
+  )
+  micro_sim(
+    pedigree, genFreqs, genotypesSample, knownGenotypes, records, eRate1, eRate2, eRate3
+  )
+}

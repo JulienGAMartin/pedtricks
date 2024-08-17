@@ -8,7 +8,6 @@
 #' Functions also exist to plot various types of pedgiree links associated with
 #' focal individuals.
 #'
-#' @aliases drawPedigree
 #' @param Ped  An ordered pedigree with 3 columns: id, dam, sire
 #' @param cohorts An optional numeric vector of the same length as the pedigree
 #'   designating, for example cohort afinities or birth years
@@ -271,5 +270,21 @@ draw_ped <- function(
   }
 }
 
-#' @rdname draw_ped
-drawPedigree <- draw_ped
+#' @rdname pedantics-deprecated
+#' @section \code{drawPedigree}: the function has just been renamed with no other changes for the moment, but will soon be replace by "ggpedigree" function
+#' @export
+drawPedigree <- function(
+    Ped, cohorts = NULL, sex = NULL, dat = NULL, dots = "n", plotfull = "y",
+    writeCohortLabels = "n", links = "all", sexInd = c(0, 1), dotSize = 0.001,
+    dataDots = "n", dataDots.cex = 2, cohortLabs.cex = 1,
+    retain = "informative", focal = NULL,
+    sexColours = c("red", "blue"), ...) {
+  .Deprecated(fix_ped,
+    msg = "this function from pedantics is deprecated, please use the new 'draw_ped()' instead",
+  )
+  draw_ped(Ped, cohorts, sex, dat, dots, plotfull, writeCohortLabels, links,
+    sexInd, dotSize,
+    dataDots, dataDots.cex, cohortLabs.cex,
+    retain, focal,
+    sexColours, ...)
+}

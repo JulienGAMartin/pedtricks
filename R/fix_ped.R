@@ -4,7 +4,6 @@
 #' Prepares a pedigree to conform with requirements of many softwares
 #' used in quantitative genetic analysis, as well as for many of the
 #' functions in pedantics.
-#' @aliases fixPedigree
 #' @param Ped An ordered pedigree with 3 columns: id, dam, sire
 #' @param dat An optional data frame, the same length as the pedigree
 #'
@@ -88,5 +87,13 @@ fix_ped <- function(Ped, dat = NULL) {
   fixedPedigree
 }
 
-#' @rdname fix_ped
-fixPedigree <- fix_ped
+#' @rdname pedantics-deprecated
+#' @section \code{fixPedigree}: the function has just been renamed with no other changes for the moment
+#' @export
+fixPedigree <- function(Ped, dat = NULL){
+.Deprecated(fix_ped,
+  msg="this function from pedantics is deprecated, please use the new 'fix_ped()' instead",
+
+)
+fix_ped(Ped, dat)
+}
