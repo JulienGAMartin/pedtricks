@@ -2,7 +2,6 @@
 % Please edit documentation in R/fix_ped.R
 \name{fix_ped}
 \alias{fix_ped}
-\alias{fixPedigree}
 \title{Manipulating pedigrees to prepare them for requirements of
 subsequent analyses
 Prepares a pedigree to conform with requirements of many softwares
@@ -10,8 +9,6 @@ used in quantitative genetic analysis, as well as for many of the
 functions in pedantics.}
 \usage{
 fix_ped(Ped, dat = NULL)
-
-fixPedigree(Ped, dat = NULL)
 }
 \arguments{
 \item{Ped}{An ordered pedigree with 3 columns: id, dam, sire}

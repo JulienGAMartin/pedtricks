@@ -2,30 +2,9 @@
 % Please edit documentation in R/draw_ped.R
 \name{draw_ped}
 \alias{draw_ped}
-\alias{drawPedigree}
 \title{Produce a graphical representation of a pedigree}
 \usage{
 draw_ped(
-  Ped,
-  cohorts = NULL,
-  sex = NULL,
-  dat = NULL,
-  dots = "n",
-  plotfull = "y",
-  writeCohortLabels = "n",
-  links = "all",
-  sexInd = c(0, 1),
-  dotSize = 0.001,
-  dataDots = "n",
-  dataDots.cex = 2,
-  cohortLabs.cex = 1,
-  retain = "informative",
-  focal = NULL,
-  sexColours = c("red", "blue"),
-  ...
-)
-
-drawPedigree(
   Ped,
   cohorts = NULL,
   sex = NULL,

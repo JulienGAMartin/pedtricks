@@ -10,8 +10,8 @@ ggpedigree(
   fathers = NULL,
   cohort = NULL,
   sex = NULL,
-  sex.female = NULL,
-  sex.male = NULL,
+  sex_female = NULL,
+  sex_male = NULL,
   id_labels = FALSE,
   remove_singletons = TRUE,
   plot_unknown_cohort = TRUE,
@@ -49,12 +49,12 @@ alphabetically (e.g. 0 or "F") will be plotted with a circle (traditionally
 denoting a female) and the second level will be plotted with a square
 (traditionally denoting a male). Any negative values, NA values, or third
 alphabetically values will be plotted with a triangle. NOTE: These can be
-overridden by specifying \code{sex.female} or \code{sex.male} values.}
+overridden by specifying \code{sex_female} or \code{sex_male} values.}
 
-\item{sex.female}{integer or character. Default NULL. Indicates the value
+\item{sex_female}{integer or character. Default NULL. Indicates the value
 used in \code{sex} for females. Will be plotted as circles.}
 
-\item{sex.male}{integer or character. Default NULL. Indicates the value used
+\item{sex_male}{integer or character. Default NULL. Indicates the value used
 in \code{sex} for males. Will be plotted as squares.}
 
 \item{id_labels}{logical. Default FALSE. Print the ids on the pedigree plot.}
@@ -66,6 +66,9 @@ i.e., no offspring or parents assigned.}
 cohorts. These are plotted in an "Unknown" cohort at the top of the
 pedigree. Be aware that any mothers and fathers of these individuals will
 be plotted below them.}
+
+\item{randomise_x_coordinates}{logical. Default TRUE. Randomise the position of
+individuals within each cohort.}
 
 \item{print_cohort_labels}{logical. Default TRUE. Prints cohort levels on the
 left hand side of plot.}
@@ -95,9 +98,6 @@ and paternal links.}
 
 \item{gg_theme}{Alternate theme information specified as a ggplot::theme()
 object.}
-
-\item{randomise_x}{logical. Default TRUE. Randomise the position of
-individuals within each cohort.}
 }
 \description{
 ggpedigree: Pedigree plotting tool for complex pedigrees.

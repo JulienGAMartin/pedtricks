@@ -18,7 +18,7 @@ convert_ped(type = "numeric", id, sire, dam, missingVal = NA, key = NULL)
 
 \item{missingVal}{the indicator that should be substituted for missing values}
 
-\item{key}{A dataframe, as produced by \code{makePedigreeNumeric}, specifying factor codes for numeric values in is, sire, and dam}
+\item{key}{A dataframe, as produced by \code{convert_ped}, specifying factor codes for numeric values in id, sire, and dam}
 }
 \value{
 \item{numericPedigree}{The factor pedigree in numeric form}
@@ -26,7 +26,7 @@ convert_ped(type = "numeric", id, sire, dam, missingVal = NA, key = NULL)
 identifiers}
 }
 \description{
-Some internal \code{pedantics} modules require that pedigrees be
+Some internal \code{pedtricks} modules require that pedigrees be
 specified only by numerical values, or including numerical values
 for missing data. This function provides the conversion to numeric but also
 back to factors if needed

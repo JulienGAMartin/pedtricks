@@ -9,7 +9,7 @@
 #' @import dplyr
 #' @import tidyr
 #' @import ggplot2
-##' @import kinship2
+#' @import kinship2
 #' @importFrom grDevices colors colours dev.new dev.off gray.colors postscript savePlot
 #' @importFrom graphics axis barplot hist lines mtext par plot
 #' @importFrom stats na.omit rbinom rnorm runif uniroot weighted.mean

@@ -13,15 +13,6 @@ ped_stats(
   includeA = TRUE,
   lowMem = FALSE
 )
-
-pedigreeStats(
-  Ped,
-  cohorts = NULL,
-  dat = NULL,
-  retain = "informative",
-  includeA = TRUE,
-  lowMem = FALSE
-)
 }
 \arguments{
 \item{Ped}{A pedigree}
