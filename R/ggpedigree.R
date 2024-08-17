@@ -25,7 +25,7 @@
 #'   cohorts. These are plotted in an "Unknown" cohort at the top of the
 #'   pedigree. Be aware that any mothers and fathers of these individuals will
 #'   be plotted below them.
-#' @param randomise_x logical. Default TRUE. Randomise the position of
+#' @param randomise_x_coordinates logical. Default TRUE. Randomise the position of
 #'   individuals within each cohort.
 #' @param print_cohort_labels logical. Default TRUE. Prints cohort levels on the
 #'   left hand side of plot.
