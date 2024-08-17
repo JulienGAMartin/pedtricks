@@ -6,3 +6,7 @@ SoayPedigree.txt
 test_31.txt
 test_38.txt
 test_78.txt
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^\.github$
