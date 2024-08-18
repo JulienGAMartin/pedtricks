@@ -1,7 +1,7 @@
 #' Simulates microsatellite data across a pedigree.
 #'
 #' Uses a pedigree with parents identified for all non-founding
-#' individuas and simulates microsatellite genotypes
+#' individuals and simulates microsatellite genotypes
 #'
 #' @param pedigree A pedigree
 #' @param genFreqs (optional) A list of allele frequencies, can be produced with \code{extractA}

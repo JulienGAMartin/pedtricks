@@ -38,7 +38,7 @@ micro_sim(
 }
 \description{
 Uses a pedigree with parents identified for all non-founding
-individuas and simulates microsatellite genotypes
+individuals and simulates microsatellite genotypes
 }
 \details{
 Error rates and data availability rates can be specified as either (1) single values to be applied to all individuals and all loci, (2) as a vector the same length as the number of loci, representing locus-specific rates to be applied uniformly to all individuals, or (3) as data frames with rows for each individual and columns for each locus.  In the third option, observed patterns of data availability can be simulated by supplying 0s and 1s for missing and available individual genotypes, respectively.

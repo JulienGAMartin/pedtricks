@@ -22,7 +22,7 @@
 #' 
 #' 
 #' @return
-#'   \item{phenotypes}{A dataframe containing phenotypes for all indivduals specified to have records.}
+#'   \item{phenotypes}{A dataframe containing phenotypes for all individuals specified to have records.}
 #'   \item{allEffects}{(optional) A dataframe with all direct and indirect genetic and environmental effects.}
 #' 
 #' @seealso \code{\link{micro_sim}}, \code{\link{genome_sim}}

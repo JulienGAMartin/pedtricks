@@ -36,7 +36,7 @@ phen_sim(
 \item{returnAllEffects}{If \code{TRUE} then all individual breeding values and environmental effects are returned}
 }
 \value{
-\item{phenotypes}{A dataframe containing phenotypes for all indivduals specified to have records.}
+\item{phenotypes}{A dataframe containing phenotypes for all individuals specified to have records.}
 \item{allEffects}{(optional) A dataframe with all direct and indirect genetic and environmental effects.}
 }
 \description{
