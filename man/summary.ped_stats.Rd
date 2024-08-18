@@ -17,7 +17,7 @@ paternities, pairwise sibship relationships, numbers
 of different classes of grand-parental relationships,
 pedigree depth, number of founders, mean subship sizes,
 simple statistics of numbers of inbred and non-inbred
-indivdiuals, and proportions of pairwise relationship
+individuals, and proportions of pairwise relationship
 coefficients equal to or greater than several
 thresholds.
 }

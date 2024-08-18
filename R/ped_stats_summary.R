@@ -13,7 +13,7 @@
 #' of different classes of grand-parental relationships,
 #' pedigree depth, number of founders, mean subship sizes,
 #' simple statistics of numbers of inbred and non-inbred
-#' indivdiuals, and proportions of pairwise relationship
+#' individuals, and proportions of pairwise relationship
 #' coefficients equal to or greater than several
 #' thresholds.
 #'
@@ -75,9 +75,9 @@ pedStatSummary <- function() {
 #'   Returns a table of numbers of records, maternities,
 #' paternities, pairwise sibship relationships, numbers
 #' of different classes of grand-parental relationships,
-#' pedigree depth, number of founders, mean subship sizes,
+#' pedigree depth, number of founders, mean sibship sizes,
 #' simple statistics of numbers of inbred and non-inbred
-#' indivdiuals, and proportions of pairwise relationship
+#' individuals, and proportions of pairwise relationship
 #' coefficients equal to or greater than several
 #' thresholds.
 #' @keywords plot

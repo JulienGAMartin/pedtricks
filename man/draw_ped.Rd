@@ -28,13 +28,13 @@ draw_ped(
 \item{Ped}{An ordered pedigree with 3 columns: id, dam, sire}
 
 \item{cohorts}{An optional numeric vector of the same length as the pedigree
-designating, for example cohort afinities or birth years}
+designating, for example cohort affinities or birth years}
 
 \item{sex}{An optional numeric vector of the same length as the pedigree
-containing the sexes (may be unknown) of all indivduals with entries in the
+containing the sexes (may be unknown) of all individuals with entries in the
 pedigree.  Defaults (modifiable with \code{sexInd}) are 0=male and 1=female}
 
-\item{dat}{An optional vector or data frame containg indicators of data availablility.  If dat contains only ones and zeros, then any individual with any entry of one will be considered as having data records.  If data contains values other than ones and zeros, individuals in the pedigree with rows in data that contain at least one available record, i.e., one data record is not NA, will be treated as having data.}
+\item{dat}{An optional vector or data frame containing indicators of data availability.  If dat contains only ones and zeros, then any individual with any entry of one will be considered as having data records.  If data contains values other than ones and zeros, individuals in the pedigree with rows in data that contain at least one available record, i.e., one data record is not NA, will be treated as having data.}
 
 \item{dots}{If 'y', then a dot will be printed representing each individual in the pedigree.  If sexes are available, dots will be colour coded by sex.}
 
@@ -48,15 +48,15 @@ pedigree.  Defaults (modifiable with \code{sexInd}) are 0=male and 1=female}
 
 \item{dotSize}{Set the dot size bigger or smaller}
 
-\item{dataDots}{Will print dots over the dots denoting indivdiuals, but denoting individuals with available data as indicated by dat.}
+\item{dataDots}{Will print dots over the dots denoting individuals, but denoting individuals with available data as indicated by dat.}
 
 \item{dataDots.cex}{controls the size of dataDots relative to dots.}
 
-\item{cohortLabs.cex}{controls the size of cohort lables.}
+\item{cohortLabs.cex}{controls the size of cohort labels.}
 
 \item{retain}{When those pedigree links only informative relative to phenotypic data availability are to be plotted, this controls whether or not a pruned pedigree based on phenotypic data is plotted (if set to "pruned"), or whether strictly only those informative pedigree links are plotted (the default)}
 
-\item{focal}{An optional list containing the id of an individual and the kinds of relatives of the focal individual to which to plot pedigree links.  Available types are 'offspring','descendents','parents',,ancestors', and 'kin'.}
+\item{focal}{An optional list containing the id of an individual and the kinds of relatives of the focal individual to which to plot pedigree links.  Available types are 'offspring','descendants','parents',,ancestors', and 'kin'.}
 
 \item{sexColours}{The colours that will be used to draw points and or lines associated with males and females.}
 
@@ -64,11 +64,11 @@ pedigree.  Defaults (modifiable with \code{sexInd}) are 0=male and 1=female}
 }
 \description{
 Plots a pedigree, with options specific to considerations for pedigrees used
-to for quantitative genetic inferencein natural populations.  Pedigrees
+to for quantitative genetic inference in natural populations.  Pedigrees
 containing only those individuals that are informative with respect to
 (genetic) variation in an arbitrary trait can be plotted, potentially
 overlain on a complete pedigree.
-Functions also exist to plot various types of pedgiree links associated with
+Functions also exist to plot various types of pedigree links associated with
 focal individuals.
 }
 \examples{

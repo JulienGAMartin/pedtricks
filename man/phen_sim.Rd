@@ -40,14 +40,14 @@ phen_sim(
 \item{allEffects}{(optional) A dataframe with all direct and indirect genetic and environmental effects.}
 }
 \description{
-Simulates phenotypic data across arbitrary pedigrees.  \code{ phen_sim} simulate direct, maternal and paternal genetica and environmental effects for an arbitrary number of traits with arbitrary patterns of missing data.
+Simulates phenotypic data across arbitrary pedigrees.  \code{ phen_sim} simulate direct, maternal and paternal genetic and environmental effects for an arbitrary number of traits with arbitrary patterns of missing data.
 }
 \details{
 \code{randomA} and \code{randomE} are square matrices with dimension equal to the sum of the number direct and indirect effects.  This must be a multiple of the number of traits, i.e. if an indirect effect is to be simulated for only one of multiple traits, those traits with no indirect effect should be included with (co)variances of zero.
 
 \code{parentalA} and \code{parentalE} are optional vectors of characters indicating which trait positions in \code{randomA} and \code{randomE} are to be treated as indirect effects, and which effects to treat as maternal or paternal.  Valid values are 'd', 'm', and 'p', for direct, maternal indirect and paternal indirect effects, respectively.
 
-\code{records} can be specified either (1) as asingle value to be applied to all individuals and traits, (2) as a vector the same length as the number of traits, representing trait-specific rates to be applied uniformly to all individuals, or (3) as data frames with rows for each individual and columns for each trait.  In the third option, observed patterns of data availability can be simulated by supplying 0s and 1s for missing and available individual genotypes, respectively.
+\code{records} can be specified either (1) as a single value to be applied to all individuals and traits, (2) as a vector the same length as the number of traits, representing trait-specific rates to be applied uniformly to all individuals, or (3) as data frames with rows for each individual and columns for each trait.  In the third option, observed patterns of data availability can be simulated by supplying 0s and 1s for missing and available individual genotypes, respectively.
 }
 \examples{
 ## make up a pedigree

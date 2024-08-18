@@ -37,7 +37,7 @@ micro_sim(
 \item{observedGenotypes}{A data frame of plausible observed genotypes, given specified patterns of missingness and errors.}
 }
 \description{
-Uses a pedgiree with parents identified for all non-founding
+Uses a pedigree with parents identified for all non-founding
 individuas and simulates microsatellite genotypes
 }
 \details{

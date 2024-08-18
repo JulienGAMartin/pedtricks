@@ -1,7 +1,7 @@
 #' A function to simulated phenotypic data
 #' 
 #' @description 
-#' Simulates phenotypic data across arbitrary pedigrees.  \code{ phen_sim} simulate direct, maternal and paternal genetica and environmental effects for an arbitrary number of traits with arbitrary patterns of missing data.
+#' Simulates phenotypic data across arbitrary pedigrees.  \code{ phen_sim} simulate direct, maternal and paternal genetic and environmental effects for an arbitrary number of traits with arbitrary patterns of missing data.
 #' 
 #' @param pedigree A pedigree 
 #' @param traits The number of traits for which data should be simulated. 
@@ -18,7 +18,7 @@
 #' 
 #' \code{parentalA} and \code{parentalE} are optional vectors of characters indicating which trait positions in \code{randomA} and \code{randomE} are to be treated as indirect effects, and which effects to treat as maternal or paternal.  Valid values are 'd', 'm', and 'p', for direct, maternal indirect and paternal indirect effects, respectively.
 #' 
-#' \code{records} can be specified either (1) as asingle value to be applied to all individuals and traits, (2) as a vector the same length as the number of traits, representing trait-specific rates to be applied uniformly to all individuals, or (3) as data frames with rows for each individual and columns for each trait.  In the third option, observed patterns of data availability can be simulated by supplying 0s and 1s for missing and available individual genotypes, respectively.
+#' \code{records} can be specified either (1) as a single value to be applied to all individuals and traits, (2) as a vector the same length as the number of traits, representing trait-specific rates to be applied uniformly to all individuals, or (3) as data frames with rows for each individual and columns for each trait.  In the third option, observed patterns of data availability can be simulated by supplying 0s and 1s for missing and available individual genotypes, respectively.
 #' 
 #' 
 #' @return

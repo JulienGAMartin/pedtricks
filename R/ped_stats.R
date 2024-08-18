@@ -7,7 +7,7 @@
 #' @param Ped A pedigree
 #' @param cohorts (Optional) Cohort affinities for members of the pedigree
 #' @param dat (Optional) Available data based upon which the pedigree can be pruned for just informative individuals
-#' @param retain The default value ('informative') results in pedigree being pruned to only those indivduals who's records contribute to estimation of quantitative genetic parameters with respect to the available data specified in \code{dat}.  Otherwise, specifying a value of 'ancestors' will result in the inclusion of all ancestors of phenotyped individuals.
+#' @param retain The default value ('informative') results in pedigree being pruned to only those individuals who's records contribute to estimation of quantitative genetic parameters with respect to the available data specified in \code{dat}.  Otherwise, specifying a value of 'ancestors' will result in the inclusion of all ancestors of phenotyped individuals.
 #' @param includeA If TRUE, additive genetic relatedness matrix is returned.
 #' @param lowMem If TRUE, then stats based on calculation of A are not performed.
 #'
@@ -21,7 +21,7 @@
 #'   \item{totalMaternalGrandfathers}{Total number of maternal grandfathers defined by the pedigree.}
 #'   \item{totalPaternalGrandmothers}{Total number of paternal grandmothers defined by the pedigree.}
 #'   \item{totalPaternalGrandfathers}{Total number of paternal grandfathers defined by the pedigree.}
-#'   \item{pedigreeDepth}{The pedidigree pedth, i.e. maximum number of ancestral generations, for each individual.}
+#'   \item{pedigreeDepth}{The pedigree depth, i.e. maximum number of ancestral generations, for each individual.}
 #'   \item{inbreedingCoefficients}{Individual inbreeding coefficients}
 #'   \item{maternalSibships}{Sibship size of each individual appearing the the dam column of the pedigree.}
 #'   \item{paternalSibships}{Sibship size of each individual appearing the the sire column of the pedigree.}
@@ -30,7 +30,7 @@
 #'   \item{analyzedPedigree}{Returns the pedigree.}
 #'
 #'
-#'   \item{sampleSizesByCohort}{(Optional) Numer of individuals belonging to each cohort.}
+#'   \item{sampleSizesByCohort}{(Optional) Number of individuals belonging to each cohort.}
 #'   \item{maternitiesByCohort}{(Optional) Number of assigned maternities by offspring cohort.}
 #'   \item{paternitiesByCohort}{(Optional) Number of assigned paternities by offspring cohort.}
 #'   \item{fullSibsByCohort}{(Optional) Number of pair-wise full sib relationships by cohort - note the sum of these need not be equal to totalFullSibs in pedigrees of long-lived organisms.}

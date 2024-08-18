@@ -8,7 +8,7 @@
 #' @param dat An optional data frame, the same length as the pedigree
 #'
 #' @return
-#'   Returns a pedigree in which all individuals that exsit in the dam
+#'   Returns a pedigree in which all individuals that exist in the dam
 #' and sire columns are represented by their own record lines, occurring
 #' before the records of their first offspring.  If data are supplied,
 #' then fix_ped will return a dataframe, the first two columns are

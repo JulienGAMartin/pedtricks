@@ -49,7 +49,7 @@ denoting a female) and the second level will be plotted with a square
 alphabetically values will be plotted with a triangle. NOTE: These can be
 overridden by specifying \code{sex_female} or \code{sex_male} values.}
 
-\item{sex_code}{Default NULL. A vector of length 2, indicatinging the value
+\item{sex_code}{Default NULL. A vector of length 2, indicating the value
 used in \code{sex} for females and males respectively. Females will be plotted
 as circles and males as squares.}
 

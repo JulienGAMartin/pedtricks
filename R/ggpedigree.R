@@ -16,7 +16,7 @@
 #'   (traditionally denoting a male). Any negative values, NA values, or third
 #'   alphabetically values will be plotted with a triangle. NOTE: These can be
 #'   overridden by specifying `sex_female` or `sex_male` values.
-#' @param sex_code Default NULL. A vector of length 2, indicatinging the value
+#' @param sex_code Default NULL. A vector of length 2, indicating the value
 #'   used in `sex` for females and males respectively. Females will be plotted
 #'   as circles and males as squares.
 #' @param id_labels logical. Default FALSE. Print the ids on the pedigree plot.

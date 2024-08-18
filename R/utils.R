@@ -265,7 +265,7 @@ summary.genotypeD <- function(object, ...) {
 #' @param G data frame or list of \code{genotype} objects
 #' @param marker.type \code{"MSW"} or \code{"MSC"} for co-dominant markers with Wang's (2004) model of genotyping error or CERVUS's model of genotyping error (Marshall, 1998) or \code{"AFLP"} for dominant markers.
 #' 
-#' @return list of allele frequnecies at each loci
+#' @return list of allele frequencies at each loci
 #' @author Jarrod Hadfield \email{j.hadfield@ed.ac.uk}
 #' @seealso \code{\link{genotype.list}}, \code{genotype}
 #' @examples

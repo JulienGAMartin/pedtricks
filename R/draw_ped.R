@@ -1,31 +1,31 @@
 #' Produce a graphical representation of a pedigree
 #'
 #' Plots a pedigree, with options specific to considerations for pedigrees used
-#' to for quantitative genetic inferencein natural populations.  Pedigrees
+#' to for quantitative genetic inference in natural populations.  Pedigrees
 #' containing only those individuals that are informative with respect to
 #' (genetic) variation in an arbitrary trait can be plotted, potentially
 #' overlain on a complete pedigree.
-#' Functions also exist to plot various types of pedgiree links associated with
+#' Functions also exist to plot various types of pedigree links associated with
 #' focal individuals.
 #'
 #' @param Ped  An ordered pedigree with 3 columns: id, dam, sire
 #' @param cohorts An optional numeric vector of the same length as the pedigree
-#'   designating, for example cohort afinities or birth years
+#'   designating, for example cohort affinities or birth years
 #' @param sex An optional numeric vector of the same length as the pedigree
-#'   containing the sexes (may be unknown) of all indivduals with entries in the
+#'   containing the sexes (may be unknown) of all individuals with entries in the
 #'   pedigree.  Defaults (modifiable with \code{sexInd}) are 0=male and 1=female
-#' @param dat An optional vector or data frame containg indicators of data availablility.  If dat contains only ones and zeros, then any individual with any entry of one will be considered as having data records.  If data contains values other than ones and zeros, individuals in the pedigree with rows in data that contain at least one available record, i.e., one data record is not NA, will be treated as having data.
+#' @param dat An optional vector or data frame containing indicators of data availability.  If dat contains only ones and zeros, then any individual with any entry of one will be considered as having data records.  If data contains values other than ones and zeros, individuals in the pedigree with rows in data that contain at least one available record, i.e., one data record is not NA, will be treated as having data.
 #' @param dots If 'y', then a dot will be printed representing each individual in the pedigree.  If sexes are available, dots will be colour coded by sex.
 #' @param plotfull To be used when dat is supplied.  If 'y' (the default), individuals in the pedigree that are uninformative with respect to the available data have their pedigree links plotted in gray.
 #' @param writeCohortLabels To be used when cohorts is used.  Will plot the cohort values on the left hand side of the pedigree image.
 #' @param links Default is 'all', other values are 'mums' to print only maternal pedigree links and 'dads' to print only paternal pedigree links.
 #' @param sexInd To be used with if sex is supplied and if the vector of sex specifiers differs from the default.
 #' @param dotSize Set the dot size bigger or smaller
-#' @param dataDots Will print dots over the dots denoting indivdiuals, but denoting individuals with available data as indicated by dat.
+#' @param dataDots Will print dots over the dots denoting individuals, but denoting individuals with available data as indicated by dat.
 #' @param dataDots.cex controls the size of dataDots relative to dots.
-#' @param cohortLabs.cex controls the size of cohort lables.
+#' @param cohortLabs.cex controls the size of cohort labels.
 #' @param retain When those pedigree links only informative relative to phenotypic data availability are to be plotted, this controls whether or not a pruned pedigree based on phenotypic data is plotted (if set to "pruned"), or whether strictly only those informative pedigree links are plotted (the default)
-#' @param focal An optional list containing the id of an individual and the kinds of relatives of the focal individual to which to plot pedigree links.  Available types are 'offspring','descendents','parents',,ancestors', and 'kin'.
+#' @param focal An optional list containing the id of an individual and the kinds of relatives of the focal individual to which to plot pedigree links.  Available types are 'offspring','descendants','parents',,ancestors', and 'kin'.
 #' @param sexColours The colours that will be used to draw points and or lines associated with males and females.
 #' @param ... Additional graphical parameters.
 #'
@@ -199,7 +199,7 @@ draw_ped <- function(
     }
 
 
-    if (focal[2] == "descendents" | focal[2] == "kin") {
+    if (focal[2] == "descendants" | focal[2] == "kin") {
       for (x in 1:10) {
         Ped.focal <- rbind(Ped.focal, Ped[which(Ped$dam %in% Ped.focal$id), ])
         Ped.focal <- rbind(Ped.focal, Ped[which(Ped$sire %in% Ped.focal$id), ])

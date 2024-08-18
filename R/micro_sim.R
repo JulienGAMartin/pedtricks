@@ -1,6 +1,6 @@
 #' Simulates microsatellite data across a pedigree.
 #'
-#' Uses a pedgiree with parents identified for all non-founding
+#' Uses a pedigree with parents identified for all non-founding
 #' individuas and simulates microsatellite genotypes
 #'
 #' @param pedigree A pedigree
