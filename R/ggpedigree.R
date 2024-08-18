@@ -1,23 +1,23 @@
 #' ggpedigree: Pedigree plotting tool for complex pedigrees.
-#' @param ids A vector of individual identifiers
-#' @param mothers A vector of mothers corresponding to ids. Missing values are 0
+#' @params .data an optional data frame object with all the pedigree information
+#' @param ids a column of .data or a vector of individual identifiers
+#' @param mothers A column of .data or a vector of mothers corresponding to ids. Missing values are 0
 #'   or NA.
-#' @param fathers A vector of fathers corresponding to ids. Missing values are 0
+#' @param fathers A column of .data or a vector of fathers corresponding to ids. Missing values are 0
 #'   or NA.
-#' @param cohort integer. Default NULL. An optional vector assigning a cohort to
+#' @param cohort integer. Default NULL. A column of .data or an optional vector assigning a cohort to
 #'   each id. If NULL, then `kinship2::kindepth` is used to assign cohorts to
 #'   ids.
-#' @param sex integer or character. Default NULL. An optional vector assigning a
+#' @param sex integer or character. Default NULL. An optional column of .data or a vector assigning a
 #'   sex to each id. This can be any value, but the first level numerically or
 #'   alphabetically (e.g. 0 or "F") will be plotted with a circle (traditionally
 #'   denoting a female) and the second level will be plotted with a square
 #'   (traditionally denoting a male). Any negative values, NA values, or third
 #'   alphabetically values will be plotted with a triangle. NOTE: These can be
 #'   overridden by specifying `sex_female` or `sex_male` values.
-#' @param sex_female integer or character. Default NULL. Indicates the value
-#'   used in `sex` for females. Will be plotted as circles.
-#' @param sex_male integer or character. Default NULL. Indicates the value used
-#'   in `sex` for males. Will be plotted as squares.
+#' @param sex_code Default NULL. A vector of length 2, indicatinging the value
+#'   used in `sex` for females and males respectively. Females will be plotted
+#'   as circles and males as squares.
 #' @param id_labels logical. Default FALSE. Print the ids on the pedigree plot.
 #' @param remove_singletons logical. Default TRUE. Remove ids with no relatives
 #'   i.e., no offspring or parents assigned.
@@ -52,13 +52,13 @@
 #' @export
 
 
-ggpedigree <- function(ids = NULL,
-                       mothers = NULL,
-                       fathers = NULL,
-                       cohort = NULL,
-                       sex = NULL,
-                       sex_female = NULL,
-                       sex_male = NULL,
+ggpedigree <- function(.data,
+                       ids,
+                       mothers,
+                       fathers,
+                       cohort,
+                       sex,
+                       sex_code = NULL,
                        id_labels = FALSE,
                        remove_singletons = TRUE,
                        plot_unknown_cohort = TRUE,
@@ -71,11 +71,39 @@ ggpedigree <- function(ids = NULL,
                        line_alpha = 0.3,
                        point_size = 1,
                        point_colour = "black",
-                       point_alpha = 1,
-                       xlab = "",
-                       ylab = "",
-                       gg_theme = NULL) {
-
+                       point_alpha = 1) {
+  if (hasArg(.data)) {
+    if (!hasArg(ids) || !hasArg(mothers) || !hasArg(fathers)) {
+      warning(
+        "the first 3 columns were used for id, dam and sire identity, please specify if not correct or to remove the warning"
+      )
+    }
+    if (hasArg(ids)) {
+      ids <- as.vector(select(.data, {{ids}}))[[1]]
+    } else {
+      ids <- as.vector(select(.data, 1))[[1]]
+    }
+    if (hasArg(mothers)) {
+      mothers <- as.vector(select(.data, {{ mothers }}))[[1]]
+    } else {
+      mothers <- as.vector(select(.data, 2))[[1]]
+    }
+    if (hasArg(fathers)) {
+      fathers <- as.vector(select(.data, {{ fathers }}))[[1]]
+    } else {
+      fathers <- as.vector(select(.data, 3))[[1]]
+    }
+    if (hasArg(sex)) {
+      sex <- as.vector(select(.data, {{ sex }}))[[1]]
+    } else {
+      sex <- NULL
+    }
+    if (hasArg(cohort)) {
+      cohort <- as.vector(select(.data, {{ cohort }}))[[1]]
+    } else {
+      cohort <- NULL
+    }
+  }
   # Check that ids have not been duplicated
 
   if(any(tabulate(factor(ids)) > 1)) stop("Duplicated values in ids")
@@ -96,8 +124,8 @@ ggpedigree <- function(ids = NULL,
 
   # if sex_female is defined, check that sex_male is defined, and vice versa
 
-  if(!is.null(sex_female) &  is.null(sex_male)) stop("if sex_female is defined, sex_male must also be defined (and vice versa)")
-  if( is.null(sex_female) & !is.null(sex_male)) stop("if sex_female is defined, sex_male must also be defined (and vice versa)")
+  if (!is.null(sex) & is.null(sex_code)) stop("sex_code should be provided when sex is specified")
+  if (!is.null(sex_code) & length(sex_code) != 2) stop("sex_code should be a vector of length 2 providing the coding for females and then males")
 
   # Format the pedigree to have ID, MOTHER, FATHER columns and recode NA to 0.
 
