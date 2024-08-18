@@ -10,10 +10,12 @@
 #' @import tidyr
 #' @import ggplot2
 #' @import kinship2
+#' @import nadiv
 #' @importFrom grDevices colors colours dev.new dev.off gray.colors postscript savePlot
 #' @importFrom graphics axis barplot hist lines mtext par plot
 #' @importFrom stats na.omit rbinom rnorm runif uniroot weighted.mean
 #' @importFrom utils flush.console head
+#' @importFrom Matrix image
 #' @importFrom methods hasArg
 #' @importFrom mvtnorm rmvnorm
 #' @importFrom grDevices savePlot

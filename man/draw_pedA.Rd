@@ -58,3 +58,4 @@ values of the numerator relatedness matrix.
 \author{
 \email{mew0099@auburn.edu}
 }
+\keyword{plot}

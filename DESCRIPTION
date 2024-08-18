@@ -23,4 +23,4 @@ LazyData: true
 LazyLoad: yes
 Depends: 
     R (>= 4.0)
-Imports: ggplot2, dplyr, kinship2, tidyr, mvtnorm, MCMCglmm, genetics, methods
+Imports: ggplot2, dplyr, kinship2, tidyr, Matrix, mvtnorm, MCMCglmm, nadiv, genetics, methods

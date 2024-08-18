@@ -37,6 +37,7 @@
 #'     more = TRUE)
 #'   plot(Achrt, position = c(xmin = 0.55, ymin = 0, xmax = 1, ymax = 1))
 #'
+#' @keywords plot
 #' @export
 draw_pedA <- function(pedigree,
   order = c("original", "generation", "user"), grp = NULL, ...){
