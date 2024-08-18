@@ -1,5 +1,6 @@
 #' ggpedigree: Pedigree plotting tool for complex pedigrees.
-#' @params .data an optional data frame object with all the pedigree information
+#'
+#' @param .data an optional data frame object with all the pedigree information
 #' @param ids a column of .data or a vector of individual identifiers
 #' @param mothers A column of .data or a vector of mothers corresponding to ids. Missing values are 0
 #'   or NA.
@@ -38,7 +39,8 @@
 #' @param point_size Default = 1. Point size for ids.
 #' @param point_colour Default = "black". Point colour for ids.
 #' @param point_alpha Default = 1. Point alpha for ids.
-#' #' @examples
+#'
+#' @examples
 #' data(gryphons)
 #' pedigree <- fix_ped(gryphons[, 1:3])
 #'
@@ -46,10 +48,10 @@
 #' ggpedigree(pedigree)
 #' \dontrun{
 #' # specifying the column names for id, mother and father
-#'  ggpedigree(pedigree, id, dam, sire)
-#' 
+#' ggpedigree(pedigree, id, dam, sire)
+#'
 #' # with cohort and sex
-#' ggpedigree(gryphons, cohort=cohort, sex=sex, sex_code = c(0,1))
+#' ggpedigree(gryphons, cohort = cohort, sex = sex, sex_code = c(0, 1))
 #' }
 #' @keywords plot
 #' @export
@@ -81,7 +83,7 @@ ggpedigree <- function(.data,
       )
     }
     if (hasArg(ids)) {
-      ids <- as.vector(select(.data, {{ids}}))[[1]]
+      ids <- as.vector(select(.data, {{ ids }}))[[1]]
     } else {
       ids <- as.vector(select(.data, 1))[[1]]
     }
@@ -159,7 +161,7 @@ ggpedigree <- function(.data,
     ped
   )
 
-  baseped <- unique(subset(baseped, ID != 0))
+  baseped <- unique(filter(baseped, .data$ID != 0))
 
   # Remove Singletons
 
@@ -219,7 +221,7 @@ ggpedigree <- function(.data,
 
   baseped2 <- pivot_longer(ped, cols = c("MOTHER", "FATHER"), names_to = "ParentSex", values_to = "ParentID")
 
-  baseped2 <- subset(baseped2, ParentID != 0)
+  baseped2 <- filter(baseped2, .data$ParentID != 0)
 
   # Create a group vector for parent/offspring relationship
 
@@ -231,12 +233,12 @@ ggpedigree <- function(.data,
 
   # Add cohort information
 
-  suppressMessages(baseped3 <- left_join(baseped3, subset(baseped, select = c(ID, Cohort, xcoord))))
+  suppressMessages(baseped3 <- left_join(baseped3, select(baseped, "ID", "Cohort", "xcoord")))
 
   # baseped3 is used for the parental links. Create baseped4 which is a unique
   # value for each individual to avoid overplotting.
 
-  baseped4 <- droplevels(unique(subset(baseped3, select = c(ID, xcoord, Cohort))))
+  baseped4 <- droplevels(unique(select(baseped3, "ID", "xcoord", "Cohort")))
 
   # If sex is defined, make a data.frame with sex information.
 
@@ -293,10 +295,10 @@ ggpedigree <- function(.data,
   if (!return_plot_tables) {
     p <- ggplot() +
       geom_line(data = baseped3, aes(
-        x = xcoord,
-        y = -Cohort,
-        group = Group,
-        colour = ParentSex
+        x = .data$xcoord,
+        y = -.data$Cohort,
+        group = .data$Group,
+        colour = .data$ParentSex
       ), alpha = line_alpha) +
       scale_y_continuous(
         breaks = -seq(min(cohort_order), max(cohort_order), 1),
@@ -309,13 +311,13 @@ ggpedigree <- function(.data,
     if (id_labels) {
       return(p +
         geom_text(
-          data = baseped4, aes(x = xcoord, y = -Cohort, label = ID),
+          data = baseped4, aes(x = .data$xcoord, y = -.data$Cohort, label = .data$ID),
           size = point_size, colour = point_colour, alpha = point_alpha
         ))
     } else {
       return(p +
         geom_point(
-          data = baseped4, aes(x = xcoord, y = -Cohort, shape = SEX),
+          data = baseped4, aes(x = .data$xcoord, y = -.data$Cohort, shape = .data$SEX),
           size = point_size, colour = point_colour, alpha = point_alpha
         ) +
         scale_shape_manual(values = c(16, 15, 17)))

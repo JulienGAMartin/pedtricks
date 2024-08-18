@@ -5,45 +5,43 @@
 \title{ggpedigree: Pedigree plotting tool for complex pedigrees.}
 \usage{
 ggpedigree(
-  ids = NULL,
-  mothers = NULL,
-  fathers = NULL,
-  cohort = NULL,
-  sex = NULL,
-  sex_female = NULL,
-  sex_male = NULL,
+  .data,
+  ids,
+  mothers,
+  fathers,
+  cohort,
+  sex,
+  sex_code = NULL,
   id_labels = FALSE,
   remove_singletons = TRUE,
   plot_unknown_cohort = TRUE,
   randomise_x_coordinates = FALSE,
   print_cohort_labels = TRUE,
   return_plot_tables = FALSE,
-  suppress_plot = FALSE,
   line_col_mother = "#E41A1C",
   line_col_father = "#377EB8",
   line_alpha = 0.3,
   point_size = 1,
   point_colour = "black",
-  point_alpha = 1,
-  xlab = "",
-  ylab = "",
-  gg_theme = NULL
+  point_alpha = 1
 )
 }
 \arguments{
-\item{ids}{A vector of individual identifiers}
+\item{.data}{an optional data frame object with all the pedigree information}
 
-\item{mothers}{A vector of mothers corresponding to ids. Missing values are 0
+\item{ids}{a column of .data or a vector of individual identifiers}
+
+\item{mothers}{A column of .data or a vector of mothers corresponding to ids. Missing values are 0
 or NA.}
 
-\item{fathers}{A vector of fathers corresponding to ids. Missing values are 0
+\item{fathers}{A column of .data or a vector of fathers corresponding to ids. Missing values are 0
 or NA.}
 
-\item{cohort}{integer. Default NULL. An optional vector assigning a cohort to
+\item{cohort}{integer. Default NULL. A column of .data or an optional vector assigning a cohort to
 each id. If NULL, then \code{kinship2::kindepth} is used to assign cohorts to
 ids.}
 
-\item{sex}{integer or character. Default NULL. An optional vector assigning a
+\item{sex}{integer or character. Default NULL. An optional column of .data or a vector assigning a
 sex to each id. This can be any value, but the first level numerically or
 alphabetically (e.g. 0 or "F") will be plotted with a circle (traditionally
 denoting a female) and the second level will be plotted with a square
@@ -51,11 +49,9 @@ denoting a female) and the second level will be plotted with a square
 alphabetically values will be plotted with a triangle. NOTE: These can be
 overridden by specifying \code{sex_female} or \code{sex_male} values.}
 
-\item{sex_female}{integer or character. Default NULL. Indicates the value
-used in \code{sex} for females. Will be plotted as circles.}
-
-\item{sex_male}{integer or character. Default NULL. Indicates the value used
-in \code{sex} for males. Will be plotted as squares.}
+\item{sex_code}{Default NULL. A vector of length 2, indicatinging the value
+used in \code{sex} for females and males respectively. Females will be plotted
+as circles and males as squares.}
 
 \item{id_labels}{logical. Default FALSE. Print the ids on the pedigree plot.}
 
@@ -74,10 +70,7 @@ individuals within each cohort.}
 left hand side of plot.}
 
 \item{return_plot_tables}{logical. Default FALSE. Returns an object with the
-line and point data used for the plot.}
-
-\item{suppress_plot}{logical. Default FALSE. Will stop the plot from being
-output e.g., if using return_plot_tables to retrieve the plot objects.}
+line and point data used for the plot, but the plot will not be generated}
 
 \item{line_col_mother}{Default = "#E41A1C". Line colour for maternal links.}
 
@@ -91,15 +84,22 @@ and paternal links.}
 \item{point_colour}{Default = "black". Point colour for ids.}
 
 \item{point_alpha}{Default = 1. Point alpha for ids.}
-
-\item{xlab}{Default = blank. x-axis label.}
-
-\item{ylab}{Default = blank. y-axis label}
-
-\item{gg_theme}{Alternate theme information specified as a ggplot::theme()
-object.}
 }
 \description{
 ggpedigree: Pedigree plotting tool for complex pedigrees.
+}
+\examples{
+data(gryphons)
+pedigree <- fix_ped(gryphons[, 1:3])
+
+## draw the gryphon pedigree by pedigree depth
+ggpedigree(pedigree)
+\dontrun{
+# specifying the column names for id, mother and father
+ggpedigree(pedigree, id, dam, sire)
+
+# with cohort and sex
+ggpedigree(gryphons, cohort = cohort, sex = sex, sex_code = c(0, 1))
+}
 }
 \keyword{plot}

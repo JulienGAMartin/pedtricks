@@ -24,3 +24,9 @@ remotes::install_github(
 ### functions renamed
 * `fixPedigree()` is now `fix_ped()`
 * `genomesim()`, `microsim()` and `phensim()` have been renamed as `genome_sim()`, `micro_sim()` and `phen_sim()`
+
+## future for 1.0.0
+* `ggpedigree` a ggplot2 style function to plot pedigrees to replace `drawPedigree`
+* reimplement all plot methods from ped_stats using ggplot
+* add a plotting function for relatedness matrices
+* ...

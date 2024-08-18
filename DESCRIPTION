@@ -1,6 +1,6 @@
 Package: pedtricks
 Title: Functions to visualize, summarize and simulate data from pedigrees
-Version: 0.1.0.0000
+Version: 0.3.0.0000
 Authors@R: c(
     person("Julien", "Martin", , "julien.martin@uottawa.ca", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-7726-6809")),
@@ -23,4 +23,4 @@ LazyData: true
 LazyLoad: yes
 Depends: 
     R (>= 4.0)
-Imports: ggplot2, dplyr, kinship2, tidyr, mvtnorm, MCMCglmm, genetics
+Imports: ggplot2, dplyr, kinship2, tidyr, mvtnorm, MCMCglmm, genetics, methods
