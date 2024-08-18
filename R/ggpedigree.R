@@ -30,9 +30,7 @@
 #' @param print_cohort_labels logical. Default TRUE. Prints cohort levels on the
 #'   left hand side of plot.
 #' @param return_plot_tables logical. Default FALSE. Returns an object with the
-#'   line and point data used for the plot.
-#' @param suppress_plot logical. Default FALSE. Will stop the plot from being
-#'   output e.g., if using return_plot_tables to retrieve the plot objects.
+#'   line and point data used for the plot, but the plot will not be generated
 #' @param line_col_mother Default = "#E41A1C". Line colour for maternal links.
 #' @param line_col_father Default = "#377EB8". Line colour for paternal links.
 #' @param line_alpha Default = 0.3. Line alpha (transparency) value for maternal
@@ -40,14 +38,19 @@
 #' @param point_size Default = 1. Point size for ids.
 #' @param point_colour Default = "black". Point colour for ids.
 #' @param point_alpha Default = 1. Point alpha for ids.
-#' @param xlab Default = blank. x-axis label.
-#' @param ylab  Default = blank. y-axis label
-#' @param gg_theme Alternate theme information specified as a ggplot::theme()
-#'   object.
-#' @import dplyr
-#' @import kinship2
-#' @import ggplot2
-#' @import tidyr
+#' #' @examples
+#' data(gryphons)
+#' pedigree <- fix_ped(gryphons[, 1:3])
+#'
+#' ## draw the gryphon pedigree by pedigree depth
+#' ggpedigree(pedigree)
+#' \dontrun{
+#' # specifying the column names for id, mother and father
+#'  ggpedigree(pedigree, id, dam, sire)
+#' 
+#' # with cohort and sex
+#' ggpedigree(gryphons, cohort=cohort, sex=sex, sex_code = c(0,1))
+#' }
 #' @keywords plot
 #' @export
 
@@ -65,7 +68,6 @@ ggpedigree <- function(.data,
                        randomise_x_coordinates = FALSE,
                        print_cohort_labels = TRUE,
                        return_plot_tables = FALSE,
-                       suppress_plot = FALSE,
                        line_col_mother = "#E41A1C",
                        line_col_father = "#377EB8",
                        line_alpha = 0.3,
@@ -106,19 +108,21 @@ ggpedigree <- function(.data,
   }
   # Check that ids have not been duplicated
 
-  if(any(tabulate(factor(ids)) > 1)) stop("Duplicated values in ids")
+  if (any(tabulate(factor(ids)) > 1)) stop("Duplicated values in ids")
 
   # Check that cohort is an integer
 
-  if(!is.null(cohort)) if(!is.integer(cohort)) stop("Cohort must be an integer")
+  if (!is.null(cohort)) if (!is.integer(cohort)) stop("Cohort must be an integer")
 
   # Check that ids, mother, father, cohort (if specified) and sex (if specified) are the same length
 
-  if(length(na.omit(unique(c(length(ids),
-                             length(mothers),
-                             length(fathers),
-                             ifelse(is.null(cohort), NA, length(cohort)),
-                             ifelse(is.null(sex), NA, length(sex)))))) > 1){
+  if (length(na.omit(unique(c(
+    length(ids),
+    length(mothers),
+    length(fathers),
+    ifelse(is.null(cohort), NA, length(cohort)),
+    ifelse(is.null(sex), NA, length(sex))
+  )))) > 1) {
     stop("ids, mothers, fathers, cohort (if specified), and sex (if specified) must be the same length.")
   }
 
@@ -129,9 +133,11 @@ ggpedigree <- function(.data,
 
   # Format the pedigree to have ID, MOTHER, FATHER columns and recode NA to 0.
 
-  ped <- data.frame(ID = as.character(ids),
-                    MOTHER = as.character(mothers),
-                    FATHER = as.character(fathers))
+  ped <- data.frame(
+    ID = as.character(ids),
+    MOTHER = as.character(mothers),
+    FATHER = as.character(fathers)
+  )
 
   for (i in 1:3) ped[which(is.na(ped[, i])), i] <- 0
 
@@ -139,13 +145,19 @@ ggpedigree <- function(.data,
 
   # Add in parents that are not in ids as founders
 
-  baseped <- rbind(data.frame(ID = ped[which(!ped$FATHER %in% ped$ID), "FATHER"],
-                              MOTHER = 0,
-                              FATHER = 0),
-                   data.frame(ID = ped[which(!ped$MOTHER %in% ped$ID), "MOTHER"],
-                              MOTHER = 0,
-                              FATHER = 0),
-                   ped)
+  baseped <- rbind(
+    data.frame(
+      ID = ped[which(!ped$FATHER %in% ped$ID), "FATHER"],
+      MOTHER = 0,
+      FATHER = 0
+    ),
+    data.frame(
+      ID = ped[which(!ped$MOTHER %in% ped$ID), "MOTHER"],
+      MOTHER = 0,
+      FATHER = 0
+    ),
+    ped
+  )
 
   baseped <- unique(subset(baseped, ID != 0))
 
@@ -159,8 +171,10 @@ ggpedigree <- function(.data,
   # Determine cohorts and add to the baseped data.frame if not specified
 
   if (is.null(cohort)) {
-    cohortvec <- data.frame(ID = baseped[, "ID"],
-                            Cohort = kindepth(baseped[,"ID"], baseped[,"FATHER"], baseped[,"MOTHER"]))
+    cohortvec <- data.frame(
+      ID = baseped[, "ID"],
+      Cohort = kindepth(baseped[, "ID"], baseped[, "FATHER"], baseped[, "MOTHER"])
+    )
   } else {
     cohortvec <- data.frame(ID = as.character(ids), Cohort = cohort)
   }
@@ -181,27 +195,24 @@ ggpedigree <- function(.data,
     }
   }
 
-  if(!print_cohort_labels) cohort_labels <- rep("", length(cohort_order))
+  if (!print_cohort_labels) cohort_labels <- rep("", length(cohort_order))
 
   # Assign x coordinates
 
   baseped$xcoord <- NA
 
-  for(i in unique(baseped$Cohort)){
-
+  for (i in unique(baseped$Cohort)) {
     x <- which(baseped$Cohort == i)
 
-    if(length(x) > 1){
-      if(randomise_x_coordinates){
-        baseped$xcoord[x] <- sample(seq(0, 1, 1/(length(x)-1)))
+    if (length(x) > 1) {
+      if (randomise_x_coordinates) {
+        baseped$xcoord[x] <- sample(seq(0, 1, 1 / (length(x) - 1)))
       } else {
-        baseped$xcoord[x] <- seq(0, 1, 1/(length(x)-1))
-
+        baseped$xcoord[x] <- seq(0, 1, 1 / (length(x) - 1))
       }
     } else {
       baseped$xcoord[x] <- 0.5
     }
-
   }
 
   # Pivot ped and get rid of connections where value = 0 (means parental connection is unknown)
@@ -229,15 +240,19 @@ ggpedigree <- function(.data,
 
   # If sex is defined, make a data.frame with sex information.
 
-  if(!is.null(sex)){
+  if (!is.null(sex)) {
+    sextab <- data.frame(
+      ID = as.character(ids),
+      SEX = sex
+    )
 
-    sextab <- data.frame(ID = as.character(ids),
-                         SEX = sex)
-
-    if(!is.null(sex_female)){
-
-      sex2 <- data.frame(SEX = c(sex_female, sex_male),
-                         GraphSEX = c(1, 2))
+    if (!is.null(sex_code)) {
+      sex_female <- sex_code[1]
+      sex_male <- sex_code[2]
+      sex2 <- data.frame(
+        SEX = c(sex_female, sex_male),
+        GraphSEX = c(1, 2)
+      )
 
       suppressMessages(sextab <- left_join(sextab, sex2))
       sextab$GraphSEX[which(is.na(sextab$GraphSEX))] <- 3
@@ -246,79 +261,65 @@ ggpedigree <- function(.data,
       sextab$GraphSEX <- NULL
 
       suppressMessages(baseped4 <- left_join(baseped, sextab))
-
     } else {
-
       suppressWarnings(x <- na.omit(unique(sex[as.numeric(sex) < 0])))
 
       sexlevels <- sort(unique(sex))
 
       sexlevels <- sexlevels[-which(sexlevels %in% x)]
-      if(length(x) > 0) sexlevels <- c(sexlevels, x)
+      if (length(x) > 0) sexlevels <- c(sexlevels, x)
 
       suppressMessages(baseped4 <- left_join(baseped, sextab))
       baseped4$SEX <- factor(baseped4$SEX, levels = sexlevels)
-
     }
-
   } else {
-
     baseped4$SEX <- "1"
-
   }
 
   # Plot the pedigrees
 
-  if (is.null(gg_theme)) {
-    gg_theme <- theme(
-      axis.text.x = element_blank(),
-      axis.text.y = element_text(colour = "black"),
-      axis.ticks.y = element_blank(),
-      axis.ticks.x = element_blank(),
-      panel.grid = element_blank(),
-      plot.background = element_rect(fill = "white"),
-      panel.background = element_blank(),
-      legend.position = "none",
-      plot.margin = unit(c(0.5, 0.5, 0.5, 0.5), units = "cm")
-    )
-  }
+  gg_theme <- theme(
+    axis.text.x = element_blank(),
+    axis.text.y = element_text(colour = "black"),
+    axis.ticks.y = element_blank(),
+    axis.ticks.x = element_blank(),
+    panel.grid = element_blank(),
+    plot.background = element_rect(fill = "white"),
+    panel.background = element_blank(),
+    legend.position = "none",
+    plot.margin = unit(c(0.5, 0.5, 0.5, 0.5), units = "cm")
+  )
 
-  if (!suppress_plot) {
-
+  if (!return_plot_tables) {
     p <- ggplot() +
-      geom_line(data = baseped3, aes(x = xcoord,
-                                     y = -Cohort,
-                                     group = Group,
-                                     colour = ParentSex), alpha = line_alpha) +
+      geom_line(data = baseped3, aes(
+        x = xcoord,
+        y = -Cohort,
+        group = Group,
+        colour = ParentSex
+      ), alpha = line_alpha) +
       scale_y_continuous(
         breaks = -seq(min(cohort_order), max(cohort_order), 1),
         labels = cohort_labels
       ) +
       scale_colour_manual(values = c(line_col_father, line_col_mother)) +
-      labs(x = xlab, y = ylab) +
+      labs(x = "", y = "") +
       gg_theme
 
     if (id_labels) {
-
-      print(p +
-              geom_text(
-                data = baseped4, aes(x = xcoord, y = -Cohort, label = ID),
-                size = point_size, colour = point_colour, alpha = point_alpha
-              )
-      )
-
+      return(p +
+        geom_text(
+          data = baseped4, aes(x = xcoord, y = -Cohort, label = ID),
+          size = point_size, colour = point_colour, alpha = point_alpha
+        ))
     } else {
-
-      print(p +
-              geom_point(
-                data = baseped4, aes(x = xcoord, y = -Cohort, shape = SEX),
-                size = point_size, colour = point_colour, alpha = point_alpha
-              ) +
-              scale_shape_manual(values = c(16, 15, 17))
-      )
+      return(p +
+        geom_point(
+          data = baseped4, aes(x = xcoord, y = -Cohort, shape = SEX),
+          size = point_size, colour = point_colour, alpha = point_alpha
+        ) +
+        scale_shape_manual(values = c(16, 15, 17)))
     }
-
-
   }
 
   # Create a return object if return.plot.tables
@@ -329,5 +330,4 @@ ggpedigree <- function(.data,
       PointPlotFrame = baseped4
     ))
   }
-
 }
