@@ -9,6 +9,6 @@
 
 ## ggpedigree.R
 - replace draw_ped by ggpedigree - make sure functionality matches
-- optimize ggpedigree x-coordinates (similar to PedView programme)
+- [X] optimize ggpedigree x-coordinates (similar to PedView programme)
 - [X] add sex information (took this out temporarily)
 - [X] add data checks e.g. are vectors the same length etc.
