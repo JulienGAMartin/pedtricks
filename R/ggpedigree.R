@@ -19,7 +19,11 @@
 #' @param id_labels logical. Default FALSE. Print the ids on the pedigree plot.
 #' @param remove_singletons logical. Default TRUE. Remove ids with no relatives
 #'   i.e., no offspring or parents assigned.
-#' @param plot_unknown_cohort logical. Default TRUE. Plots ids of unknown
+#' @param spread_x_coordinates logical. Default TRUE. Evenly spreads the x-axis
+#'   (horizontal) distribution of points within each cohort. If FALSE, this will
+#'   plot the direct outcome of `igraph::layout_with_sugiyama`; this is only
+#'   recommended for small pedigrees.
+#' @param plot_unknown_cohort logical. Default FALSE. Plots ids of unknown
 #'   cohorts. These are plotted in an "Unknown" cohort at the top of the
 #'   pedigree. Be aware that any mothers and fathers of these individuals will
 #'   be plotted below them.
@@ -61,8 +65,8 @@ ggpedigree <- function(.data,
                        sex_code = NULL,
                        id_labels = FALSE,
                        remove_singletons = TRUE,
-                       plot_unknown_cohort = TRUE,
-                       randomise_x_coordinates = FALSE,
+                       plot_unknown_cohort = FALSE,
+                       spread_x_coordinates = TRUE,
                        print_cohort_labels = TRUE,
                        return_plot_tables = FALSE,
                        line_col_mother = "#E41A1C",
@@ -199,7 +203,10 @@ ggpedigree <- function(.data,
 
   # Create igraph object with sugiyama layout.
 
-  baseped2 <- pivot_longer(ped, cols = c("MOTHER", "FATHER"), names_to = "ParentSex", values_to = "ParentID")
+  baseped2 <- pivot_longer(ped,
+                           cols = c("MOTHER", "FATHER"),
+                           names_to = "ParentSex",
+                           values_to = "ParentID")
   baseped2 <- subset(baseped2, ParentID != 0)
 
   nodes <- data.frame(ID = unique(c(baseped2$ParentID, baseped2$ID)))
@@ -218,19 +225,23 @@ ggpedigree <- function(.data,
   ggplot() +
     geom_point(data = idplot, aes(X1, -Cohort))
 
-  # Spread the x-coords
+  # Spread the x-coords if spread_x_coordinates == TRUE
 
-  idplot <- arrange(idplot, Cohort, X1)
-  idplot$xcoord <- NA
+  if (spread_x_coordinates){
+    idplot <- arrange(idplot, Cohort, X1)
+    idplot$xcoord <- NA
 
-  for (i in cohort_order) {
-    x <- which(idplot$Cohort == i)
+    for (i in cohort_order) {
+      x <- which(idplot$Cohort == i)
 
-    if (length(x) > 1) {
-      idplot$xcoord[x] <- seq(0, 1, 1 / (length(x) - 1))
-    } else {
-      idplot$xcoord[x] <- 0.5
+      if (length(x) > 1) {
+        idplot$xcoord[x] <- seq(0, 1, 1 / (length(x) - 1))
+      } else {
+        idplot$xcoord[x] <- 0.5
+      }
     }
+  } else {
+    idplot$xcoord <- idplot$X1
   }
 
   # Create the edges object (parent-ID relationship) & add ID coords
@@ -309,17 +320,17 @@ ggpedigree <- function(.data,
 
     if (id_labels) {
       return(p +
-        geom_text(
-          data = idplot, aes(x = .data$xcoord, y = -.data$Cohort, label = .data$ID),
-          size = point_size, colour = point_colour, alpha = point_alpha
-        ))
+               geom_text(
+                 data = idplot, aes(x = .data$xcoord, y = -.data$Cohort, label = .data$ID),
+                 size = point_size, colour = point_colour, alpha = point_alpha
+               ))
     } else {
       return(p +
-        geom_point(
-          data = idplot, aes(x = .data$xcoord, y = -.data$Cohort, shape = .data$SEX),
-          size = point_size, colour = point_colour, alpha = point_alpha
-        ) +
-        scale_shape_manual(values = c(16, 15, 17)))
+               geom_point(
+                 data = idplot, aes(x = .data$xcoord, y = -.data$Cohort, shape = .data$SEX),
+                 size = point_size, colour = point_colour, alpha = point_alpha
+               ) +
+               scale_shape_manual(values = c(16, 15, 17)))
     }
   }
 
