@@ -2,23 +2,20 @@
 #'
 #' @param .data an optional data frame object with all the pedigree information
 #' @param ids a column of .data or a vector of individual identifiers
-#' @param mothers A column of .data or a vector of mothers corresponding to ids. Missing values are 0
-#'   or NA.
-#' @param fathers A column of .data or a vector of fathers corresponding to ids. Missing values are 0
-#'   or NA.
-#' @param cohort integer. Default NULL. A column of .data or an optional vector assigning a cohort to
-#'   each id. If NULL, then `kinship2::kindepth` is used to assign cohorts to
-#'   ids.
-#' @param sex integer or character. Default NULL. An optional column of .data or a vector assigning a
-#'   sex to each id. This can be any value, but the first level numerically or
-#'   alphabetically (e.g. 0 or "F") will be plotted with a circle (traditionally
-#'   denoting a female) and the second level will be plotted with a square
-#'   (traditionally denoting a male). Any negative values, NA values, or third
-#'   alphabetically values will be plotted with a triangle. NOTE: These can be
-#'   overridden by specifying `sex_female` or `sex_male` values.
-#' @param sex_code Default NULL. A vector of length 2, indicating the value
-#'   used in `sex` for females and males respectively. Females will be plotted
-#'   as circles and males as squares.
+#' @param mothers A column of .data or a vector of mothers corresponding to ids.
+#'   Missing values are 0 or NA.
+#' @param fathers A column of .data or a vector of fathers corresponding to ids.
+#'   Missing values are 0 or NA.
+#' @param cohort integer. Default NULL. A column of .data or an optional vector
+#'   assigning a cohort to each id. If NULL, then `kinship2::kindepth` is used
+#'   to assign cohorts to ids.
+#' @param sex integer or character. Default NULL. An optional column of .data or
+#'   a vector assigning a sex to each id. When using this option, `sex_code`
+#'   must be specified. Any values not matching values in `sex_code` will be
+#'   treated as unknown sex.
+#' @param sex_code Default NULL. A vector of length 2, indicating the value used
+#'   in `sex` for females and males respectively. Females are plotted as
+#'   circles, males as squares, and unknown values as triangles.
 #' @param id_labels logical. Default FALSE. Print the ids on the pedigree plot.
 #' @param remove_singletons logical. Default TRUE. Remove ids with no relatives
 #'   i.e., no offspring or parents assigned.
@@ -26,8 +23,6 @@
 #'   cohorts. These are plotted in an "Unknown" cohort at the top of the
 #'   pedigree. Be aware that any mothers and fathers of these individuals will
 #'   be plotted below them.
-#' @param randomise_x_coordinates logical. Default TRUE. Randomise the position of
-#'   individuals within each cohort.
 #' @param print_cohort_labels logical. Default TRUE. Prints cohort levels on the
 #'   left hand side of plot.
 #' @param return_plot_tables logical. Default FALSE. Returns an object with the
@@ -51,7 +46,7 @@
 #' ggpedigree(pedigree, id, dam, sire)
 #'
 #' # with cohort and sex
-#' ggpedigree(gryphons, cohort = cohort, sex = sex, sex_code = c(0, 1))
+#' ggpedigree(gryphons, cohort = cohort, sex = sex, sex_code = c(1, 0))
 #' }
 #' @keywords plot
 #' @export
@@ -76,6 +71,7 @@ ggpedigree <- function(.data,
                        point_size = 1,
                        point_colour = "black",
                        point_alpha = 1) {
+
   if (hasArg(.data)) {
     if (!hasArg(ids) || !hasArg(mothers) || !hasArg(fathers)) {
       warning(
@@ -108,6 +104,7 @@ ggpedigree <- function(.data,
       cohort <- NULL
     }
   }
+
   # Check that ids have not been duplicated
 
   if (any(tabulate(factor(ids)) > 1)) stop("Duplicated values in ids")
@@ -130,7 +127,7 @@ ggpedigree <- function(.data,
 
   # if sex_female is defined, check that sex_male is defined, and vice versa
 
-  if (!is.null(sex) & is.null(sex_code)) stop("sex_code should be provided when sex is specified")
+  if (!is.null(sex) & is.null(sex_code)) stop("sex_code should be defined when sex is specified")
   if (!is.null(sex_code) & length(sex_code) != 2) stop("sex_code should be a vector of length 2 providing the coding for females and then males")
 
   # Format the pedigree to have ID, MOTHER, FATHER columns and recode NA to 0.
@@ -142,8 +139,6 @@ ggpedigree <- function(.data,
   )
 
   for (i in 1:3) ped[which(is.na(ped[, i])), i] <- 0
-
-
 
   # Add in parents that are not in ids as founders
 
@@ -199,46 +194,50 @@ ggpedigree <- function(.data,
 
   if (!print_cohort_labels) cohort_labels <- rep("", length(cohort_order))
 
-  # Assign x coordinates
 
-  baseped$xcoord <- NA
+  #~~~~ igraph APPROACH
 
-  for (i in unique(baseped$Cohort)) {
-    x <- which(baseped$Cohort == i)
+  # Create igraph object with sugiyama layout.
+
+  baseped2 <- pivot_longer(ped, cols = c("MOTHER", "FATHER"), names_to = "ParentSex", values_to = "ParentID")
+  baseped2 <- subset(baseped2, ParentID != 0)
+
+  nodes <- data.frame(ID = unique(c(baseped2$ParentID, baseped2$ID)))
+  edges <- data.frame(from = baseped2$ParentID, to = baseped2$ID)
+
+  suppressMessages(nodes <- left_join(nodes, baseped[,c("ID", "Cohort")]))
+
+  graphobj <- graph_from_data_frame(edges, vertices = nodes[,1], directed = TRUE)
+  lay <- layout_with_sugiyama(graphobj, layers = nodes$Cohort)
+
+  # Create the ID points object
+
+  idplot <- lay$layout %>% data.frame()
+  idplot <- cbind(idplot, Cohort = nodes$Cohort, ID = nodes$ID)
+
+  ggplot() +
+    geom_point(data = idplot, aes(X1, -Cohort))
+
+  # Spread the x-coords
+
+  idplot <- arrange(idplot, Cohort, X1)
+  idplot$xcoord <- NA
+
+  for (i in cohort_order) {
+    x <- which(idplot$Cohort == i)
 
     if (length(x) > 1) {
-      if (randomise_x_coordinates) {
-        baseped$xcoord[x] <- sample(seq(0, 1, 1 / (length(x) - 1)))
-      } else {
-        baseped$xcoord[x] <- seq(0, 1, 1 / (length(x) - 1))
-      }
+      idplot$xcoord[x] <- seq(0, 1, 1 / (length(x) - 1))
     } else {
-      baseped$xcoord[x] <- 0.5
+      idplot$xcoord[x] <- 0.5
     }
   }
 
-  # Pivot ped and get rid of connections where value = 0 (means parental connection is unknown)
+  # Create the edges object (parent-ID relationship) & add ID coords
 
-  baseped2 <- pivot_longer(ped, cols = c("MOTHER", "FATHER"), names_to = "ParentSex", values_to = "ParentID")
-
-  baseped2 <- filter(baseped2, .data$ParentID != 0)
-
-  # Create a group vector for parent/offspring relationship
-
-  baseped2$Group <- 1:nrow(baseped2)
-
-  # Pivot again to create a single line per ID with Group specified
-
+  baseped2$Group = 1:nrow(baseped2)
   baseped3 <- pivot_longer(baseped2, cols = c("ID", "ParentID"), names_to = "Relationship", values_to = "ID")
-
-  # Add cohort information
-
-  suppressMessages(baseped3 <- left_join(baseped3, select(baseped, "ID", "Cohort", "xcoord")))
-
-  # baseped3 is used for the parental links. Create baseped4 which is a unique
-  # value for each individual to avoid overplotting.
-
-  baseped4 <- droplevels(unique(select(baseped3, "ID", "xcoord", "Cohort")))
+  suppressMessages(baseped3 <- left_join(baseped3, idplot[,c("ID", "xcoord", "Cohort")]))
 
   # If sex is defined, make a data.frame with sex information.
 
@@ -262,7 +261,7 @@ ggpedigree <- function(.data,
       sextab$SEX <- as.character(sextab$GraphSEX)
       sextab$GraphSEX <- NULL
 
-      suppressMessages(baseped4 <- left_join(baseped, sextab))
+      suppressMessages(idplot <- left_join(idplot, sextab))
     } else {
       suppressWarnings(x <- na.omit(unique(sex[as.numeric(sex) < 0])))
 
@@ -271,11 +270,11 @@ ggpedigree <- function(.data,
       sexlevels <- sexlevels[-which(sexlevels %in% x)]
       if (length(x) > 0) sexlevels <- c(sexlevels, x)
 
-      suppressMessages(baseped4 <- left_join(baseped, sextab))
-      baseped4$SEX <- factor(baseped4$SEX, levels = sexlevels)
+      suppressMessages(idplot <- left_join(idplot     , sextab))
+      idplot$SEX <- factor(idplot$SEX, levels = sexlevels)
     }
   } else {
-    baseped4$SEX <- "1"
+    idplot$SEX <- "1"
   }
 
   # Plot the pedigrees
@@ -311,13 +310,13 @@ ggpedigree <- function(.data,
     if (id_labels) {
       return(p +
         geom_text(
-          data = baseped4, aes(x = .data$xcoord, y = -.data$Cohort, label = .data$ID),
+          data = idplot, aes(x = .data$xcoord, y = -.data$Cohort, label = .data$ID),
           size = point_size, colour = point_colour, alpha = point_alpha
         ))
     } else {
       return(p +
         geom_point(
-          data = baseped4, aes(x = .data$xcoord, y = -.data$Cohort, shape = .data$SEX),
+          data = idplot, aes(x = .data$xcoord, y = -.data$Cohort, shape = .data$SEX),
           size = point_size, colour = point_colour, alpha = point_alpha
         ) +
         scale_shape_manual(values = c(16, 15, 17)))
@@ -329,7 +328,7 @@ ggpedigree <- function(.data,
   if (return_plot_tables) {
     return(list(
       LinePlotFrame = baseped3,
-      PointPlotFrame = baseped4
+      PointPlotFrame = idplot
     ))
   }
 }
