@@ -21,8 +21,8 @@
 #'   i.e., no offspring or parents assigned.
 #' @param spread_x_coordinates logical. Default TRUE. Evenly spreads the x-axis
 #'   (horizontal) distribution of points within each cohort. If FALSE, this will
-#'   plot the direct outcome of `igraph::layout_with_sugiyama`; this is only
-#'   recommended for small pedigrees.
+#'   plot the direct outcome of `igraph::layout_with_sugiyama`; the FALSE option is
+#'   only recommended for small pedigrees and/or less connected pedigrees.
 #' @param plot_unknown_cohort logical. Default FALSE. Plots ids of unknown
 #'   cohorts. These are plotted in an "Unknown" cohort at the top of the
 #'   pedigree. Be aware that any mothers and fathers of these individuals will
