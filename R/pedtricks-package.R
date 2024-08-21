@@ -9,8 +9,8 @@
 #' @import dplyr
 #' @import tidyr
 #' @import ggplot2
-#' @import kinship2
 #' @import nadiv
+#' @import kinship2
 #' @importFrom grDevices colors colours dev.new dev.off gray.colors postscript savePlot
 #' @importFrom graphics axis barplot hist lines mtext par plot
 #' @importFrom stats na.omit rbinom rnorm runif uniroot weighted.mean
@@ -21,8 +21,7 @@
 #' @importFrom grDevices savePlot
 #' @importFrom grid grid.segments gpar grid.circle grid.text
 #' @importFrom MCMCglmm inverseA rbv
-#' @importFrom kinship2 kindepth
 #' @importFrom genetics is.genotype nallele allele.names is.locus genotype
-
+#' @importFrom igraph layout_with_sugiyama graph_from_data_frame
 "_PACKAGE"
 
