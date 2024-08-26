@@ -1,17 +1,20 @@
-# pedtricks 0.2.0
+# pedtricks 0.3.0
 
 ## New
 
   - `ggpedigree()`
+    - draw pedigree using ggplot2
     - compatible with dplyr/tidyverse use
     - return a ggplot object that can be modified with ggplot functions
+    - optimized graph layout with igrah
 
   - `draw_pedA()`
     - returns a trellis plot object for visualizing relatedness among pedigreed individuals
      
 # pedtricks 0.1.0
 
-## NEW
+## New
+
   - Initial transfer and update of CRAN archived [`pedantics`](https://CRAN.R-project.org/package=pedantics) package under the new name `pedtricks`.
 
 ## DEPRECATED from `pedantics`

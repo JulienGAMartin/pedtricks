@@ -2,8 +2,6 @@
 
 This package is taking the core functions from pedantics, removed the dependencies on archived packages ("MasterBayes") and removed function based on C libraries that are outdated, providing an easier to maintain package
 
-New functions will include a ggplot function to plot pedigree `ggpedigree()` and more
-
 Install with
 
 ```r
@@ -13,6 +11,8 @@ remotes::install_github(
 ```
 
 ## Changes from pedantics
+
+see https://juliengamartin.github.io/pedtricks/news/index.html for the list of all the changes
 
 ### Defunct functions
 * `rpederr` and `fpederr` have been removed from the package
