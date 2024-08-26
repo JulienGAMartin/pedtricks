@@ -207,7 +207,7 @@ ggpedigree <- function(.data,
                            cols = c("MOTHER", "FATHER"),
                            names_to = "ParentSex",
                            values_to = "ParentID")
-  baseped2 <- subset(baseped2, ParentID != 0)
+  baseped2 <- filter(baseped2, .data$ParentID != 0)
 
   nodes <- data.frame(ID = unique(c(baseped2$ParentID, baseped2$ID)))
   edges <- data.frame(from = baseped2$ParentID, to = baseped2$ID)
@@ -223,12 +223,12 @@ ggpedigree <- function(.data,
   idplot <- cbind(idplot, Cohort = nodes$Cohort, ID = nodes$ID)
 
   ggplot() +
-    geom_point(data = idplot, aes(X1, -Cohort))
+    geom_point(data = idplot, aes(.data$X1, -.data$Cohort))
 
   # Spread the x-coords if spread_x_coordinates == TRUE
 
   if (spread_x_coordinates){
-    idplot <- arrange(idplot, Cohort, X1)
+    idplot <- arrange(idplot, .data$Cohort, .data$X1)
     idplot$xcoord <- NA
 
     for (i in cohort_order) {
