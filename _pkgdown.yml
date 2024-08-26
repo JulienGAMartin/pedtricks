@@ -1,5 +1,16 @@
+url: https://juliengamartin.github.io/pedtricks/
+
+#home:
+#  title:
+#  description: 
+
 template:
   bootstrap: 5
-  params:
-    bootswatch: spacelab
-
+  light-switch: true
+  bslib:
+    primary: "#0054AD"
+    border-radius: 0.5rem
+    btn-border-radius: 0.25rem
+    danger: "#A6081A"
+#  params:
+#    bootswatch: spacelab

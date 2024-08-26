@@ -18,6 +18,14 @@ Functions for sensitivity and power analysis, for calculating statistics describ
 
 For backward compatibility with code using \code{pedantics} older names are still usable but not recommended.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://juliengamartin.github.io/pedtricks/}
+  \item Report bugs at \url{https://github.com/JulienGAMartin/pedtricks/issues}
+}
+
+}
 \author{
 \strong{Maintainer}: Julien Martin \email{julien.martin@uottawa.ca} (\href{https://orcid.org/0000-0001-7726-6809}{ORCID})
 
