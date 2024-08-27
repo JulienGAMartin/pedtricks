@@ -47,12 +47,13 @@ values of the numerator relatedness matrix.
     pedigree$cohort <- NA
     pedigree$cohort[match(gryphons$id, pedigree[, 1])] <- gryphons$cohort
   (Achrt <- draw_pedA(pedigree, order = "user", grp = "cohort"))
-
+\dontrun{
   ## show two images of the same pedigree in different orders
   ### (i.e., plotting multiple trellis objects in the same figure)
   plot(Agen, position = c(xmin = 0, ymin = 0, xmax = 0.45, ymax = 1),
     more = TRUE)
   plot(Achrt, position = c(xmin = 0.55, ymin = 0, xmax = 1, ymax = 1))
+}
 
 }
 \author{

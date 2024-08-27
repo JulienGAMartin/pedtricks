@@ -343,11 +343,11 @@ ggpedigree <- function(.data,
 
       # Identify which groups belong to parents with missing phenos & filter
 
-      temptab <- filter(baseped3, Relationship == "ParentID")
+      temptab <- filter(baseped3, .data$Relationship == "ParentID")
 
       suppressMessages(temptab <- left_join(temptab, phenotab))
 
-      temptab <- filter(temptab, is.na(Pheno))
+      temptab <- filter(temptab, is.na(.data$Pheno))
 
       baseped3$ParentSex[which(baseped3$Group %in% temptab$Group)] <- "UNKNOWN"
     }
