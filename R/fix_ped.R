@@ -3,15 +3,15 @@
 
 #' Prepares a pedigree to conform with requirements of many softwares
 #' used in quantitative genetic analysis, as well as for many of the
-#' functions in pedantics.
-#' @param Ped An ordered pedigree with 3 columns: id, dam, sire
+#' functions in pedtricks.
+#' @param ped An ordered pedigree with 3 columns: id, dam, sire
 #' @param dat An optional data frame, the same length as the pedigree
 #'
 #' @return
 #'   Returns a pedigree in which all individuals that exist in the dam
 #' and sire columns are represented by their own record lines, occurring
 #' before the records of their first offspring.  If data are supplied,
-#' then fix_ped will return a dataframe, the first two columns are
+#' then fix_ped will return a dataframe, the first three columns are
 #' the 'fixed' pedigree, and the following columns of which contain
 #' appropriately reordered data.
 #'
@@ -33,66 +33,85 @@
 #' ), 10, 3, byrow = TRUE))
 #' names(pedigree) <- c("id", "dam", "sire")
 #' pedigree
-#' fixedPedigree <- fix_ped(Ped = pedigree)
-#' fixedPedigree
+#' fixed_pedigree <- fix_ped(ped = pedigree)
+#' fixed_pedigree
 #'
 #' @keywords manipulation
 #'
 #' @export
 
 
-fix_ped <- function(Ped, dat = NULL) {
-  if (is.null(dat) == FALSE && is.null(dim(dat)) == FALSE && length(Ped[, 1]) != length(dat[, 1])) {
-    cat(paste("Pedigree and cohorts differ in length.", "\n"))
+fix_ped <- function(ped, dat = NULL) {
+  if (is.null(dat) == FALSE){
+    if (
+      is.null(dim(dat)) == FALSE &&
+      length(ped[, 1]) != length(dat[, 1])
+  ) {
+    cat(paste("pedigree and cohorts differ in length.", "\n"))
     flush.console()
     stop()
   }
-  if (is.null(dat) == FALSE && is.null(dim(dat)) && length(Ped[, 1]) != length(dat)) {
-    cat(paste("Pedigree and cohorts differ in length.", "\n"))
+  if (
+    is.null(dim(dat)) &&
+      length(ped[, 1]) != length(dat)
+  ) {
+    cat(paste("pedigree and cohorts differ in length.", "\n"))
     flush.console()
     stop()
+  }
   }
 
-  names(Ped) <- c("id", "dam", "sire")
-  ntotal <- length(Ped$id) * 3
+  names(ped) <- c("id", "dam", "sire")
+  ntotal <- length(ped$id) * 3
   IDs <- array(dim = ntotal)
-  for (x in 1:length(Ped$id)) {
-    IDs[x] <- as.character(Ped$id[x])
-    IDs[x + ntotal] <- as.character(Ped$dam[x])
-    IDs[x + ntotal * 2] <- as.character(Ped$sire[x])
+  for (x in seq_along(ped$id)) {
+    IDs[x] <- as.character(ped$id[x])
+    IDs[x + ntotal] <- as.character(ped$dam[x])
+    IDs[x + ntotal * 2] <- as.character(ped$sire[x])
   }
   IDs <- as.data.frame(IDs)
   IDs <- unique(IDs)
   IDs <- subset(IDs, is.na(IDs) == FALSE)
   names(IDs) <- "id"
-  IDs$dam <- Ped$dam[match(IDs$id, Ped$id)]
-  IDs$sire <- Ped$sire[match(IDs$id, Ped$id)]
+  IDs$dam <- ped$dam[match(IDs$id, ped$id)]
+  IDs$sire <- ped$sire[match(IDs$id, ped$id)]
 
-  fixedPedigree <- orderPed(IDs)
+  fixed_ped <- orderPed(IDs)
   if (is.null(dat) == FALSE) {
-    if (names(dat)[1] == "id" | names(dat)[1] == "ID" | names(dat)[1] == "ids" | names(dat)[1] == "IDS") {
+    if (
+        names(dat)[1] == "id" ||
+        names(dat)[1] == "ID" ||
+        names(dat)[1] == "ids" ||
+        names(dat)[1] == "IDS") {
       for (x in 2:length(dat[1, ])) {
-        fixedPedigree[, (3 + x - 1)] <- dat[match(fixedPedigree[, 1], dat[, 1]), x]
+        fixed_ped[, (3 + x - 1)] <- dat[match(fixed_ped[, 1], dat[, 1]), x]
       }
     } else {
-      cat(paste("No id column detected in dat, assuming same order as Ped.", "\n"))
+      cat(
+        paste(
+          "No id column detected in dat, assuming same order as ped.",
+          "\n"
+        )
+      )
       flush.console()
-      dat$id <- Ped[, 1]
+      dat$id <- ped[, 1]
       for (x in 1:(length(dat[1, ]) - 1)) {
-        fixedPedigree[, (3 + x - 1)] <- dat[match(fixedPedigree[, 1], dat$id), x]
+        fixed_ped[, (3 + x - 1)] <- dat[match(fixed_ped[, 1], dat$id), x]
       }
     }
   }
-  for (x in 1:3) fixedPedigree[, x] <- as.factor(fixedPedigree[, x])
-  fixedPedigree
+  for (x in 1:3) fixed_ped[, x] <- as.factor(fixed_ped[, x])
+  fixed_ped
 }
 
 #' @rdname pedantics-deprecated
-#' @section \code{fixPedigree}: the function has just been renamed with no other changes for the moment
+#' @section \code{fixPedigree}: the function has just been renamed with no
+#' other changes for the moment
 #' @export
-fixPedigree <- function(Ped, dat = NULL) {
+fixPedigree <- function(ped, dat = NULL) {
   .Deprecated(fix_ped,
-    msg = "this function from pedantics is deprecated, please use the new 'fix_ped()' instead",
+    msg = "this function from pedantics is deprecated, please use the new
+    'fix_ped()' instead",
   )
-  fix_ped(Ped, dat)
+  fix_ped(ped, dat)
 }

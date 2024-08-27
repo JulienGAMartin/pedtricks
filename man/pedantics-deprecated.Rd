@@ -39,7 +39,7 @@ drawPedigree(
   ...
 )
 
-fixPedigree(Ped, dat = NULL)
+fixPedigree(ped, dat = NULL)
 
 genomesim(
   pedigree,
@@ -101,7 +101,8 @@ functionality are also mentioned.
 }
 
 \section{\code{fixPedigree}}{
- the function has just been renamed with no other changes for the moment
+ the function has just been renamed with no
+other changes for the moment
 }
 
 \section{\code{genomesim}}{

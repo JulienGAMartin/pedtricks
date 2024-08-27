@@ -6,12 +6,12 @@
 subsequent analyses
 Prepares a pedigree to conform with requirements of many softwares
 used in quantitative genetic analysis, as well as for many of the
-functions in pedantics.}
+functions in pedtricks.}
 \usage{
-fix_ped(Ped, dat = NULL)
+fix_ped(ped, dat = NULL)
 }
 \arguments{
-\item{Ped}{An ordered pedigree with 3 columns: id, dam, sire}
+\item{ped}{An ordered pedigree with 3 columns: id, dam, sire}
 
 \item{dat}{An optional data frame, the same length as the pedigree}
 }
@@ -19,7 +19,7 @@ fix_ped(Ped, dat = NULL)
 Returns a pedigree in which all individuals that exist in the dam
 and sire columns are represented by their own record lines, occurring
 before the records of their first offspring.  If data are supplied,
-then fix_ped will return a dataframe, the first two columns are
+then fix_ped will return a dataframe, the first tree columns are
 the 'fixed' pedigree, and the following columns of which contain
 appropriately reordered data.
 }
@@ -28,7 +28,7 @@ Manipulating pedigrees to prepare them for requirements of
 subsequent analyses
 Prepares a pedigree to conform with requirements of many softwares
 used in quantitative genetic analysis, as well as for many of the
-functions in pedantics.
+functions in pedtricks.
 }
 \examples{
 ##  a valid pedigree, i.e., no loops, no bisexuality, etc.,
@@ -48,8 +48,8 @@ pedigree <- as.data.frame(matrix(c(
 ), 10, 3, byrow = TRUE))
 names(pedigree) <- c("id", "dam", "sire")
 pedigree
-fixedPedigree <- fix_ped(Ped = pedigree)
-fixedPedigree
+fixed_pedigree <- fix_ped(ped = pedigree)
+fixed_pedigree
 
 }
 \keyword{manipulation}
