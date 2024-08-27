@@ -1,5 +1,10 @@
 # pedtricks 0.3
 
+## 0.3.2
+
+- `ggpedigree()`
+  - adding functionality to highlight phenotyped individuals with `pheno` argument
+
 ## 0.3.1
 
 - `ggpedigree()`

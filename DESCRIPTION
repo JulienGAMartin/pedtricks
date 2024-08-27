@@ -1,6 +1,6 @@
 Package: pedtricks
 Title: Functions to Visualize, Summarize and Simulate Data from Pedigrees
-Version: 0.3.1 
+Version: 0.3.2 
 Authors@R: c(
     person("Julien", "Martin", , "julien.martin@uottawa.ca", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-7726-6809")),
