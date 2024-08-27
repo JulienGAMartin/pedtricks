@@ -11,3 +11,5 @@ test_78.txt
 ^pkgdown$
 ^\.github$
 ^\_*\.R
+^CRAN-SUBMISSION$
+^cran-comments\.md$
