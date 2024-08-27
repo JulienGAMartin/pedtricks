@@ -14,3 +14,27 @@ template:
     danger: "#A6081A"
 #  params:
 #    bootswatch: spacelab
+
+reference:
+- title: Pedigree statistics
+#  desc:  Build a complete site or its individual section components.
+- contents:
+  - ped_stats
+  - summary.ped_stats
+- title: Pedigree visualization
+#  desc:  Build a complete site or its individual section components.
+- contents:
+  - draw_ped
+  - draw_pedA
+  - ggpedigree
+  - plot.ped_stats
+- title: Pedigree manipulation
+- contents:
+  - convert_ped
+  - fix_ped
+- title: Pedigree simulations
+- contents:
+  - ends_with("_sim")
+- title: Pedigree example
+- contents:
+  - gryphons

@@ -6,6 +6,8 @@
 #'
 #' For backward compatibility with code using `pedantics` older names are still usable but not recommended.
 #'
+#' @keywords internal
+#' 
 #' @import dplyr
 #' @import tidyr
 #' @import ggplot2
