@@ -70,25 +70,25 @@ getSibNums <- function(ped) {
 # genotype.list from MasterBayes
 
 #' Genotype Objects for all Loci
-#' 
+#'
 #' Creates a \code{list} of \code{genotype} objects from a \code{matrix} or \code{data.frame} of multilocus genotypes.
-#' 
+#'
 #' @param G matrix or data.frame of multilocus genotypes with individuals down the rows and loci across columns. Adjacent columns are taken to be the same locus
 #' @param marker.type \code{"MSW"} or \code{"MSC"} for co-dominant markers with Wang's (2004) model of genotyping error or CERVUS's model of genotyping error (Kalinowski, 2006; Marshall, 1998) or \code{"AFLP"} for dominant markers (Hadfield, 2009).
-#' 
+#'
 #' @return
 #'   list of \code{genotype} objects for all loci
-#' 
-#' 
+#'
+#'
 #' @author Jarrod Hadfield \email{j.hadfield@ed.ac.uk}
 #' @examples
 #' \dontrun{
-#'   data(WarblerG)
-#' 
-#'   G<-genotype.list(WarblerG[,-1])
-#'   summary(G[[1]])
+#' data(WarblerG)
+#'
+#' G <- genotype.list(WarblerG[, -1])
+#' summary(G[[1]])
 #' }
-#' 
+#'
 #' @keywords internal
 #' @export
 
@@ -257,29 +257,28 @@ summary.genotypeD <- function(object, ...) {
 }
 
 ################################################################################
-#' 
+#'
 #' Allele Frequencies
-#' 
+#'
 #' Extracts allele frequencies from genotype data
-#' 
+#'
 #' @param G data frame or list of \code{genotype} objects
 #' @param marker.type \code{"MSW"} or \code{"MSC"} for co-dominant markers with Wang's (2004) model of genotyping error or CERVUS's model of genotyping error (Marshall, 1998) or \code{"AFLP"} for dominant markers.
-#' 
+#'
 #' @return list of allele frequencies at each loci
 #' @author Jarrod Hadfield \email{j.hadfield@ed.ac.uk}
 #' @seealso \code{\link{genotype.list}}, \code{genotype}
 #' @examples
 #' \dontrun{
-#'   data(WarblerG)
-#' 
-#'   A<-extractA(WarblerG)
-#'   A[[1]]
+#' data(WarblerG)
+#'
+#' A <- extractA(WarblerG)
+#' A[[1]]
 #' }
-#' 
-#' 
+#'
 #' @export
 #' @keywords internal
-#' 
+#'
 
 extractA <- function(G, marker.type = "MSW") {
   ## from Jarrod to avoid

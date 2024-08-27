@@ -42,8 +42,10 @@
 #' draw_ped(pedigree)
 #'
 #' ## draw the gryphon pedigree by cohort
-#' draw_ped(pedigree,cohorts=gryphons$cohort,writeCohortLabels='y',
-#'   cohortLabs.cex=1)
+#' draw_ped(pedigree,
+#'   cohorts = gryphons$cohort, writeCohortLabels = "y",
+#'   cohortLabs.cex = 1
+#' )
 #'
 #' ## draw the gryphon pedigree by cohort with only maternal links
 #' draw_ped(pedigree, cohorts = gryphons$cohort, links = "mums")
@@ -56,8 +58,10 @@
 #' ## colour coded by sex:
 #' dataAvailability <- (gryphons$cohort >= (max(gryphons$cohort) - 1)) + 0
 #'
-#' draw_ped(pedigree,cohorts=gryphons$cohort,sex=gryphons$sex,
-#'   dots='y',dat=dataAvailability,writeCohortLabels='y',dataDots='y')
+#' draw_ped(pedigree,
+#'   cohorts = gryphons$cohort, sex = gryphons$sex,
+#'   dots = "y", dat = dataAvailability, writeCohortLabels = "y", dataDots = "y"
+#' )
 #'
 #' @keywords plot
 #' @export
@@ -282,9 +286,11 @@ drawPedigree <- function(
   .Deprecated(fix_ped,
     msg = "this function from pedantics is deprecated, please use the new 'draw_ped()' instead",
   )
-  draw_ped(Ped, cohorts, sex, dat, dots, plotfull, writeCohortLabels, links,
+  draw_ped(
+    Ped, cohorts, sex, dat, dots, plotfull, writeCohortLabels, links,
     sexInd, dotSize,
     dataDots, dataDots.cex, cohortLabs.cex,
     retain, focal,
-    sexColours, ...)
+    sexColours, ...
+  )
 }

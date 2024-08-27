@@ -90,10 +90,9 @@ fix_ped <- function(Ped, dat = NULL) {
 #' @rdname pedantics-deprecated
 #' @section \code{fixPedigree}: the function has just been renamed with no other changes for the moment
 #' @export
-fixPedigree <- function(Ped, dat = NULL){
-.Deprecated(fix_ped,
-  msg="this function from pedantics is deprecated, please use the new 'fix_ped()' instead",
-
-)
-fix_ped(Ped, dat)
+fixPedigree <- function(Ped, dat = NULL) {
+  .Deprecated(fix_ped,
+    msg = "this function from pedantics is deprecated, please use the new 'fix_ped()' instead",
+  )
+  fix_ped(Ped, dat)
 }

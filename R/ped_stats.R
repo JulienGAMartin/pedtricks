@@ -53,14 +53,16 @@
 #' pedigree <- gryphons[, 1:3]
 #'
 #' gryphons_ped_stats <- ped_stats(pedigree,
-#'   cohorts = gryphons$cohort)
+#'   cohorts = gryphons$cohort
+#' )
 #'
 #' gryphons_ped_stats$totalMaternities
 #' gryphons_ped_stats$paternitiesByCohort
-#' 
+#'
 #' summary(gryphons_ped_stats)
 #'
 #' plot(gryphons_ped_stats)
+#' }
 
 #' }
 #' @export
@@ -128,7 +130,8 @@ ped_stats <-
 
     # siblings
 
-    numPed <- convert_ped(type = "numeric", as.character(Ped$id), as.character(Ped$sire),
+    numPed <- convert_ped(
+      type = "numeric", as.character(Ped$id), as.character(Ped$sire),
       as.character(Ped$dam),
       missingVal = NA
     )
@@ -281,7 +284,8 @@ ped_stats <-
         cohortMaternities[x] <- sum(table(temp$dam))
         cohortPaternities[x] <- sum(table(temp$sire))
 
-        numPed <- convert_ped(type = "numeric", as.character(temp$id), as.character(temp$sire),
+        numPed <- convert_ped(
+          type = "numeric", as.character(temp$id), as.character(temp$sire),
           as.character(temp$dam),
           missingVal = NA
         )

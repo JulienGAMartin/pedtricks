@@ -70,7 +70,7 @@ pedStatSummary <- function() {
 #' @param lowMem If TRUE, then stats based on calculation of A are not performed.
 #' @param grContrast If TRUE, then uglier shades of red and blue are used to denote male and female statistics in graphical reports, but these colours provide better contrast in greyscale.
 #' @param ... extra arguments
-#' 
+#'
 #' @return
 #'   Returns a table of numbers of records, maternities,
 #' paternities, pairwise sibship relationships, numbers
@@ -96,16 +96,20 @@ plot.ped_stats <- function(x, lowMem = FALSE, grContrast = FALSE, ...) {
     cohortRelatedness <- as.data.frame(x$meanRelatednessAmongCohorts)
     cohortTakeOneRelatedness <- array(dim = length(cohortRelatedness[1, ]))
     for (i in 1:(length(cohortTakeOneRelatedness) - 1)) {
-      cohortTakeOneRelatedness[i + 1] <- cohortRelatedness[i, i + 1]}
+      cohortTakeOneRelatedness[i + 1] <- cohortRelatedness[i, i + 1]
+    }
     cohortTakeTwoRelatedness <- array(dim = length(cohortRelatedness[1, ]))
     for (i in 1:(length(cohortTakeOneRelatedness) - 2)) {
-      cohortTakeTwoRelatedness[i + 2] <- cohortRelatedness[i, i + 2]}
+      cohortTakeTwoRelatedness[i + 2] <- cohortRelatedness[i, i + 2]
+    }
     cohortTakeThreeRelatedness <- array(dim = length(cohortRelatedness[1, ]))
     for (i in 1:(length(cohortTakeOneRelatedness) - 3)) {
-      cohortTakeThreeRelatedness[i + 3] <- cohortRelatedness[i, i + 3]}
+      cohortTakeThreeRelatedness[i + 3] <- cohortRelatedness[i, i + 3]
+    }
     cohortTakeFourRelatedness <- array(dim = length(cohortRelatedness[1, ]))
     for (i in 1:(length(cohortTakeOneRelatedness) - 4)) {
-      cohortTakeFourRelatedness[i + 4] <- cohortRelatedness[i, i + 4]}
+      cohortTakeFourRelatedness[i + 4] <- cohortRelatedness[i, i + 4]
+    }
     par(oma = c(5, 1, 1, 1))
 
     plot(as.numeric(names(cohortRelatedness)), cohortTakeOneRelatedness, type = "l", xlab = "Cohort", ylab = "Pairwise mean cohort relatedness")
@@ -359,5 +363,4 @@ plot.ped_stats <- function(x, lowMem = FALSE, grContrast = FALSE, ...) {
       readline(prompt = "File saved.  Press <Enter> to continue...")
     }
   }
-
 }

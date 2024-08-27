@@ -70,7 +70,6 @@
 #' gryphons$pheno <- 1
 #' gryphons$pheno[sample(length(gryphons$pheno), 1000)] <- NA
 #' ggpedigree(gryphons, cohort = cohort, sex = sex, sex_code = c(1, 0), pheno = pheno)
-#'
 #' }
 #' @keywords plot
 #' @export
@@ -98,8 +97,6 @@ ggpedigree <- function(.data,
                        point_size = 1,
                        point_colour = "black",
                        point_alpha = 1) {
-
-
   if (hasArg(.data)) {
     if (!hasArg(ids) || !hasArg(mothers) || !hasArg(fathers)) {
       warning(
@@ -229,22 +226,23 @@ ggpedigree <- function(.data,
   if (!print_cohort_labels) cohort_labels <- rep("", length(cohort_order))
 
 
-  #~~~~ igraph APPROACH
+  # ~~~~ igraph APPROACH
 
   # Create igraph object with sugiyama layout.
 
   baseped2 <- pivot_longer(ped,
-                           cols = c("MOTHER", "FATHER"),
-                           names_to = "ParentSex",
-                           values_to = "ParentID")
+    cols = c("MOTHER", "FATHER"),
+    names_to = "ParentSex",
+    values_to = "ParentID"
+  )
   baseped2 <- filter(baseped2, .data$ParentID != 0)
 
   nodes <- data.frame(ID = unique(c(baseped2$ParentID, baseped2$ID)))
   edges <- data.frame(from = baseped2$ParentID, to = baseped2$ID)
 
-  suppressMessages(nodes <- left_join(nodes, baseped[,c("ID", "Cohort")]))
+  suppressMessages(nodes <- left_join(nodes, baseped[, c("ID", "Cohort")]))
 
-  graphobj <- graph_from_data_frame(edges, vertices = nodes[,1], directed = TRUE)
+  graphobj <- graph_from_data_frame(edges, vertices = nodes[, 1], directed = TRUE)
   lay <- layout_with_sugiyama(graphobj, layers = nodes$Cohort)
 
   # Create the ID points object
@@ -254,7 +252,7 @@ ggpedigree <- function(.data,
 
   # Spread the x-coords if spread_x_coordinates == TRUE
 
-  if (spread_x_coordinates){
+  if (spread_x_coordinates) {
     idplot <- arrange(idplot, .data$Cohort, .data$X1)
     idplot$xcoord <- NA
 
@@ -273,9 +271,9 @@ ggpedigree <- function(.data,
 
   # Create the edges object (parent-ID relationship) & add ID coords
 
-  baseped2$Group = 1:nrow(baseped2)
+  baseped2$Group <- 1:nrow(baseped2)
   baseped3 <- pivot_longer(baseped2, cols = c("ID", "ParentID"), names_to = "Relationship", values_to = "ID")
-  suppressMessages(baseped3 <- left_join(baseped3, idplot[,c("ID", "xcoord", "Cohort")]))
+  suppressMessages(baseped3 <- left_join(baseped3, idplot[, c("ID", "xcoord", "Cohort")]))
 
   # If sex is defined, make a data.frame with sex information.
 
@@ -308,7 +306,7 @@ ggpedigree <- function(.data,
       sexlevels <- sexlevels[-which(sexlevels %in% x)]
       if (length(x) > 0) sexlevels <- c(sexlevels, x)
 
-      suppressMessages(idplot <- left_join(idplot     , sextab))
+      suppressMessages(idplot <- left_join(idplot, sextab))
       idplot$SEX <- factor(idplot$SEX, levels = sexlevels)
     }
   } else {
@@ -331,12 +329,10 @@ ggpedigree <- function(.data,
   )
 
   if (!return_plot_tables) {
-
     # If phenotype is specified, change the ParentSex to "UNKNOWN". This will
     # not be returned if return_plot_tables == TRUE.
 
-    if(!is.null(pheno)){
-
+    if (!is.null(pheno)) {
       # Create pheno frame
 
       phenotab <- data.frame(ID = as.character(ids), Pheno = pheno)
@@ -369,17 +365,17 @@ ggpedigree <- function(.data,
 
     if (id_labels) {
       return(p +
-               geom_text(
-                 data = idplot, aes(x = .data$xcoord, y = -.data$Cohort, label = .data$ID),
-                 size = point_size, colour = point_colour, alpha = point_alpha
-               ))
+        geom_text(
+          data = idplot, aes(x = .data$xcoord, y = -.data$Cohort, label = .data$ID),
+          size = point_size, colour = point_colour, alpha = point_alpha
+        ))
     } else {
       return(p +
-               geom_point(
-                 data = idplot, aes(x = .data$xcoord, y = -.data$Cohort, shape = .data$SEX),
-                 size = point_size, colour = point_colour, alpha = point_alpha
-               ) +
-               scale_shape_manual(values = c(16, 15, 17)))
+        geom_point(
+          data = idplot, aes(x = .data$xcoord, y = -.data$Cohort, shape = .data$SEX),
+          size = point_size, colour = point_colour, alpha = point_alpha
+        ) +
+        scale_shape_manual(values = c(16, 15, 17)))
     }
   }
 

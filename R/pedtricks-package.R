@@ -7,7 +7,7 @@
 #' For backward compatibility with code using `pedantics` older names are still usable but not recommended.
 #'
 #' @keywords internal
-#' 
+#'
 #' @import dplyr
 #' @import tidyr
 #' @import ggplot2
@@ -26,4 +26,3 @@
 #' @importFrom genetics is.genotype nallele allele.names is.locus genotype
 #' @importFrom igraph layout_with_sugiyama graph_from_data_frame
 "_PACKAGE"
-

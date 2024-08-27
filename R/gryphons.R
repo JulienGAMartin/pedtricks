@@ -14,7 +14,7 @@
 #'   \item{fatherSampledProb}{what}
 #'   \item{firstReproCohort}{what}
 #'   \item{lastReproCohort}{what}
-#'}
+#' }
 #' @keywords dataset
 
 "gryphons"
