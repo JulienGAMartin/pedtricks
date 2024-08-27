@@ -178,7 +178,7 @@ line and point data used for the plot, but the plot will not be generated</p></d
 
 
 <dt id="arg-line-col-no-pheno">line_col_no_pheno<a class="anchor" aria-label="anchor" href="#arg-line-col-no-pheno"></a></dt>
-<dd><p>Default = "#bbbbbb". Line colour for parents with
+<dd><p>Default = "#aaaaaa". Line colour for parents with
 <code>NA</code> values in <code>pheno</code>.</p></dd>
 
 
@@ -215,6 +215,12 @@ and paternal links.</p></dd>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># with cohort and sex</span></span></span>
 <span class="r-in"><span><span class="fu">ggpedigree</span><span class="op">(</span><span class="va">gryphons</span>, cohort <span class="op">=</span> <span class="va">cohort</span>, sex <span class="op">=</span> <span class="va">sex</span>, sex_code <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">#' with cohort, sex, and pheno</span></span></span>
+<span class="r-in"><span><span class="va">gryphons</span><span class="op">$</span><span class="va">pheno</span> <span class="op">&lt;-</span> <span class="fl">1</span></span></span>
+<span class="r-in"><span><span class="va">gryphons</span><span class="op">$</span><span class="va">pheno</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">gryphons</span><span class="op">$</span><span class="va">pheno</span><span class="op">)</span>, <span class="fl">1000</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="cn">NA</span></span></span>
+<span class="r-in"><span><span class="fu">ggpedigree</span><span class="op">(</span><span class="va">gryphons</span>, cohort <span class="op">=</span> <span class="va">cohort</span>, sex <span class="op">=</span> <span class="va">sex</span>, sex_code <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span>, pheno <span class="op">=</span> <span class="va">pheno</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
