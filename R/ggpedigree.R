@@ -3,8 +3,8 @@
 #' This function plots simple and complex pedigrees, with options specific to
 #' the types of pedigrees used for quantitative genetic inference in natural
 #' populations. This function is flexible to missing parents and can be
-#' customised to visualise specific cohorts, sexes, and/or phenotype
-#' availability. Pedigree layout is optimised using a Sugiyama algorithm. For
+#' customized to visualise specific cohorts, sexes, and/or phenotype
+#' availability. Pedigree layout is optimized using a Sugiyama algorithm. For
 #' simpler pedigrees, visualisation may be improved by specifying
 #' `spread_x_coordinates = FALSE`.
 #'

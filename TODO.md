@@ -13,3 +13,14 @@
 - [X] optimize ggpedigree x-coordinates (similar to PedView programme)
 - [X] add sex information (took this out temporarily)
 - [X] add data checks e.g. are vectors the same length etc.
+
+## nadiv integration
+
+since we are already dependent on nadiv why not remove the redundant functions
+
+- internal
+  - `prune` -> `prunePed`
+  - `orderPed` -> `prepPed`
+- exported
+  - `convert_ped` -> `numPed`
+  - `fix_ped` -> `prepPed`
