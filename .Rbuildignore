@@ -10,3 +10,4 @@ test_78.txt
 ^docs$
 ^pkgdown$
 ^\.github$
+^\_*\.R
