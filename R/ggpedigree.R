@@ -1,4 +1,12 @@
-#' ggpedigree: Pedigree plotting tool for complex pedigrees.
+#' ggpedigree: Plotting tool for simple and complex pedigrees.
+#'
+#' This function plots simple and complex pedigrees, with options specific to
+#' the types of pedigrees used for quantitative genetic inference in natural
+#' populations. This function is flexible to missing parents and can be
+#' customised to visualise specific cohorts, sexes, and/or phenotype
+#' availability. Pedigree layout is optimised using a Sugiyama algorithm. For
+#' simpler pedigrees, visualisation may be improved by specifying
+#' `spread_x_coordinates = FALSE`.
 #'
 #' @param .data an optional data frame object with all the pedigree information
 #' @param ids a column of .data or a vector of individual identifiers
@@ -13,6 +21,10 @@
 #'   a vector assigning a sex to each id. When using this option, `sex_code`
 #'   must be specified. Any values not matching values in `sex_code` will be
 #'   treated as unknown sex.
+#' @param pheno integer or character. Default NULL. An optional column of .data
+#'   or a vector assigning a phenotype to each id. Links originating from
+#'   parents that have `NA` values for this argument will be plotted with a grey
+#'   line, unless otherwise specified in `line_col_no_pheno`.
 #' @param sex_code Default NULL. A vector of length 2, indicating the value used
 #'   in `sex` for females and males respectively. Females are plotted as
 #'   circles, males as squares, and unknown values as triangles.
@@ -21,8 +33,8 @@
 #'   i.e., no offspring or parents assigned.
 #' @param spread_x_coordinates logical. Default TRUE. Evenly spreads the x-axis
 #'   (horizontal) distribution of points within each cohort. If FALSE, this will
-#'   plot the direct outcome of `igraph::layout_with_sugiyama`; the FALSE option is
-#'   only recommended for small pedigrees and/or less connected pedigrees.
+#'   plot the direct outcome of `igraph::layout_with_sugiyama`; the FALSE option
+#'   is only recommended for small pedigrees and/or less connected pedigrees.
 #' @param plot_unknown_cohort logical. Default FALSE. Plots ids of unknown
 #'   cohorts. These are plotted in an "Unknown" cohort at the top of the
 #'   pedigree. Be aware that any mothers and fathers of these individuals will
@@ -33,6 +45,8 @@
 #'   line and point data used for the plot, but the plot will not be generated
 #' @param line_col_mother Default = "#E41A1C". Line colour for maternal links.
 #' @param line_col_father Default = "#377EB8". Line colour for paternal links.
+#' @param line_col_no_pheno Default = "#aaaaaa". Line colour for parents with
+#'   `NA` values in `pheno`.
 #' @param line_alpha Default = 0.3. Line alpha (transparency) value for maternal
 #'   and paternal links.
 #' @param point_size Default = 1. Point size for ids.
@@ -62,6 +76,7 @@ ggpedigree <- function(.data,
                        fathers,
                        cohort,
                        sex,
+                       pheno,
                        sex_code = NULL,
                        id_labels = FALSE,
                        remove_singletons = TRUE,
@@ -71,6 +86,7 @@ ggpedigree <- function(.data,
                        return_plot_tables = FALSE,
                        line_col_mother = "#E41A1C",
                        line_col_father = "#377EB8",
+                       line_col_no_pheno = "#aaaaaa",
                        line_alpha = 0.3,
                        point_size = 1,
                        point_colour = "black",
@@ -107,6 +123,11 @@ ggpedigree <- function(.data,
     } else {
       cohort <- NULL
     }
+    if (hasArg(pheno)) {
+      pheno <- as.vector(select(.data, {{ pheno }}))[[1]]
+    } else {
+      pheno <- NULL
+    }
   }
 
   # Check that ids have not been duplicated
@@ -124,9 +145,10 @@ ggpedigree <- function(.data,
     length(mothers),
     length(fathers),
     ifelse(is.null(cohort), NA, length(cohort)),
-    ifelse(is.null(sex), NA, length(sex))
+    ifelse(is.null(sex), NA, length(sex)),
+    ifelse(is.null(pheno), NA, length(pheno))
   )))) > 1) {
-    stop("ids, mothers, fathers, cohort (if specified), and sex (if specified) must be the same length.")
+    stop("ids, mothers, fathers, cohort (if specified), sex (if specified), and pheno (if specified) must be the same length.")
   }
 
   # if sex_female is defined, check that sex_male is defined, and vice versa
@@ -222,9 +244,6 @@ ggpedigree <- function(.data,
   idplot <- lay$layout %>% data.frame()
   idplot <- cbind(idplot, Cohort = nodes$Cohort, ID = nodes$ID)
 
-  ggplot() +
-    geom_point(data = idplot, aes(.data$X1, -.data$Cohort))
-
   # Spread the x-coords if spread_x_coordinates == TRUE
 
   if (spread_x_coordinates){
@@ -288,6 +307,7 @@ ggpedigree <- function(.data,
     idplot$SEX <- "1"
   }
 
+
   # Plot the pedigrees
 
   gg_theme <- theme(
@@ -303,6 +323,27 @@ ggpedigree <- function(.data,
   )
 
   if (!return_plot_tables) {
+
+    # If phenotype is specified, change the ParentSex to "UNKNOWN". This will
+    # not be returned if return_plot_tables == TRUE.
+
+    if(!is.null(pheno)){
+
+      # Create pheno frame
+
+      phenotab <- data.frame(ID = as.character(ids), Pheno = pheno)
+
+      # Identify which groups belong to parents with missing phenos & filter
+
+      temptab <- filter(baseped3, Relationship == "ParentID")
+
+      suppressMessages(temptab <- left_join(temptab, phenotab))
+
+      temptab <- filter(temptab, is.na(Pheno))
+
+      baseped3$ParentSex[which(baseped3$Group %in% temptab$Group)] <- "UNKNOWN"
+    }
+
     p <- ggplot() +
       geom_line(data = baseped3, aes(
         x = .data$xcoord,
@@ -314,7 +355,7 @@ ggpedigree <- function(.data,
         breaks = -seq(min(cohort_order), max(cohort_order), 1),
         labels = cohort_labels
       ) +
-      scale_colour_manual(values = c(line_col_father, line_col_mother)) +
+      scale_colour_manual(values = c(line_col_father, line_col_mother, line_col_no_pheno)) +
       labs(x = "", y = "") +
       gg_theme
 
