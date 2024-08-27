@@ -1,10 +1,11 @@
 # pedtricks package
 
 <!-- badges: start -->
-[![R-CMD-check](https://github.com/juliengamartin/pedtricks/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/uliengamartin/pedtricks/actions/workflows/R-CMD-check.yaml)
-<!--[![Codecov test coverage](https://codecov.io/gh/r-lib/devtools/branch/main/graph/badge.svg)](https://app.codecov.io/gh/r-lib/devtools?branch=main)-->
+[![R-CMD-check](https://github.com/juliengamartin/pedtricks/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/juliengamartin/pedtricks/actions/workflows/R-CMD-check.yaml)
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/pedtricks)](https://cran.r-project.org/package=pedtricks)
 <!-- badges: end -->
+
+<!--[![Codecov test coverage](https://codecov.io/gh/r-lib/devtools/branch/main/graph/badge.svg)](https://app.codecov.io/gh/r-lib/devtools?branch=main)-->
 
 This package is taking the core functions from pedantics, removed the dependencies on archived packages ("MasterBayes") and removed function based on C libraries that are outdated, providing an easier to maintain package
 
