@@ -19,12 +19,11 @@ Extracts allele frequencies from genotype data
 }
 \examples{
 \dontrun{
-  data(WarblerG)
+data(WarblerG)
 
-  A<-extractA(WarblerG)
-  A[[1]]
+A <- extractA(WarblerG)
+A[[1]]
 }
-
 
 }
 \seealso{

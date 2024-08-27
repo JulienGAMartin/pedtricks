@@ -120,7 +120,6 @@ ggpedigree(gryphons, cohort = cohort, sex = sex, sex_code = c(1, 0))
 gryphons$pheno <- 1
 gryphons$pheno[sample(length(gryphons$pheno), 1000)] <- NA
 ggpedigree(gryphons, cohort = cohort, sex = sex, sex_code = c(1, 0), pheno = pheno)
-
 }
 }
 \keyword{plot}

@@ -63,8 +63,7 @@
 #'
 #' plot(gryphons_ped_stats)
 #' }
-
-#' }
+#' 
 #' @export
 #'
 

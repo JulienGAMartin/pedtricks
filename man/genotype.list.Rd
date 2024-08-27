@@ -19,10 +19,10 @@ Creates a \code{list} of \code{genotype} objects from a \code{matrix} or \code{d
 }
 \examples{
 \dontrun{
-  data(WarblerG)
+data(WarblerG)
 
-  G<-genotype.list(WarblerG[,-1])
-  summary(G[[1]])
+G <- genotype.list(WarblerG[, -1])
+summary(G[[1]])
 }
 
 }

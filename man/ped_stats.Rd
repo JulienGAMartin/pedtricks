@@ -71,7 +71,8 @@ data(gryphons)
 pedigree <- gryphons[, 1:3]
 
 gryphons_ped_stats <- ped_stats(pedigree,
-  cohorts = gryphons$cohort)
+  cohorts = gryphons$cohort
+)
 
 gryphons_ped_stats$totalMaternities
 gryphons_ped_stats$paternitiesByCohort
@@ -80,4 +81,5 @@ summary(gryphons_ped_stats)
 
 plot(gryphons_ped_stats)
 }
+
 }
