@@ -65,10 +65,17 @@
 #'
 #' # with cohort and sex
 #' ggpedigree(gryphons, cohort = cohort, sex = sex, sex_code = c(1, 0))
+#'
+#' #' with cohort, sex, and pheno
+#' gryphons$pheno <- 1
+#' gryphons$pheno[sample(length(gryphons$pheno), 1000)] <- NA
+#' ggpedigree(gryphons, cohort = cohort, sex = sex, sex_code = c(1, 0), pheno = pheno)
+#'
 #' }
 #' @keywords plot
 #' @export
-
+#'
+#'
 
 ggpedigree <- function(.data,
                        ids,
@@ -91,6 +98,7 @@ ggpedigree <- function(.data,
                        point_size = 1,
                        point_colour = "black",
                        point_alpha = 1) {
+
 
   if (hasArg(.data)) {
     if (!hasArg(ids) || !hasArg(mothers) || !hasArg(fathers)) {

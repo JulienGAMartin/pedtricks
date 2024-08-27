@@ -82,7 +82,7 @@ line and point data used for the plot, but the plot will not be generated}
 
 \item{line_col_father}{Default = "#377EB8". Line colour for paternal links.}
 
-\item{line_col_no_pheno}{Default = "#bbbbbb". Line colour for parents with
+\item{line_col_no_pheno}{Default = "#aaaaaa". Line colour for parents with
 \code{NA} values in \code{pheno}.}
 
 \item{line_alpha}{Default = 0.3. Line alpha (transparency) value for maternal
@@ -115,6 +115,12 @@ ggpedigree(pedigree, id, dam, sire)
 
 # with cohort and sex
 ggpedigree(gryphons, cohort = cohort, sex = sex, sex_code = c(1, 0))
+
+#' with cohort, sex, and pheno
+gryphons$pheno <- 1
+gryphons$pheno[sample(length(gryphons$pheno), 1000)] <- NA
+ggpedigree(gryphons, cohort = cohort, sex = sex, sex_code = c(1, 0), pheno = pheno)
+
 }
 }
 \keyword{plot}
