@@ -53,9 +53,30 @@
 <li><label><input type="checkbox" checked>add sex information (took this out temporarily)</label></li>
 <li><label><input type="checkbox" checked>add data checks e.g. are vectors the same length etc.</label></li>
 </ul></div>
+<div class="section level2">
+<h2 id="nadiv-integration">nadiv integration<a class="anchor" aria-label="anchor" href="#nadiv-integration"></a></h2>
+<p>since we are already dependent on nadiv why not remove the redundant functions</p>
+<ul><li>internal
+<ul><li>
+<code>prune</code> -&gt; <code>prunePed</code>
+</li>
+<li>
+<code>orderPed</code> -&gt; <code>prepPed</code>
+</li>
+</ul></li>
+<li>exported
+<ul><li>
+<code>convert_ped</code> -&gt; <code>numPed</code>
+</li>
+<li>
+<code>fix_ped</code> -&gt; <code>prepPed</code>
+</li>
+</ul></li>
+</ul></div>
 </div>
 
-  </main></div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">
