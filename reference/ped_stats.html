@@ -181,8 +181,7 @@
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
-<span class="r-in"><span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">gryphons</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">pedigree</span> <span class="op">&lt;-</span> <span class="va">gryphons</span><span class="op">[</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span></span></span>
 <span class="r-in"><span></span></span>
@@ -191,10 +190,39 @@
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">gryphons_ped_stats</span><span class="op">$</span><span class="va">totalMaternities</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2435</span>
 <span class="r-in"><span><span class="va">gryphons_ped_stats</span><span class="op">$</span><span class="va">paternitiesByCohort</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1145 1146 1147 1148 1149 1150 1151 1152 1153 1154 1155 1156 1157 1158 1159 1160 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    0    0    0    0    0    0    0    0    0    3    0    4    2    2    9    6 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1161 1162 1163 1164 1165 1166 1167 1168 1169 1170 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   33   80  118   75   91  161  157  163  128  124 </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">gryphons_ped_stats</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                  sumData</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> records                     4.918000e+03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> maternities                 2.435000e+03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> paternities                 1.156000e+03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> full sibs                   8.600000e+01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> maternal sibs               6.957000e+03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> maternal half sibs          6.871000e+03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> paternal sibs               6.138000e+03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> paternal half sibs          6.052000e+03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> maternal grandmothers       1.503000e+03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> maternal grandfathers       8.890000e+02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> paternal grandmothers       5.070000e+02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> paternal grandfathers       3.540000e+02</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> maximum pedigree depth      6.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> founders                    2.483000e+03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> mean maternal sibsip size   4.183849e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> mean paternal sibsip size   3.853333e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> non-zero F                  2.300000e+01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> F &gt; 0.125                   7.000000e+00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> mean pairwise relatedness   1.129934e-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> pairwise relatedness&gt;=0.125 4.373784e-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> pairwise relatedness&gt;=0.25  1.672662e-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> pairwise relatedness&gt;=0.5   3.047746e-04</span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">gryphons_ped_stats</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
