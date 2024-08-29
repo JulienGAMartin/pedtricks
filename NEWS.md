@@ -1,3 +1,9 @@
+# pedtricks 0.4
+
+## 0.4.0
+
+- `ped_stats`: optimized to run much faster (I think it can even be improved).  Now running in 1.6s on the gryphons pedigree instead of 160s so 10x faster. Now using sparse matrix format for A and removing some sluggish loops in estimations.
+
 # pedtricks 0.3
 
 ## 0.3.2
