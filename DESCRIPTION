@@ -17,6 +17,7 @@ Description: Functions for sensitivity and power analysis,
   and for visualizing pedigrees.
 URL: https://juliengamartin.github.io/pedtricks/
 BugReports: https://github.com/JulienGAMartin/pedtricks/issues
+Language: en-US
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

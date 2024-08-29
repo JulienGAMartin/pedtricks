@@ -19,7 +19,7 @@ fix_ped(ped, dat = NULL)
 Returns a pedigree in which all individuals that exist in the dam
 and sire columns are represented by their own record lines, occurring
 before the records of their first offspring.  If data are supplied,
-then fix_ped will return a dataframe, the first tree columns are
+then fix_ped will return a dataframe, the first three columns are
 the 'fixed' pedigree, and the following columns of which contain
 appropriately reordered data.
 }
