@@ -47,7 +47,6 @@
 #'   Graphical summaries of a number of these summary statistics are printed to the console when \code{graphicalReports=='y'}.
 #'
 #' @examples
-#' \dontrun{
 #'
 #' data(gryphons)
 #' pedigree <- gryphons[, 1:3]
@@ -60,13 +59,16 @@
 #' gryphons_ped_stats$paternitiesByCohort
 #'
 #' summary(gryphons_ped_stats)
-#'
+#' 
+#' \dontrun{
 #' plot(gryphons_ped_stats)
 #' }
 #' 
 #' @export
 #'
 
+
+##### NEED TO TEST
 
 ped_stats <-
   function(Ped, cohorts = NULL, dat = NULL, retain = "informative", includeA = TRUE, lowMem = FALSE) {
@@ -97,6 +99,7 @@ ped_stats <-
       stop("Pedigree and available data differ in length.")
     }
 
+    Ped <- fix_ped(Ped)
 
     if (is.null(dat) == FALSE) {
       if (is.numeric(dat)) {
@@ -181,14 +184,11 @@ ped_stats <-
       names(cumulativeRelatedness) <- midBins
       relatednessBin <- array(dim = length(midBins))
       names(relatednessBin) <- midBins
-      A <- kinship(Ped[, 1], Ped[, 3], Ped[, 2]) * 2
-      pairwiseRelatedness <- A * abs(diag(length(A[, 1])) - 1)
-      pairwiseRelatedness[upper.tri(pairwiseRelatedness)] <- 0
-      pairwiseRelatedness <- c(pairwiseRelatedness)
-      #  pairwiseRelatedness<-subset(pairwiseRelatedness,pairwiseRelatedness>1e-9)
+      A <- nadiv::makeA(Ped)
+      pairwiseRelatedness <- A
+      diag(pairwiseRelatedness) <- 0
       for (x in 2:(length(cutoffs) - 1)) {
-        #  cumulativeRelatedness[x]<-table(pairwiseRelatedness<cutoffs[x+1])["TRUE"]
-        relatednessBin[x] <- table(pairwiseRelatedness > cutoffs[x] & pairwiseRelatedness <= cutoffs[x + 1])["TRUE"]
+        relatednessBin[x] <- table(pairwiseRelatedness@x > cutoffs[x] & pairwiseRelatedness@x <= cutoffs[x + 1])["TRUE"]
       }
       relatednessBin[1] <- ((totalSampleSize^2 - totalSampleSize) / 2) - sum(relatednessBin, na.rm = TRUE)
       relatednessBin[relatednessBin %in% NA] <- 0
@@ -327,125 +327,47 @@ ped_stats <-
       }
     }
 
-    if (lowMem == FALSE & includeA == TRUE) {
-      results <- list(
-        totalSampleSize = totalSampleSize,
-        totalMaternities = totalMaternities,
-        totalPaternities = totalPaternities,
-        totalFullSibs = totalFullSibs[[1]],
-        totalMaternalSibs = totalMaternalSibs[[1]],
-        totalPaternalSibs = totalPaternalSibs[[1]],
-        totalMaternalGrandmothers = totalMaternalGM,
-        totalMaternalGrandfathers = totalMaternalGF,
-        totalPaternalGrandmothers = totalPaternalGM,
-        totalPaternalGrandfathers = totalPaternalGF,
-        pedigreeDepth = pedigreeDepth,
-        inbreedingCoefficients = reorderInbreeding$inbreeding,
-        Amatrix = A,
-        maternalSibships = matSibships,
-        paternalSibships = patSibships,
-        cumulativeRelatedness = cumulativeRelatedness,
-        relatednessCategories = relatednessBin,
-        analyzedPedigree = Ped,
-        missingness = missingness,
+    if (includeA == FALSE) A <- NULL
+    results <- list(
+      totalSampleSize = totalSampleSize,
+      totalMaternities = totalMaternities,
+      totalPaternities = totalPaternities,
+      totalFullSibs = totalFullSibs[[1]],
+      totalMaternalSibs = totalMaternalSibs[[1]],
+      totalPaternalSibs = totalPaternalSibs[[1]],
+      totalMaternalGrandmothers = totalMaternalGM,
+      totalMaternalGrandfathers = totalMaternalGF,
+      totalPaternalGrandmothers = totalPaternalGM,
+      totalPaternalGrandfathers = totalPaternalGF,
+      pedigreeDepth = pedigreeDepth,
+      inbreedingCoefficients = reorderInbreeding$inbreeding,
+      Amatrix = A,
+      maternalSibships = matSibships,
+      paternalSibships = patSibships,
+      cumulativeRelatedness = cumulativeRelatedness,
+      relatednessCategories = relatednessBin,
+      analyzedPedigree = Ped,
+      missingness = missingness
+    )
+
+    if (is.null(cohorts) == FALSE) {
+      results_cohorts <- list(
+        sampleSizesByCohort = cohortSampleSizes,
+        maternitiesByCohort = cohortMaternities,
+        paternitiesByCohort = cohortPaternities,
+        fullSibsByCohort = cohortFullSibs,
+        maternalSibsByCohort = cohortMaternalSibs,
+        paternalSibsByCohort = cohortPaternalSibs,
+        maternalGrandmothersByCohort = cohortMaternalGM,
+        maternalGrandfathersByCohort = cohortMaternalGF,
+        paternalGrandmothersByCohort = cohortPaternalGM,
+        paternalGrandfathersByCohort = cohortPaternalGF,
+        cumulativePedigreeDepth = cohortPedgireeDepth,
+        meanRelatednessAmongCohorts = meanRelatednessAmongCohorts,
+        cohorts = cohorts,
         cohortPedigreeCompleteness = cohortPedigreeCompleteness
       )
-
-      if (is.null(cohorts) == FALSE) {
-        results <- list(
-          totalSampleSize = totalSampleSize,
-          totalMaternities = totalMaternities,
-          totalPaternities = totalPaternities,
-          totalFullSibs = totalFullSibs[[1]],
-          totalMaternalSibs = totalMaternalSibs[[1]],
-          totalPaternalSibs = totalPaternalSibs[[1]],
-          totalMaternalGrandmothers = totalMaternalGM,
-          totalMaternalGrandfathers = totalMaternalGF,
-          totalPaternalGrandmothers = totalPaternalGM,
-          totalPaternalGrandfathers = totalPaternalGF,
-          sampleSizesByCohort = cohortSampleSizes,
-          maternitiesByCohort = cohortMaternities,
-          paternitiesByCohort = cohortPaternities,
-          fullSibsByCohort = cohortFullSibs,
-          maternalSibsByCohort = cohortMaternalSibs,
-          paternalSibsByCohort = cohortPaternalSibs,
-          maternalGrandmothersByCohort = cohortMaternalGM,
-          maternalGrandfathersByCohort = cohortMaternalGF,
-          paternalGrandmothersByCohort = cohortPaternalGM,
-          paternalGrandfathersByCohort = cohortPaternalGF,
-          pedigreeDepth = pedigreeDepth,
-          cumulativePedigreeDepth = cohortPedgireeDepth,
-          meanRelatednessAmongCohorts = meanRelatednessAmongCohorts,
-          inbreedingCoefficients = reorderInbreeding$inbreeding,
-          Amatrix = A,
-          maternalSibships = matSibships,
-          paternalSibships = patSibships,
-          cumulativeRelatedness = cumulativeRelatedness,
-          relatednessCategories = relatednessBin,
-          cohorts = cohorts,
-          analyzedPedigree = Ped,
-          missingness = missingness,
-          cohortPedigreeCompleteness = cohortPedigreeCompleteness
-        )
-      }
-    } else {
-      results <- list(
-        totalSampleSize = totalSampleSize,
-        totalMaternities = totalMaternities,
-        totalPaternities = totalPaternities,
-        totalFullSibs = totalFullSibs[[1]],
-        totalMaternalSibs = totalMaternalSibs[[1]],
-        totalPaternalSibs = totalPaternalSibs[[1]],
-        totalMaternalGrandmothers = totalMaternalGM,
-        totalMaternalGrandfathers = totalMaternalGF,
-        totalPaternalGrandmothers = totalPaternalGM,
-        totalPaternalGrandfathers = totalPaternalGF,
-        pedigreeDepth = pedigreeDepth,
-        inbreedingCoefficients = reorderInbreeding$inbreeding,
-        maternalSibships = matSibships,
-        paternalSibships = patSibships,
-        cumulativeRelatedness = cumulativeRelatedness,
-        relatednessCategories = relatednessBin,
-        analyzedPedigree = Ped,
-        missingness = missingness
-      )
-
-      if (is.null(cohorts) == FALSE) {
-        results <- list(
-          totalSampleSize = totalSampleSize,
-          totalMaternities = totalMaternities,
-          totalPaternities = totalPaternities,
-          totalFullSibs = totalFullSibs[[1]],
-          totalMaternalSibs = totalMaternalSibs[[1]],
-          totalPaternalSibs = totalPaternalSibs[[1]],
-          totalMaternalGrandmothers = totalMaternalGM,
-          totalMaternalGrandfathers = totalMaternalGF,
-          totalPaternalGrandmothers = totalPaternalGM,
-          totalPaternalGrandfathers = totalPaternalGF,
-          sampleSizesByCohort = cohortSampleSizes,
-          maternitiesByCohort = cohortMaternities,
-          paternitiesByCohort = cohortPaternities,
-          fullSibsByCohort = cohortFullSibs,
-          maternalSibsByCohort = cohortMaternalSibs,
-          paternalSibsByCohort = cohortPaternalSibs,
-          maternalGrandmothersByCohort = cohortMaternalGM,
-          maternalGrandfathersByCohort = cohortMaternalGF,
-          paternalGrandmothersByCohort = cohortPaternalGM,
-          paternalGrandfathersByCohort = cohortPaternalGF,
-          pedigreeDepth = pedigreeDepth,
-          cumulativePedigreeDepth = cohortPedgireeDepth,
-          meanRelatednessAmongCohorts = meanRelatednessAmongCohorts,
-          inbreedingCoefficients = reorderInbreeding$inbreeding,
-          maternalSibships = matSibships,
-          paternalSibships = patSibships,
-          cumulativeRelatedness = cumulativeRelatedness,
-          relatednessCategories = relatednessBin,
-          cohorts = cohorts,
-          analyzedPedigree = Ped,
-          missingness = missingness,
-          cohortPedigreeCompleteness = cohortPedigreeCompleteness
-        )
-      }
+      results <- c(results, results_cohorts)
     }
     class(results) <- "ped_stats"
     results

@@ -65,7 +65,6 @@ Graphical summaries of a number of these summary statistics are printed to the c
 Statistics are those that will hopefully be useful for describing pedigrees to be used in quantitative genetic analyses of natural populations.  This module will be most useful when cohort affinities for all individuals can be provided.  All outputs are produced in a numerical form as well as in graphical summaries.
 }
 \examples{
-\dontrun{
 
 data(gryphons)
 pedigree <- gryphons[, 1:3]
@@ -79,6 +78,7 @@ gryphons_ped_stats$paternitiesByCohort
 
 summary(gryphons_ped_stats)
 
+\dontrun{
 plot(gryphons_ped_stats)
 }
 

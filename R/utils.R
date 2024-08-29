@@ -35,35 +35,24 @@ orderPed <- function(ped) {
   return(reorder)
 }
 
+
 getSibNums <- function(ped) {
   n <- as.integer(length(ped$id))
   id <- as.integer(ped$id)
   mum <- as.integer(ped$dam)
   dad <- as.integer(ped$sire)
-  f <- 0 # Number of full siblings
-  m <- 0 # Number of maternal siblings
-  p <- 0 # Number of paternal siblings
+  f <- vector() # Number of full siblings
+  m <- vector() # Number of maternal siblings
+  p <- vector() # Number of paternal siblings
 
   for (x in 1:(n - 1)) {
-    for (y in (x + 1):n) {
       # Full siblings check
-      if (!is.na(mum[x]) && !is.na(dad[x]) && !is.na(mum[y]) && !is.na(dad[y]) &&
-        mum[x] == mum[y] && dad[x] == dad[y]) {
-        f <- f + 1
-      }
-      # Maternal siblings check
-      if (!is.na(mum[x]) && !is.na(mum[y]) && mum[x] == mum[y]) {
-        m <- m + 1
-      }
-      # Paternal siblings check
-      if (!is.na(dad[x]) && !is.na(dad[y]) && dad[x] == dad[y]) {
-        p <- p + 1
-      }
+      f[x] <- sum(ped$dam[(x + 1):n] == ped$dam[x] & ped$sire[(x + 1):n] == ped$sire[x], na.rm = TRUE)
+      m[x] <- sum(ped$dam[(x + 1):n] == ped$dam[x], na.rm = TRUE)
+      p[x] <- sum(ped$sire[(x + 1):n] == ped$sire[x], na.rm = TRUE)
     }
-  }
-
   # Returning results as a list
-  return(c(full = f, maternal = m, paternal = p))
+  c(full = sum(f), maternal = sum(m), paternal = sum(p))
 }
 
 ################################################################################
