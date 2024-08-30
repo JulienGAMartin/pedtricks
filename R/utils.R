@@ -37,21 +37,15 @@ orderPed <- function(ped) {
 
 
 getSibNums <- function(ped) {
-  n <- as.integer(length(ped$id))
-  id <- as.integer(ped$id)
-  mum <- as.integer(ped$dam)
-  dad <- as.integer(ped$sire)
-  f <- vector() # Number of full siblings
-  m <- vector() # Number of maternal siblings
-  p <- vector() # Number of paternal siblings
-
-  for (x in 1:(n - 1)) {
-      # Full siblings check
-      f[x] <- sum(ped$dam[(x + 1):n] == ped$dam[x] & ped$sire[(x + 1):n] == ped$sire[x], na.rm = TRUE)
-      m[x] <- sum(ped$dam[(x + 1):n] == ped$dam[x], na.rm = TRUE)
-      p[x] <- sum(ped$sire[(x + 1):n] == ped$sire[x], na.rm = TRUE)
-    }
-  # Returning results as a list
+  ped$damsire <- case_when(
+    is.na(ped$dam) ~ NA_character_,
+    is.na(ped$sire) ~ NA_character_,
+    .default = paste(ped$dam, ped$sire, sep="_")
+  )
+  f <- table(ped$damsire) * (table(ped$damsire) - 1) / 2 # Number of full siblings
+  m <- table(ped$dam) * (table(ped$dam) - 1) / 2 # vector() # Number of maternal siblings
+  p <- table(ped$sire) * (table(ped$sire) - 1) / 2 # vector() # Number of paternal siblings
+  # Returning results as a vector
   c(full = sum(f), maternal = sum(m), paternal = sum(p))
 }
 
