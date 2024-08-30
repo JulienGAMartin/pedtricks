@@ -27,12 +27,16 @@ remotes::install_github(
 
 see the [News page](https://juliengamartin.github.io/pedtricks/news/index.html)  of pedtricks website for the list of all the changes
 
+### speed
+
+Code has been optimized to run faster (over 200 times faster on example pedigree for `ped_stats` from >160s to <1s)
+
 ### Defunct functions
 - `rpederr()` and `fpederr()` have been removed from the package.
 
 The questions about rates of pedigree error typically encountered, and their effects on inference of elementary QG parameters are basically settled (Charmantier & Réale 2005, Morrissey *et al.* 2007, Firth *et al.* 2015, Bourret & Garant 2017), and outstanding questions will not plausibly be supported by these functions or any straightforward modifications thereof.
 
-### major changes
+### functions structure changes
 - `pedigreeStats()` and `pedStatSummary()` have been replaced by `ped_stats()` with a `summary()` and `plot()` methods to simplify the workflow and allow to get the plots without running the statistics each time
 - `makePedigreeFactor()` and `makePedigreeNumeric()` have been combined in `convert_ped()` which convert a pedigree to numeric or factor
 
