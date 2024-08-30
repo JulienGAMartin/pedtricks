@@ -182,16 +182,12 @@ ped_stats <-
       midBins <- seq(0, 0.975, by = 0.025)
       cumulativeRelatedness <- array(dim = length(midBins))
       names(cumulativeRelatedness) <- midBins
-      relatednessBin <- array(dim = length(midBins))
-      names(relatednessBin) <- midBins
       A <- nadiv::makeA(Ped)
       pairwiseRelatedness <- A
       diag(pairwiseRelatedness) <- 0
-      for (x in 2:(length(cutoffs) - 1)) {
-        relatednessBin[x] <- table(pairwiseRelatedness@x > cutoffs[x] & pairwiseRelatedness@x <= cutoffs[x + 1])["TRUE"]
-      }
-      relatednessBin[1] <- ((totalSampleSize^2 - totalSampleSize) / 2) - sum(relatednessBin, na.rm = TRUE)
-      relatednessBin[relatednessBin %in% NA] <- 0
+      relatednessBin <- table(cut(pairwiseRelatedness@x,cutoffs))
+      names(relatednessBin) <- midBins
+      relatednessBin[1] <- ((totalSampleSize^2 - totalSampleSize) / 2) - sum(relatednessBin[-1])
 
       rb <- relatednessBin / sum(relatednessBin)
       for (x in 1:(length(cutoffs) - 1)) {
