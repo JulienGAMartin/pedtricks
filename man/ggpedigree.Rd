@@ -29,29 +29,29 @@ ggpedigree(
 )
 }
 \arguments{
-\item{.data}{an optional data frame object with all the pedigree information}
+\item{.data}{a data frame object with all the pedigree information}
 
-\item{ids}{a column of .data or a vector of individual identifiers}
+\item{ids}{a column of .data of individual identifiers}
 
-\item{mothers}{A column of .data or a vector of mothers corresponding to ids.
-Missing values are 0 or NA.}
+\item{mothers}{A column of .data of mothers corresponding to ids. Missing
+values are 0 or NA.}
 
-\item{fathers}{A column of .data or a vector of fathers corresponding to ids.
-Missing values are 0 or NA.}
+\item{fathers}{A column of .data of fathers corresponding to ids. Missing
+values are 0 or NA.}
 
-\item{cohort}{integer. Default NULL. A column of .data or an optional vector
-assigning a cohort to each id. If NULL, then \code{kinship2::kindepth} is used
-to assign cohorts to ids.}
+\item{cohort}{integer. Default NULL. A optional column of .data assigning a
+cohort to each id. If NULL, then \code{kinship2::kindepth} is used to assign
+cohorts to ids.}
 
-\item{sex}{integer or character. Default NULL. An optional column of .data or
-a vector assigning a sex to each id. When using this option, \code{sex_code}
-must be specified. Any values not matching values in \code{sex_code} will be
-treated as unknown sex.}
+\item{sex}{integer or character. Default NULL. An optional column of .data
+assigning a sex to each id. When using this option, \code{sex_code} must be
+specified. Any values not matching values in \code{sex_code} will be treated as
+unknown sex.}
 
 \item{pheno}{integer or character. Default NULL. An optional column of .data
-or a vector assigning a phenotype to each id. Links originating from
-parents that have \code{NA} values for this argument will be plotted with a grey
-line, unless otherwise specified in \code{line_col_no_pheno}.}
+assigning a phenotype to each id. Links originating from parents that have
+\code{NA} values for this argument will be plotted with a grey line, unless
+otherwise specified in \code{line_col_no_pheno}.}
 
 \item{sex_code}{Default NULL. A vector of length 2, indicating the value used
 in \code{sex} for females and males respectively. Females are plotted as

@@ -8,23 +8,23 @@
 #' simpler pedigrees, visualisation may be improved by specifying
 #' `spread_x_coordinates = FALSE`.
 #'
-#' @param .data an optional data frame object with all the pedigree information
-#' @param ids a column of .data or a vector of individual identifiers
-#' @param mothers A column of .data or a vector of mothers corresponding to ids.
-#'   Missing values are 0 or NA.
-#' @param fathers A column of .data or a vector of fathers corresponding to ids.
-#'   Missing values are 0 or NA.
-#' @param cohort integer. Default NULL. A column of .data or an optional vector
-#'   assigning a cohort to each id. If NULL, then `kinship2::kindepth` is used
-#'   to assign cohorts to ids.
-#' @param sex integer or character. Default NULL. An optional column of .data or
-#'   a vector assigning a sex to each id. When using this option, `sex_code`
-#'   must be specified. Any values not matching values in `sex_code` will be
-#'   treated as unknown sex.
+#' @param .data a data frame object with all the pedigree information
+#' @param ids a column of .data of individual identifiers
+#' @param mothers A column of .data of mothers corresponding to ids. Missing
+#'   values are 0 or NA.
+#' @param fathers A column of .data of fathers corresponding to ids. Missing
+#'   values are 0 or NA.
+#' @param cohort integer. Default NULL. A optional column of .data assigning a
+#'   cohort to each id. If NULL, then `kinship2::kindepth` is used to assign
+#'   cohorts to ids.
+#' @param sex integer or character. Default NULL. An optional column of .data
+#'   assigning a sex to each id. When using this option, `sex_code` must be
+#'   specified. Any values not matching values in `sex_code` will be treated as
+#'   unknown sex.
 #' @param pheno integer or character. Default NULL. An optional column of .data
-#'   or a vector assigning a phenotype to each id. Links originating from
-#'   parents that have `NA` values for this argument will be plotted with a grey
-#'   line, unless otherwise specified in `line_col_no_pheno`.
+#'   assigning a phenotype to each id. Links originating from parents that have
+#'   `NA` values for this argument will be plotted with a grey line, unless
+#'   otherwise specified in `line_col_no_pheno`.
 #' @param sex_code Default NULL. A vector of length 2, indicating the value used
 #'   in `sex` for females and males respectively. Females are plotted as
 #'   circles, males as squares, and unknown values as triangles.
@@ -221,6 +221,13 @@ ggpedigree <- function(.data,
       cohort_order <- c(min(cohort_order) - 1, cohort_order)
       cohort_labels <- c("Unknown", cohort_labels)
     }
+  }  else {
+    if(any(is.na(baseped$Cohort))){
+      message(paste0(length(which(is.na(baseped$Cohort))), " individuals of unknown cohort have not been plotted."))
+      baseped <- filter(baseped, !is.na(Cohort))
+      baseped$MOTHER[which(!baseped$MOTHER %in% baseped$ID)] <- 0
+      baseped$FATHER[which(!baseped$FATHER %in% baseped$ID)] <- 0
+    }
   }
 
   if (!print_cohort_labels) cohort_labels <- rep("", length(cohort_order))
@@ -230,12 +237,13 @@ ggpedigree <- function(.data,
 
   # Create igraph object with sugiyama layout.
 
-  baseped2 <- pivot_longer(ped,
-    cols = c("MOTHER", "FATHER"),
-    names_to = "ParentSex",
-    values_to = "ParentID"
+  baseped2 <- pivot_longer(baseped,
+                           cols = c("MOTHER", "FATHER"),
+                           names_to = "ParentSex",
+                           values_to = "ParentID"
   )
   baseped2 <- filter(baseped2, .data$ParentID != 0)
+  baseped2$Cohort <- NULL
 
   nodes <- data.frame(ID = unique(c(baseped2$ParentID, baseped2$ID)))
   edges <- data.frame(from = baseped2$ParentID, to = baseped2$ID)
@@ -365,17 +373,17 @@ ggpedigree <- function(.data,
 
     if (id_labels) {
       return(p +
-        geom_text(
-          data = idplot, aes(x = .data$xcoord, y = -.data$Cohort, label = .data$ID),
-          size = point_size, colour = point_colour, alpha = point_alpha
-        ))
+               geom_text(
+                 data = idplot, aes(x = .data$xcoord, y = -.data$Cohort, label = .data$ID),
+                 size = point_size, colour = point_colour, alpha = point_alpha
+               ))
     } else {
       return(p +
-        geom_point(
-          data = idplot, aes(x = .data$xcoord, y = -.data$Cohort, shape = .data$SEX),
-          size = point_size, colour = point_colour, alpha = point_alpha
-        ) +
-        scale_shape_manual(values = c(16, 15, 17)))
+               geom_point(
+                 data = idplot, aes(x = .data$xcoord, y = -.data$Cohort, shape = .data$SEX),
+                 size = point_size, colour = point_colour, alpha = point_alpha
+               ) +
+               scale_shape_manual(values = c(16, 15, 17)))
     }
   }
 
