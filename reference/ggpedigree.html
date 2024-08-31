@@ -93,41 +93,41 @@ simpler pedigrees, visualisation may be improved by specifying
 
 
 <dl><dt id="arg--data">.data<a class="anchor" aria-label="anchor" href="#arg--data"></a></dt>
-<dd><p>an optional data frame object with all the pedigree information</p></dd>
+<dd><p>a data frame object with all the pedigree information</p></dd>
 
 
 <dt id="arg-ids">ids<a class="anchor" aria-label="anchor" href="#arg-ids"></a></dt>
-<dd><p>a column of .data or a vector of individual identifiers</p></dd>
+<dd><p>a column of .data of individual identifiers</p></dd>
 
 
 <dt id="arg-mothers">mothers<a class="anchor" aria-label="anchor" href="#arg-mothers"></a></dt>
-<dd><p>A column of .data or a vector of mothers corresponding to ids.
-Missing values are 0 or NA.</p></dd>
+<dd><p>A column of .data of mothers corresponding to ids. Missing
+values are 0 or NA.</p></dd>
 
 
 <dt id="arg-fathers">fathers<a class="anchor" aria-label="anchor" href="#arg-fathers"></a></dt>
-<dd><p>A column of .data or a vector of fathers corresponding to ids.
-Missing values are 0 or NA.</p></dd>
+<dd><p>A column of .data of fathers corresponding to ids. Missing
+values are 0 or NA.</p></dd>
 
 
 <dt id="arg-cohort">cohort<a class="anchor" aria-label="anchor" href="#arg-cohort"></a></dt>
-<dd><p>integer. Default NULL. A column of .data or an optional vector
-assigning a cohort to each id. If NULL, then <code><a href="https://rdrr.io/pkg/kinship2/man/kindepth.html" class="external-link">kinship2::kindepth</a></code> is used
-to assign cohorts to ids.</p></dd>
+<dd><p>integer. Default NULL. A optional column of .data assigning a
+cohort to each id. If NULL, then <code><a href="https://rdrr.io/pkg/kinship2/man/kindepth.html" class="external-link">kinship2::kindepth</a></code> is used to assign
+cohorts to ids.</p></dd>
 
 
 <dt id="arg-sex">sex<a class="anchor" aria-label="anchor" href="#arg-sex"></a></dt>
-<dd><p>integer or character. Default NULL. An optional column of .data or
-a vector assigning a sex to each id. When using this option, <code>sex_code</code>
-must be specified. Any values not matching values in <code>sex_code</code> will be
-treated as unknown sex.</p></dd>
+<dd><p>integer or character. Default NULL. An optional column of .data
+assigning a sex to each id. When using this option, <code>sex_code</code> must be
+specified. Any values not matching values in <code>sex_code</code> will be treated as
+unknown sex.</p></dd>
 
 
 <dt id="arg-pheno">pheno<a class="anchor" aria-label="anchor" href="#arg-pheno"></a></dt>
 <dd><p>integer or character. Default NULL. An optional column of .data
-or a vector assigning a phenotype to each id. Links originating from
-parents that have <code>NA</code> values for this argument will be plotted with a grey
-line, unless otherwise specified in <code>line_col_no_pheno</code>.</p></dd>
+assigning a phenotype to each id. Links originating from parents that have
+<code>NA</code> values for this argument will be plotted with a grey line, unless
+otherwise specified in <code>line_col_no_pheno</code>.</p></dd>
 
 
 <dt id="arg-sex-code">sex_code<a class="anchor" aria-label="anchor" href="#arg-sex-code"></a></dt>
