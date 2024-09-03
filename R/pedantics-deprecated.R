@@ -6,6 +6,7 @@
 #'   functionality are also mentioned. 
 #' @name pedantics-deprecated
 #' @keywords internal
+#' @return dependant on the deprecated function see pedantics help for details
 NULL
 
 

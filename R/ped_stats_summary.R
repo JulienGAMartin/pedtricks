@@ -93,7 +93,7 @@ plot.ped_stats <- function(x, lowMem = FALSE, grContrast = FALSE, ...) {
   cohorts <- x$cohorts
 
   if (is.null(cohorts) == FALSE & lowMem == FALSE) {
-    cohortRelatedness <- as.data.frame(x$meanRelatednessAmongCohorts)
+    cohortRelatedness <- as.data.frame(as.matrix(x$meanRelatednessAmongCohorts))
     cohortTakeOneRelatedness <- array(dim = length(cohortRelatedness[1, ]))
     for (i in 1:(length(cohortTakeOneRelatedness) - 1)) {
       cohortTakeOneRelatedness[i + 1] <- cohortRelatedness[i, i + 1]
@@ -110,6 +110,10 @@ plot.ped_stats <- function(x, lowMem = FALSE, grContrast = FALSE, ...) {
     for (i in 1:(length(cohortTakeOneRelatedness) - 4)) {
       cohortTakeFourRelatedness[i + 4] <- cohortRelatedness[i, i + 4]
     }
+    
+    opar <- par(no.readonly = TRUE)
+    on.exit(par(opar))
+
     par(oma = c(5, 1, 1, 1))
 
     plot(as.numeric(names(cohortRelatedness)), cohortTakeOneRelatedness, type = "l", xlab = "Cohort", ylab = "Pairwise mean cohort relatedness")

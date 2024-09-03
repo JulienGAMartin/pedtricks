@@ -53,13 +53,17 @@
 #' @param point_colour Default = "black". Point colour for ids.
 #' @param point_alpha Default = 1. Point alpha for ids.
 #'
+#' @return output a ggplot object or
+#'   a list of tables if `return_plot_tables = TRUE`
+#'
 #' @examples
 #' data(gryphons)
 #' pedigree <- fix_ped(gryphons[, 1:3])
 #'
 #' ## draw the gryphon pedigree by pedigree depth
 #' ggpedigree(pedigree)
-#' \dontrun{
+#'
+#' \donttest{
 #' # specifying the column names for id, mother and father
 #' ggpedigree(pedigree, id, dam, sire)
 #'
@@ -71,6 +75,7 @@
 #' gryphons$pheno[sample(length(gryphons$pheno), 1000)] <- NA
 #' ggpedigree(gryphons, cohort = cohort, sex = sex, sex_code = c(1, 0), pheno = pheno)
 #' }
+#'
 #' @keywords plot
 #' @export
 #'
@@ -221,10 +226,10 @@ ggpedigree <- function(.data,
       cohort_order <- c(min(cohort_order) - 1, cohort_order)
       cohort_labels <- c("Unknown", cohort_labels)
     }
-  }  else {
-    if(any(is.na(baseped$Cohort))){
+  } else {
+    if (any(is.na(baseped$Cohort))) {
       message(paste0(length(which(is.na(baseped$Cohort))), " individuals of unknown cohort have not been plotted."))
-      baseped <- filter(baseped, !is.na(Cohort))
+      baseped <- filter(baseped, !is.na(.data$Cohort))
       baseped$MOTHER[which(!baseped$MOTHER %in% baseped$ID)] <- 0
       baseped$FATHER[which(!baseped$FATHER %in% baseped$ID)] <- 0
     }
@@ -238,9 +243,9 @@ ggpedigree <- function(.data,
   # Create igraph object with sugiyama layout.
 
   baseped2 <- pivot_longer(baseped,
-                           cols = c("MOTHER", "FATHER"),
-                           names_to = "ParentSex",
-                           values_to = "ParentID"
+    cols = c("MOTHER", "FATHER"),
+    names_to = "ParentSex",
+    values_to = "ParentID"
   )
   baseped2 <- filter(baseped2, .data$ParentID != 0)
   baseped2$Cohort <- NULL
@@ -373,17 +378,17 @@ ggpedigree <- function(.data,
 
     if (id_labels) {
       return(p +
-               geom_text(
-                 data = idplot, aes(x = .data$xcoord, y = -.data$Cohort, label = .data$ID),
-                 size = point_size, colour = point_colour, alpha = point_alpha
-               ))
+        geom_text(
+          data = idplot, aes(x = .data$xcoord, y = -.data$Cohort, label = .data$ID),
+          size = point_size, colour = point_colour, alpha = point_alpha
+        ))
     } else {
       return(p +
-               geom_point(
-                 data = idplot, aes(x = .data$xcoord, y = -.data$Cohort, shape = .data$SEX),
-                 size = point_size, colour = point_colour, alpha = point_alpha
-               ) +
-               scale_shape_manual(values = c(16, 15, 17)))
+        geom_point(
+          data = idplot, aes(x = .data$xcoord, y = -.data$Cohort, shape = .data$SEX),
+          size = point_size, colour = point_colour, alpha = point_alpha
+        ) +
+        scale_shape_manual(values = c(16, 15, 17)))
     }
   }
 

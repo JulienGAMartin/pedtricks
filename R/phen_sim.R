@@ -12,6 +12,7 @@
 #' @param sampled A vector indicating which individuals are sampled
 #' @param records A single value, array of matrix specifying data record availability - see details
 #' @param returnAllEffects If \code{TRUE} then all individual breeding values and environmental effects are returned
+#' @param verbose If \code{TRUE} provide a progress bar and messages, Default: TRUE
 #'
 #' @details
 #' \code{randomA} and \code{randomE} are square matrices with dimension equal to the sum of the number direct and indirect effects.  This must be a multiple of the number of traits, i.e. if an indirect effect is to be simulated for only one of multiple traits, those traits with no indirect effect should be included with (co)variances of zero.
@@ -60,7 +61,8 @@
 
 phen_sim <-
   function(pedigree, traits = 1, randomA = NULL, randomE = NULL,
-           parentalA = NULL, parentalE = NULL, sampled = NULL, records = NULL, returnAllEffects = FALSE) {
+           parentalA = NULL, parentalE = NULL, sampled = NULL, records = NULL, returnAllEffects = FALSE,
+           verbose = TRUE) {
     if (is.null(records) == FALSE && is.data.frame(records) == FALSE && is.matrix(records) == FALSE && length(records) != traits && length(records) != 1) {
       stop("Dimension of records incompatible with number of traits")
     }
@@ -94,8 +96,10 @@ phen_sim <-
       result
     }
 
-    cat(paste("Simulating breeding values and environmental effects..."))
-    flush.console()
+    if (verbose) {
+      message(paste("Simulating breeding values and environmental effects..."))
+      flush.console()
+    }
 
     n <- length(pedigree[, 1])
     breedingValues <- matrix(0, length(pedigree[, 1]), traits)
@@ -182,11 +186,13 @@ phen_sim <-
       }
     }
 
-    cat(paste("done.", "\n"))
-    flush.console()
+    if (verbose) {
+      message(paste("done.", "\n"))
+      flush.console()
 
-    cat(paste("Calculating phenotypes..."))
-    flush.console()
+      message(paste("Calculating phenotypes..."))
+      flush.console()
+    }
 
     calcPhen <- effectsTable[, 4:length(effectsTable[1, ])]
     retainIndex <- c(rep(1, traits), rep(0, parentalAeffects), rep(1, traits), rep(0, parentalEeffects), rep(1, (parentalAeffects + parentalEeffects)))
@@ -201,15 +207,18 @@ phen_sim <-
       effectsTable[, (dim(effectsTable)[2] + 1)] <- rowSums(calcPhenTrait)
       names(effectsTable)[dim(effectsTable)[2]] <- paste("Phen_tr", x, sep = "")
     }
-
-    cat(paste("done.", "\n"))
-    flush.console()
+    if (verbose) {
+      message(paste("done.", "\n"))
+      flush.console()
+    }
 
     phenAvailIndex <- NULL
 
     if (is.null(records) == FALSE) {
-      cat(paste("Accounting for missing records..."))
-      flush.console()
+      if (verbose) {
+        message(paste("Accounting for missing records..."))
+        flush.console()
+      }
       if (dim(as.data.frame(records))[1] == 1 & dim(as.data.frame(records))[2] == 1) {
         phenAvailIndex <- matrix(rbinom((length(pedigree[, 1]) * traits), 1, records), length(pedigree[, 1]), traits)
       }
@@ -225,8 +234,10 @@ phen_sim <-
       if (dim(as.data.frame(records))[1] == length(pedigree[, 1]) & dim(as.data.frame(records))[2] == traits) {
         phenAvailIndex <- apply(records, c(1, 2), rbinfunc)
       }
-      cat(paste("done.", "\n"))
-      flush.console()
+      if (verbose) {
+        message(paste("done.", "\n"))
+        flush.console()
+      }
     }
 
     phenotypes <- as.data.frame(effectsTable[, (dim(effectsTable)[2] - traits + 1):dim(effectsTable)[2]])
@@ -237,15 +248,19 @@ phen_sim <-
     for (x in 1:traits) names(phenotypes)[x + 1] <- paste("trait_", x, sep = "")
 
     if (is.null(sampled) == FALSE) {
-      cat(paste("Accounting for unsampled individuals..."))
-      flush.console()
+      if (verbose) {
+        message(paste("Accounting for unsampled individuals..."))
+        flush.console()
+      }
       if (is.numeric(sampled) && length(sampled) != length(pedigree[, 1])) {
         stop("Indicator vector for sampled individuals is of different length than pedigree")
       }
       if (is.numeric(sampled)) phenotypes <- subset(phenotypes, sampled > 0)
       if (is.character(sampled)) dataPed <- subset(phenotypes, pedigree[, 1] %in% sampled)
-      cat(paste("done.", "\n"))
-      flush.console()
+      if (verbose) {
+        message(paste("done.", "\n"))
+        flush.console()
+      }
     }
 
 
@@ -268,6 +283,7 @@ phensim <- function(
   phen_sim(
     pedigree, traits, randomA, randomE,
     parentalA, parentalE, sampled, records,
-    returnAllEffects
+    returnAllEffects,
+    verbose = TRUE
   )
 }

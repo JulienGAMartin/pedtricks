@@ -222,11 +222,11 @@ genome_sim <-
       offspringHaplotype
     }
 
-    cat(paste("Processing pedigree...", "\n"))
+    message(paste("Processing pedigree...", "\n"))
     flush.console()
-    cat(paste("0%                     50%                     100%", "\n"))
+    message(paste("0%                     50%                     100%", "\n"))
     flush.console()
-    cat(paste("|                       |                       |", "\n"))
+    message(paste("|                       |                       |", "\n"))
     flush.console()
     mark.at <- (length(pedigree[, 1]) - 1) / 50
     count <- 0
@@ -236,7 +236,7 @@ genome_sim <-
       count <- count + 1
       if (count > mark.at) {
         count <- 0
-        cat("-")
+        message("-")
         flush.console()
       }
 
@@ -277,10 +277,10 @@ genome_sim <-
         genomes[(x - 1) * 2 + 2, ] <- mapply(mutation, currentAllele = genomes[(x - 1) * 2 + 2, ], mutationType = mutationType, mu = mutationRate)
       }
     }
-    cat(paste("\n", "...done.", "\n"))
+    message(paste("\n", "...done.", "\n"))
     flush.console()
 
-    cat(paste("\n", "Calculating phenotypes..."))
+    message(paste("\n", "Calculating phenotypes..."))
     flush.console()
     allelicEffect <- 1
 
@@ -294,13 +294,13 @@ genome_sim <-
     }
     if (is.character(phenotyped)) phenotypes <- phenotypes[which(phenotypes[, 1] %in% phenotyped), ]
     if (is.numeric(phenotyped)) phenotypes <- subset(phenotypes, phenotyped > 0)
-    cat(paste("done.", "\n"))
+    message(paste("done.", "\n"))
     flush.console()
 
     markerData <- NULL
 
     if (length(subset(mutationType, mutationType != "cIAM")) > 0) {
-      cat(paste("\n", "Tabulating marker genotypes..."))
+      message(paste("\n", "Tabulating marker genotypes..."))
       flush.console()
       for (x in 1:length(positions)) {
         if (mutationType[x] == "dIAM") genomes[, x] <- as.numeric(as.factor(genomes[, x]))
@@ -312,7 +312,7 @@ genome_sim <-
       markerData <- markers
       idsformarkers <- markers[, 1]
       markers <- as.matrix(markers[, 2:length(markers[1, ])])
-      cat(paste("done.", "\n"))
+      message(paste("done.", "\n"))
       flush.console()
 
       mt <- subset(mutationType, mutationType != "cIAM")
@@ -344,7 +344,7 @@ genome_sim <-
     #  S<-matrix(NA,(length(genes[,1])/2),(length(genes[,1])/2))
 
     #  for(x in 1:(length(S[1,])-1)){
-    # cat(paste(x,'\n')); flush.console();
+    # message(paste(x,'\n')); flush.console();
     #    for(y in x:length(S[,1])){
     #      sim=0;
     #      for(g in 1:length(genes[1,])){

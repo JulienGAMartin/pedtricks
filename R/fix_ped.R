@@ -47,7 +47,7 @@ fix_ped <- function(ped, dat = NULL) {
       is.null(dim(dat)) == FALSE &&
       length(ped[, 1]) != length(dat[, 1])
   ) {
-    cat(paste("pedigree and cohorts differ in length.", "\n"))
+    stop(paste("pedigree and cohorts differ in length.", "\n"))
     flush.console()
     stop()
   }
@@ -55,9 +55,8 @@ fix_ped <- function(ped, dat = NULL) {
     is.null(dim(dat)) &&
       length(ped[, 1]) != length(dat)
   ) {
-    cat(paste("pedigree and cohorts differ in length.", "\n"))
+    stop(paste("pedigree and cohorts differ in length.", "\n"))
     flush.console()
-    stop()
   }
   }
 
@@ -87,7 +86,7 @@ fix_ped <- function(ped, dat = NULL) {
         fixed_ped[, (3 + x - 1)] <- dat[match(fixed_ped[, 1], dat[, 1]), x]
       }
     } else {
-      cat(
+      warning(
         paste(
           "No id column detected in dat, assuming same order as ped.",
           "\n"

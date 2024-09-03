@@ -49,32 +49,6 @@ getSibNums <- function(ped) {
   c(full = sum(f), maternal = sum(m), paternal = sum(p))
 }
 
-################################################################################
-# genotype.list from MasterBayes
-
-#' Genotype Objects for all Loci
-#'
-#' Creates a \code{list} of \code{genotype} objects from a \code{matrix} or \code{data.frame} of multilocus genotypes.
-#'
-#' @param G matrix or data.frame of multilocus genotypes with individuals down the rows and loci across columns. Adjacent columns are taken to be the same locus
-#' @param marker.type \code{"MSW"} or \code{"MSC"} for co-dominant markers with Wang's (2004) model of genotyping error or CERVUS's model of genotyping error (Kalinowski, 2006; Marshall, 1998) or \code{"AFLP"} for dominant markers (Hadfield, 2009).
-#'
-#' @return
-#'   list of \code{genotype} objects for all loci
-#'
-#'
-#' @author Jarrod Hadfield \email{j.hadfield@ed.ac.uk}
-#' @examples
-#' \dontrun{
-#' data(WarblerG)
-#'
-#' G <- genotype.list(WarblerG[, -1])
-#' summary(G[[1]])
-#' }
-#'
-#' @keywords internal
-#' @export
-
 genotype.list <- function(G, marker.type = "MSW") {
   gens <- list()
   if (marker.type == "MSC" | marker.type == "SNP" | marker.type == "MSW") {
@@ -118,13 +92,15 @@ is.genotypeD <- function(x) {
   inherits(x, "genotypeD")
 }
 
+### exported function providing methods
+
 #' @export
 print.genotypeD <- function(x, ...) {
   if (!is.null(attr(x, "locus"))) {
     print(attr(x, "locus"))
   }
   print(as.character(x))
-  cat("Alleles:", as.character(allele.names(x)), "\n")
+  message("Alleles:", as.character(allele.names(x)), "\n")
   invisible(x)
 }
 
@@ -250,9 +226,8 @@ summary.genotypeD <- function(object, ...) {
 #'
 #' @return list of allele frequencies at each loci
 #' @author Jarrod Hadfield \email{j.hadfield@ed.ac.uk}
-#' @seealso \code{\link{genotype.list}}, \code{genotype}
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' data(WarblerG)
 #'
 #' A <- extractA(WarblerG)

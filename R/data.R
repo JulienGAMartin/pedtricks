@@ -18,3 +18,15 @@
 #' @keywords dataset
 
 "gryphons"
+
+#' Seychelles Warbler Genotypes
+#'
+#' Genotype data collected by David Richardson from Cousin Island in 1999.
+#'
+#' @references
+#' Richardson \emph{et.al.} (2001) Molecular Ecology 10 2263-2273
+#' Hadfield J.D. \emph{et al} (2006) Molecular Ecology 15 3715-31
+#' 
+#' @keywords dataset
+
+"WarblerG"
