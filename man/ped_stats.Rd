@@ -78,8 +78,6 @@ gryphons_ped_stats$paternitiesByCohort
 
 summary(gryphons_ped_stats)
 
-\dontrun{
 plot(gryphons_ped_stats)
-}
 
 }

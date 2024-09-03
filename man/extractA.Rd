@@ -18,16 +18,13 @@ list of allele frequencies at each loci
 Extracts allele frequencies from genotype data
 }
 \examples{
-\dontrun{
+\donttest{
 data(WarblerG)
 
 A <- extractA(WarblerG)
 A[[1]]
 }
 
-}
-\seealso{
-\code{\link{genotype.list}}, \code{genotype}
 }
 \author{
 Jarrod Hadfield \email{j.hadfield@ed.ac.uk}
