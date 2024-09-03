@@ -13,7 +13,8 @@ phen_sim(
   parentalE = NULL,
   sampled = NULL,
   records = NULL,
-  returnAllEffects = FALSE
+  returnAllEffects = FALSE,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -34,6 +35,8 @@ phen_sim(
 \item{records}{A single value, array of matrix specifying data record availability - see details}
 
 \item{returnAllEffects}{If \code{TRUE} then all individual breeding values and environmental effects are returned}
+
+\item{verbose}{If \code{TRUE} provide a progress bar and messages, Default: TRUE}
 }
 \value{
 \item{phenotypes}{A dataframe containing phenotypes for all individuals specified to have records.}

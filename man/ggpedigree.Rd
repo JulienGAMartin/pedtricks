@@ -94,6 +94,10 @@ and paternal links.}
 
 \item{point_alpha}{Default = 1. Point alpha for ids.}
 }
+\value{
+output a ggplot object or
+a list of tables if \code{return_plot_tables = TRUE}
+}
 \description{
 This function plots simple and complex pedigrees, with options specific to
 the types of pedigrees used for quantitative genetic inference in natural
@@ -109,7 +113,8 @@ pedigree <- fix_ped(gryphons[, 1:3])
 
 ## draw the gryphon pedigree by pedigree depth
 ggpedigree(pedigree)
-\dontrun{
+
+\donttest{
 # specifying the column names for id, mother and father
 ggpedigree(pedigree, id, dam, sire)
 
@@ -121,5 +126,6 @@ gryphons$pheno <- 1
 gryphons$pheno[sample(length(gryphons$pheno), 1000)] <- NA
 ggpedigree(gryphons, cohort = cohort, sex = sex, sex_code = c(1, 0), pheno = pheno)
 }
+
 }
 \keyword{plot}

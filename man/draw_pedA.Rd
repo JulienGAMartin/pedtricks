@@ -42,12 +42,14 @@ draw_pedA(pedigree, order = "original")
 ## draw the gryphon pedigree by function assigned generation
 (Agen <- draw_pedA(pedigree, order = "generation"))
 
+
+\donttest{
 ## draw the gryphon pedigree by cohort in the dataset
 ## add cohort back from original data
 pedigree$cohort <- NA
 pedigree$cohort[match(gryphons$id, pedigree[, 1])] <- gryphons$cohort
 (Achrt <- draw_pedA(pedigree, order = "user", grp = "cohort"))
-\dontrun{
+
 ## show two images of the same pedigree in different orders
 ### (i.e., plotting multiple trellis objects in the same figure)
 plot(Agen,

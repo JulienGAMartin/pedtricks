@@ -62,6 +62,9 @@ pedigree.  Defaults (modifiable with \code{sexInd}) are 0=male and 1=female}
 
 \item{...}{Additional graphical parameters.}
 }
+\value{
+output a plot of the pedigree, and does not return a value
+}
 \description{
 Plots a pedigree, with options specific to considerations for pedigrees used
 to for quantitative genetic inference in natural populations.  Pedigrees

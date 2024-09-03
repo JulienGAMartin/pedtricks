@@ -82,6 +82,9 @@ phensim(
   returnAllEffects = FALSE
 )
 }
+\value{
+dependant on the deprecated function see pedantics help for details
+}
 \description{
 The functions listed below are deprecated and are available for
 backward compatibility only. They might be defunct in a future version

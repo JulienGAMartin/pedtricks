@@ -4,9 +4,9 @@
 \name{pedtricks-package}
 \alias{pedtricks}
 \alias{pedtricks-package}
-\title{pedtricks: Functions to Visualize, Summarize and Simulate Data from Pedigrees}
+\title{pedtricks: Visualize, Summarize and Simulate Data from Pedigrees}
 \description{
-Functions for sensitivity and power analysis, for calculating statistics describing pedigrees from wild populations, and for visualizing pedigrees.
+Sensitivity and power analysis, for calculating statistics describing pedigrees from wild populations, and for visualizing pedigrees.
 }
 \details{
 \itemize{
