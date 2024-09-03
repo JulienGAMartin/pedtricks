@@ -25,12 +25,14 @@
 #' ## draw the gryphon pedigree by function assigned generation
 #' (Agen <- draw_pedA(pedigree, order = "generation"))
 #'
+#' 
+#' \donttest{
 #' ## draw the gryphon pedigree by cohort in the dataset
 #' ## add cohort back from original data
 #' pedigree$cohort <- NA
 #' pedigree$cohort[match(gryphons$id, pedigree[, 1])] <- gryphons$cohort
 #' (Achrt <- draw_pedA(pedigree, order = "user", grp = "cohort"))
-#' \dontrun{
+#' 
 #' ## show two images of the same pedigree in different orders
 #' ### (i.e., plotting multiple trellis objects in the same figure)
 #' plot(Agen,
@@ -59,20 +61,20 @@ draw_pedA <- function(
 
   if (ord == "user") {
     if (is.null(grp)) {
-      warning(cat(
+      warning(
         "No value in 'grp' argument when order='user'.",
         "\n Using the original order instead\n"
-      ))
+      )
       ped <- pedigree
     } else {
       if (grp %in% names(pedigree)) {
         ped <- pedigree[order(pedigree[, grp]), ]
         # TODO make axis 1 and 2 labels (i.e., grp)
       } else {
-        warning(cat(
+        warning(
           "No column named", grp, "in 'pedigree'",
           "\n Using the original order instead\n"
-        ))
+        )
         ped <- pedigree
       }
     } #<-- end if/else grp=NULL

@@ -29,7 +29,8 @@
 #' @param sexColours The colours that will be used to draw points and or lines associated with males and females.
 #' @param ... Additional graphical parameters.
 #'
-#'
+#' @return output a plot of the pedigree, and does not return a value
+#' 
 #' @author Michael Morrissey \email{michael.morrissey@@st-andrews.ac.uk}
 #'
 #' @seealso \code{\link{fix_ped}} to prepare pedigrees that may not explicitly contain records for all individuals (i.e., where founding individuals may only appear in the dam or sire column).)
@@ -78,7 +79,7 @@ draw_ped <- function(
   names(Ped)[1] <- "id"
   if (names(Ped)[2] != "dam" | names(Ped)[3] != "sire") {
     if (names(Ped)[3] %in% c("mum", "mom", "mother", "Mum", "Mmom", "Dam", "Mother", "MUM", "MOM", "DAM", "MOTHER")) {
-      cat(paste("'mum' appears to be in third column, reordering to 'id','dam','sire'"))
+      message(paste("'mum' appears to be in third column, reordering to 'id','dam','sire'"))
       flush.console()
       Ped <- Ped[, c(1, 3, 2)]
     }
@@ -221,9 +222,9 @@ draw_ped <- function(
   }
 
   if (is.null(dat) == FALSE) {
-    cat(paste("Individuals in full pedigree:", length(Ped[, 1]), "\n"))
+    message(paste("Individuals in full pedigree:", length(Ped[, 1]), "\n"))
     flush.console()
-    cat(paste("Individuals in informative pedigree subset:", length(Ped.subset[, 1]), "\n"))
+    message(paste("Individuals in informative pedigree subset:", length(Ped.subset[, 1]), "\n"))
     flush.console()
   }
 

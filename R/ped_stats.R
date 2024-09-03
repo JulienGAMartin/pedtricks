@@ -60,9 +60,7 @@
 #'
 #' summary(gryphons_ped_stats)
 #' 
-#' \dontrun{
 #' plot(gryphons_ped_stats)
-#' }
 #' 
 #' @export
 #'
@@ -75,7 +73,7 @@ ped_stats <-
     names(Ped)[1] <- "id"
     if (names(Ped)[2] != "dam" | names(Ped)[3] != "sire") {
       if (names(Ped)[3] %in% c("mum", "mom", "mother", "Mum", "Mmom", "Dam", "Mother", "MUM", "MOM", "DAM", "MOTHER")) {
-        cat(paste("'mum' appears to be in third column, reordering to 'id','dam','sire'"))
+        message(paste("'mum' appears to be in third column, reordering to 'id','dam','sire'"))
         flush.console()
         Ped <- Ped[, c(1, 3, 2)]
       }

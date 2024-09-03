@@ -1,6 +1,6 @@
 Package: pedtricks
-Title: Functions to Visualize, Summarize and Simulate Data from Pedigrees
-Version: 0.4.1 
+Title: Visualize, Summarize and Simulate Data from Pedigrees
+Version: 0.4.2 
 Authors@R: c(
     person("Julien", "Martin", , "julien.martin@uottawa.ca", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-7726-6809")),
@@ -12,7 +12,7 @@ Authors@R: c(
            role = c("aut"),
            comment = c(ORCID = "0000-0001-6209-0177"))
            )
-Description: Functions for sensitivity and power analysis,
+Description: Sensitivity and power analysis,
   for calculating statistics describing pedigrees from wild populations,
   and for visualizing pedigrees.
 URL: https://juliengamartin.github.io/pedtricks/

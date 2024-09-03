@@ -53,13 +53,17 @@
 #' @param point_colour Default = "black". Point colour for ids.
 #' @param point_alpha Default = 1. Point alpha for ids.
 #'
+#' @return output a ggplot object or
+#'   a list of tables if `return_plot_tables = TRUE`
+#' 
 #' @examples
 #' data(gryphons)
 #' pedigree <- fix_ped(gryphons[, 1:3])
 #'
 #' ## draw the gryphon pedigree by pedigree depth
 #' ggpedigree(pedigree)
-#' \dontrun{
+#' 
+#' \donttest{
 #' # specifying the column names for id, mother and father
 #' ggpedigree(pedigree, id, dam, sire)
 #'
@@ -71,6 +75,7 @@
 #' gryphons$pheno[sample(length(gryphons$pheno), 1000)] <- NA
 #' ggpedigree(gryphons, cohort = cohort, sex = sex, sex_code = c(1, 0), pheno = pheno)
 #' }
+#' 
 #' @keywords plot
 #' @export
 #'
