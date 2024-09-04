@@ -1,5 +1,9 @@
 # pedtricks 0.4
 
+## 0.4.2
+
+- more fix for CRAN submission
+
 ## 0.4.1
 
 -`ped_stats`: more optimisation to run even faster.  Now running in 0.7s on the gryphons pedigree instead of 160s so 210x faster. Loops are slow
