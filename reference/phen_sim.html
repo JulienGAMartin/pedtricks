@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">pedtricks</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.4.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -54,7 +54,8 @@
 <span>  parentalE <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  sampled <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  records <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  returnAllEffects <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  returnAllEffects <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -96,6 +97,10 @@
 
 <dt id="arg-returnalleffects">returnAllEffects<a class="anchor" aria-label="anchor" href="#arg-returnalleffects"></a></dt>
 <dd><p>If <code>TRUE</code> then all individual breeding values and environmental effects are returned</p></dd>
+
+
+<dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
+<dd><p>If <code>TRUE</code> provide a progress bar and messages, Default: TRUE</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -140,19 +145,21 @@
 <span class="r-in"><span>  pedigree <span class="op">=</span> <span class="va">pedigree</span>, traits <span class="op">=</span> <span class="fl">2</span>, randomA <span class="op">=</span> <span class="va">randomA</span>, randomE <span class="op">=</span> <span class="va">randomE</span>,</span></span>
 <span class="r-in"><span>  parentalA <span class="op">=</span> <span class="va">parentalA</span>, parentalE <span class="op">=</span> <span class="va">parentalE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Simulating breeding values and environmental effects...done. </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Calculating phenotypes...done. </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Simulating breeding values and environmental effects...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> done. </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Calculating phenotypes...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> done. </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $phenotypes</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    id    trait_1    trait_2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> a1 a1 -2.1543727  1.0496300</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> a2 a2  0.5121640 -0.1652518</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> a3 a3 -0.9382492  0.1022400</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> a4 a4  0.6400959 -0.2518556</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> a5 a5  0.3645492 -0.7251698</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> a6 a6  2.9096596  2.6040775</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> a7 a7 -0.7399189  1.3612447</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> a8 a8  0.4500141 -1.0180013</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> a9 a9  2.7681576  0.6924113</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    id      trait_1    trait_2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> a1 a1  0.635630356  2.5303279</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> a2 a2  0.573565965  1.6102071</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> a3 a3 -0.821761510 -1.1875030</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> a4 a4 -0.008898436  2.3850244</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> a5 a5  1.896592223  3.3994600</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> a6 a6  2.581344532  0.8592014</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> a7 a7  2.887748532  1.9672431</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> a8 a8  2.682974192  0.9062174</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> a9 a9  1.474571866  2.2015559</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## let's do it again but see how the phenotypes were composed</span></span></span>
@@ -160,51 +167,53 @@
 <span class="r-in"><span>  pedigree <span class="op">=</span> <span class="va">pedigree</span>, traits <span class="op">=</span> <span class="fl">2</span>, randomA <span class="op">=</span> <span class="va">randomA</span>, randomE <span class="op">=</span> <span class="va">randomE</span>,</span></span>
 <span class="r-in"><span>  parentalA <span class="op">=</span> <span class="va">parentalA</span>, parentalE <span class="op">=</span> <span class="va">parentalE</span>, returnAllEffects <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Simulating breeding values and environmental effects...done. </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Calculating phenotypes...done. </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Simulating breeding values and environmental effects...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> done. </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Calculating phenotypes...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> done. </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $phenotypes</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    id     trait_1     trait_2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> a1 a1 -0.58712126  1.60206528</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> a2 a2 -4.37478225  1.21041313</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> a3 a3  0.56852801  0.73824510</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> a4 a4 -0.33852939  0.38431169</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> a5 a5  0.01098483 -0.08103798</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> a6 a6 -0.52486905  0.93101551</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> a7 a7  1.01660687 -1.61843254</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> a8 a8  0.05202055  1.18594418</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> a9 a9 -1.08385598  0.11114675</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    id    trait_1    trait_2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> a1 a1 -0.4099814 -0.2708281</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> a2 a2 -0.8987986  4.0180170</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> a3 a3 -2.0619251  0.4699000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> a4 a4  0.5101248  1.7330805</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> a5 a5  3.1419989  2.2318840</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> a6 a6 -2.0368235  0.8033704</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> a7 a7 -0.1579793  0.1603304</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> a8 a8 -0.9392673 -1.7291288</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> a9 a9 -3.5522131  0.5295370</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $allEffects</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    id sire  dam       a_tr1    a_tr2   bv_m_tr1    bv_m_tr2       e_tr1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> a1 a1 &lt;NA&gt; &lt;NA&gt; -0.30562067 2.211769 -1.0416684 -1.14652385  0.54214155</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> a2 a2 &lt;NA&gt; &lt;NA&gt; -1.67532730 1.525939  0.5541855  1.99311026 -1.45229977</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> a3 a3 &lt;NA&gt; &lt;NA&gt; -0.15412074 2.564408  1.0619991  1.14269488  0.04020439</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> a4 a4   a2   a1 -0.19579992 1.588132 -0.8258750  0.01395996  0.34042449</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> a5 a5   a2   a1  0.25671344 1.962894  0.0224838  1.22848111  0.23742535</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> a6 a6   a2   a1 -0.11276845 2.301668 -0.5473590  1.38528464  0.07105336</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> a7 a7   a5   a4 -0.01964701 1.583071 -2.1317596  0.66752659  1.15337579</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> a8 a8   a6   a4 -0.93104728 1.497175 -2.1458410  2.57270010  1.10018974</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> a9 a9   a6   a4 -0.96986001 1.704032 -0.1305747 -0.19876614  0.00312594</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          e_tr2    e_m_tr1     e_m_tr2 P_bv_m_tr1  P_bv_m_tr2  P_e_m_tr1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> a1  0.07510590  0.5585144  0.41540640  -1.113417 -0.20475662  0.2897745</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> a2  0.94120612 -0.3389359 -0.07557425  -1.396835  0.17658945  0.1496794</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> a3  0.12430107 -0.9984326  1.23339006   1.588785  0.15168817 -0.9063402</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> a4 -0.47270248  0.7087531 -1.52895871  -1.041668 -1.14652385  0.5585144</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> a5 -1.31281425  0.7470286 -1.56251843  -1.041668 -1.14652385  0.5585144</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> a6 -0.63953477 -0.8451957  0.67524470  -1.041668 -1.14652385  0.5585144</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> a7 -1.68650474 -0.9028149  1.31763370  -0.825875  0.01395996  0.7087531</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> a8  1.20376784 -1.4312708  1.38291086  -0.825875  0.01395996  0.7087531</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> a9 -0.07788682  0.4414282  0.12892290  -0.825875  0.01395996  0.7087531</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     P_e_m_tr2    Phen_tr1    Phen_tr2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> a1 -0.4800535 -0.58712126  1.60206528</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> a2 -1.4333211 -4.37478225  1.21041313</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> a3 -2.1021525  0.56852801  0.73824510</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> a4  0.4154064 -0.33852939  0.38431169</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> a5  0.4154064  0.01098483 -0.08103798</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> a6  0.4154064 -0.52486905  0.93101551</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> a7 -1.5289587  1.01660687 -1.61843254</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> a8 -1.5289587  0.05202055  1.18594418</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> a9 -1.5289587 -1.08385598  0.11114675</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    id sire  dam      a_tr1      a_tr2   bv_m_tr1   bv_m_tr2       e_tr1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> a1 a1 &lt;NA&gt; &lt;NA&gt;  1.4974139 -0.3028269 -1.3768313  0.8831702  0.11062832</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> a2 a2 &lt;NA&gt; &lt;NA&gt;  0.6714203  1.2300224  1.6454679 -0.1829260 -0.05961225</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> a3 a3 &lt;NA&gt; &lt;NA&gt; -1.3792578  1.2506006 -1.8762368 -0.3687876 -0.57938809</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> a4 a4   a2   a1 -0.4212235  0.7023495 -0.9790743  0.2113033  0.73325992</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> a5 a5   a2   a1  1.7314623  1.2263090  1.1616050 -0.8189242  1.21244833</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> a6 a6   a2   a1 -0.8685181  0.6505350  0.8587998 -0.1159925 -1.36639361</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> a7 a7   a5   a4  0.3819610  0.7928566  0.2472483 -1.3510993  0.69450905</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> a8 a8   a6   a4 -0.1324367 -1.0047145 -0.1063885 -0.2844761  0.42761881</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> a9 a9   a6   a4 -0.8432258  1.0829131 -0.2055727  0.2137410 -1.47453793</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         e_tr2    e_m_tr1     e_m_tr2 P_bv_m_tr1 P_bv_m_tr2  P_e_m_tr1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> a1  0.2742022  1.5749196  0.56776783 -0.9014624  0.5380665 -1.1165613</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> a2 -0.1495877  0.2661688  0.52840324  0.5204204  0.1868176 -2.0310270</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> a3  0.9421994 -0.7063614 -1.27540210 -0.8440720 -0.4520918  0.7407928</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> a4 -0.4202071 -0.2553751 -0.36923822 -1.3768313  0.8831702  1.5749196</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> a5 -0.4453630  1.1386675  0.19052348 -1.3768313  0.8831702  1.5749196</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> a6 -1.2981026 -2.1370983 -0.09620553 -1.3768313  0.8831702  1.5749196</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> a7 -0.4745912  1.7631306  2.02584606 -0.9790743  0.2113033 -0.2553751</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> a8 -0.5664793 -0.8338353  0.39825915 -0.9790743  0.2113033 -0.2553751</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> a9 -0.3954412 -0.1307025 -1.99949395 -0.9790743  0.2113033 -0.2553751</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     P_e_m_tr2   Phen_tr1   Phen_tr2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> a1 -0.7802699 -0.4099814 -0.2708281</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> a2  2.7507648 -0.8987986  4.0180170</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> a3 -1.2708082 -2.0619251  0.4699000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> a4  0.5677678  0.5101248  1.7330805</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> a5  0.5677678  3.1419989  2.2318840</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> a6  0.5677678 -2.0368235  0.8033704</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> a7 -0.3692382 -0.1579793  0.1603304</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> a8 -0.3692382 -0.9392673 -1.7291288</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> a9 -0.3692382 -3.5522131  0.5295370</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
