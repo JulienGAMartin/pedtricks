@@ -3,6 +3,8 @@
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/juliengamartin/pedtricks/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/juliengamartin/pedtricks/actions/workflows/R-CMD-check.yaml)
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/pedtricks)](https://cran.r-project.org/package=pedtricks)
+[![](https://cranlogs.r-pkg.org/badges/grand-total/pedtricks)](https://cranlogs.r-pkg.org/badges/grand-total/pedtricks)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.13736236.svg)](https://doi.org/10.5281/zenodo.13736236)
 <!-- badges: end -->
 
 <!--[![Codecov test coverage](https://codecov.io/gh/r-lib/devtools/branch/main/graph/badge.svg)](https://app.codecov.io/gh/r-lib/devtools?branch=main)-->
