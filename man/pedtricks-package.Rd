@@ -6,7 +6,7 @@
 \alias{pedtricks-package}
 \title{pedtricks: Visualize, Summarize and Simulate Data from Pedigrees}
 \description{
-Sensitivity and power analysis, for calculating statistics describing pedigrees from wild populations, and for visualizing pedigrees.
+Sensitivity and power analysis, for calculating statistics describing pedigrees from wild populations, and for visualizing pedigrees. This is a reboot of the methods developped by Morrissey and Wilson (2010) \doi{ 10.1111/j.1755-0998.2009.02817.x}
 }
 \details{
 \itemize{
