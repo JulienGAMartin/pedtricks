@@ -22,7 +22,7 @@
 #' @importFrom mvtnorm rmvnorm
 #' @importFrom grDevices savePlot
 #' @importFrom grid grid.segments gpar grid.circle grid.text
-#' @importFrom MCMCglmm inverseA rbv
+#' @importFrom MCMCglmm rbv
 #' @importFrom genetics is.genotype nallele allele.names is.locus genotype
 #' @importFrom igraph layout_with_sugiyama graph_from_data_frame
 "_PACKAGE"
