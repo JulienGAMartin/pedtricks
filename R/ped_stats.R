@@ -162,7 +162,7 @@ ped_stats <-
     # inbreeding coefficients
 
     orderedPed <- as.data.frame(orderPed(Ped))
-    orderedPed$inbreeding <- makeDiiF(orderedPed)$f
+    orderedPed$inbreeding <- nadiv::makeDiiF(orderedPed)$f
     reorderInbreeding <- as.data.frame(Ped$id)
     reorderInbreeding$inbreeding <- orderedPed$inbreeding[match(reorderInbreeding[, 1], orderedPed$id)]
 
