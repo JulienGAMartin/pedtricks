@@ -155,6 +155,28 @@ ped_stats <-
     totalPaternalGM <- sum(table(gpData$paternalGM))
     totalPaternalGF <- sum(table(gpData$paternalGF))
 
+
+    ## parent pairs
+    gpData$pair<-paste(gpData$dam,gpData$sire)
+    gpData$pair<-ifelse(gpData$pair== "NA NA", NA, gpData$pair)
+
+    # grandparent pairs
+    gpData$maternalGP <- paste(gpData$maternalGM,gpData$maternalGF)
+    gpData$paternalGP <- paste(gpData$paternalGM,gpData$paternalGF)
+    gpData$maternalGP<-ifelse(grepl("NA",gpData$maternalGP), NA, gpData$maternalGP)
+    gpData$paternalGP<-ifelse(grepl("NA",gpData$paternalGP), NA, gpData$paternalGP)
+
+
+    # cousins
+
+    cousinNums <- getCousinNums(gpData)
+  
+
+    # aunts/uncles
+
+    auNums <- getAuNums(gpData)
+  
+
     # pedigree depth
 
     pedigreeDepth <- table(kindepth(Ped[, 1], Ped[, 2], Ped[, 3]))
@@ -329,6 +351,8 @@ ped_stats <-
       totalMaternalGrandfathers = totalMaternalGF,
       totalPaternalGrandmothers = totalPaternalGM,
       totalPaternalGrandfathers = totalPaternalGF,
+      cousinNums = cousinNums,
+      auNums = auNums,
       pedigreeDepth = pedigreeDepth,
       inbreedingCoefficients = reorderInbreeding$inbreeding,
       Amatrix = A,

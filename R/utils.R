@@ -49,6 +49,129 @@ getSibNums <- function(ped) {
   c(full = sum(f), maternal = sum(m), paternal = sum(p))
 }
 
+
+#####################
+### Cousin Functions
+#####################
+
+## function to make products of all combinations and sum them 
+combo_prod <- function(x) if(length(x)>1){sum( utils::combn(x, m =2)[1, ] * utils::combn(x, m =2)[2, ])}else{0}
+
+## function to get cousins via a certain parent (p) and grandparent (gp) from a certain pedigree (ped)
+## assumes that you have put grandparents into the pedigree  and grandparent pairs (so 9 columns) 
+n_cousin <- function(p,gp,ped){
+  if(all(is.na(ped[,gp]))){ ## stops working when there no links through a certain grandparent type
+    0
+  }else{
+    f1 <- formula(paste("id~",p,"+",gp))
+    f2 <- formula(paste("id~",gp))
+    d1 <- aggregate(f1, ped,length)
+    sum(aggregate(f2,d1,combo_prod)$id) 
+  }
+}
+
+## function to work out all the cousin relationships
+getCousinNums <- function(ped) {
+
+  cousin_D_FS <- n_cousin(p="dam", gp="maternalGP", ped=ped)
+  cousin_D_MHS <- n_cousin(p="dam", gp="maternalGM", ped=ped) - cousin_D_FS
+  cousin_D_PHS <- n_cousin(p="dam", gp="maternalGF", ped=ped) - cousin_D_FS
+
+  cousin_S_FS <- n_cousin(p="sire", gp="paternalGP", ped=ped)
+  cousin_S_MHS <- n_cousin(p="sire", gp="paternalGM", ped=ped) - cousin_S_FS
+  cousin_S_PHS <- n_cousin(p="sire", gp="paternalGF", ped=ped) - cousin_S_FS
+
+
+    ## stack maternal and paternal grandparents, to get allows for all cousins relationships, not just through mothers or father
+  mat_gp <- ped[,c("id","dam","maternalGM","maternalGF","maternalGP")]
+  pat_gp <- ped[,c("id","sire","paternalGM","paternalGF","paternalGP")]
+  colnames(pat_gp) <- colnames(mat_gp)
+
+  GM <- rbind(pat_gp,mat_gp)
+  
+  cousin_FS <- n_cousin(p="dam", gp="maternalGP", ped=GM)
+  cousin_DS_FS <- cousin_FS-cousin_D_FS-cousin_S_FS
+
+  cousin_MS <- n_cousin(p="dam", gp="maternalGM", ped=GM)
+  cousin_DS_MHS <- cousin_MS-cousin_FS-cousin_D_MHS-cousin_S_MHS
+
+  cousin_PS <- n_cousin(p="dam", gp="maternalGF", ped=GM)
+  cousin_DS_PHS <- cousin_PS-cousin_FS-cousin_D_PHS-cousin_S_PHS
+  
+## double cousins - share both sets of gps
+
+  c(cousin_D_FS=cousin_D_FS,
+    cousin_DS_FS=cousin_DS_FS,
+    cousin_S_FS=cousin_S_FS,
+    cousin_D_MHS=cousin_D_MHS,
+    cousin_DS_MHS=cousin_DS_MHS,
+    cousin_S_MHS=cousin_S_MHS,
+    cousin_D_PHS=cousin_D_PHS,
+    cousin_DS_PHS=cousin_DS_PHS,
+    cousin_S_PHS=cousin_S_PHS)
+# c(cousin_D_FS=cousin_D_FS,
+#     cousin_DS_FS=cousin_DS_FS,
+#     cousin_S_FS=cousin_S_FS,
+#     cousin_D_HS=cousin_D_MHS + cousin_D_PHS,
+#     cousin_DS_HS=cousin_DS_MHS + cousin_DS_PHS,
+#     cousin_S_HS=cousin_S_MHS + cousin_S_PHS)
+
+
+
+}
+#####################
+### Aunt/uncle Functions
+#####################
+
+## function to get aunts and uncles via a certain  grandparent (link) from a certain pedigree (ped)
+## assumes that you have put grandparents and grandparent pairs into the pedigree (so 9 columns) 
+n_au <- function(link,ped){
+  if(all(is.na(ped[,link]))){
+    0
+  }else{  
+    p <- if(grepl("maternal",link)){"dam"}else{"sire"}
+    gp <- if(grepl("M",link)){"dam"}else if(grepl("F",link)){"sire"} else{"pair"}
+    f1 <- formula(paste("id~",p,"+",link))
+    f2 <- formula(paste("id~",gp))
+    d1 <- aggregate(f1, ped,length)
+    d2 <- aggregate(f2, ped,length)
+    sum(d1$id * (d2[match(d1[,link],d2[,gp]),"id"]-1), na.rm=TRUE)
+  }
+}
+
+## function to work out all the aunt/uncle relationships
+
+getAuNums <- function(ped){
+
+  # related through a maternal grandmother (au_D_FS + au_D_MHS ?)
+  au_D_MS <- n_au("maternalGM",ped)
+
+  # related through a maternal grandfather (au_D_FS + au_D_PHS ?)
+  au_D_PS <- n_au("maternalGF",ped)
+
+  # related through a maternal grandparents (au_D_FS ?)
+  au_D_FS <- n_au("maternalGP",ped)
+
+  au_D_PHS <- au_D_PS - au_D_FS
+  au_D_MHS <- au_D_MS - au_D_FS
+
+  # related through a paternal grandmother (au_S_FS + au_S_MHS ?)
+  au_S_MS <- n_au("paternalGM",ped)
+
+  # related through a paternal grandfather (au_S_FS + au_D_PHS ?)
+  au_S_PS <- n_au("paternalGF",ped)
+
+  # related through a paternal grandparents (au_S_FS ?)
+  au_S_FS <- n_au("paternalGP",ped)
+
+  au_S_PHS <- au_S_PS - au_S_FS
+  au_S_MHS <- au_S_MS - au_S_FS
+
+  c(au_D_FS=au_D_FS,au_S_FS=au_S_FS,au_D_MHS=au_D_MHS,au_S_MHS=au_S_MHS,au_D_PHS=au_D_PHS,au_S_PHS=au_S_PHS)
+}
+
+
+
 genotype.list <- function(G, marker.type = "MSW") {
   gens <- list()
   if (marker.type == "MSC" | marker.type == "SNP" | marker.type == "MSW") {
