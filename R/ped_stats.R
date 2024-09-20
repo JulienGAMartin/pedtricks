@@ -178,8 +178,6 @@ ped_stats <-
       # relatedness classes
       cutoffs <- seq(-0.0125, 0.9875, by = 0.025)
       midBins <- seq(0, 0.975, by = 0.025)
-      cumulativeRelatedness <- array(dim = length(midBins))
-      names(cumulativeRelatedness) <- midBins
       A <- nadiv::makeA(Ped)
       pairwiseRelatedness <- A
       diag(pairwiseRelatedness) <- 0
@@ -188,9 +186,7 @@ ped_stats <-
       relatednessBin[1] <- ((totalSampleSize^2 - totalSampleSize) / 2) - sum(relatednessBin[-1])
 
       rb <- relatednessBin / sum(relatednessBin)
-      for (x in 1:(length(cutoffs) - 1)) {
-        cumulativeRelatedness[x] <- sum(rb[1:x])
-      }
+      cumulativeRelatedness <- cumsum(rb)
     }
 
     # MacCluer's pedigree completeness statistics
