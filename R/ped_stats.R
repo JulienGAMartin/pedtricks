@@ -144,16 +144,16 @@ ped_stats <-
 
     # grandparents
 
-    grandparentData <- Ped
-    grandparentData$maternalGM <- grandparentData$dam[match(grandparentData$dam, grandparentData$id)]
-    grandparentData$maternalGF <- grandparentData$sire[match(grandparentData$dam, grandparentData$id)]
-    grandparentData$paternalGM <- grandparentData$dam[match(grandparentData$sire, grandparentData$id)]
-    grandparentData$paternalGF <- grandparentData$sire[match(grandparentData$sire, grandparentData$id)]
+    gpData <- Ped
+    gpData$maternalGM <- gpData$dam[match(gpData$dam, gpData$id)]
+    gpData$maternalGF <- gpData$sire[match(gpData$dam, gpData$id)]
+    gpData$paternalGM <- gpData$dam[match(gpData$sire, gpData$id)]
+    gpData$paternalGF <- gpData$sire[match(gpData$sire, gpData$id)]
 
-    totalMaternalGM <- sum(table(grandparentData$maternalGM))
-    totalMaternalGF <- sum(table(grandparentData$maternalGF))
-    totalPaternalGM <- sum(table(grandparentData$paternalGM))
-    totalPaternalGF <- sum(table(grandparentData$paternalGF))
+    totalMaternalGM <- sum(table(gpData$maternalGM))
+    totalMaternalGF <- sum(table(gpData$maternalGF))
+    totalPaternalGM <- sum(table(gpData$paternalGM))
+    totalPaternalGF <- sum(table(gpData$paternalGF))
 
     # pedigree depth
 
@@ -287,7 +287,7 @@ ped_stats <-
         pedDepth <- table(kindepth(temp[, 1], temp[, 2], temp[, 3]))
         for (y in 1:length(pedDepth)) cohortPedgireeDepth[x, names(pedDepth[y])] <- pedDepth[y]
 
-        temp <- subset(grandparentData, as.character(cohorts) == names(table(cohorts))[x])
+        temp <- subset(gpData, as.character(cohorts) == names(table(cohorts))[x])
         cohortMaternalGM[x] <- sum(table(temp$maternalGM))
         cohortMaternalGF[x] <- sum(table(temp$maternalGF))
         cohortPaternalGM[x] <- sum(table(temp$paternalGM))
