@@ -19,7 +19,7 @@
 #'
 #' @export
 
-summary.ped_stats <- function(object, ...) {
+summary.ped_stats <- function(object, extended=FALSE, ...) {
   sumData <- array(NA, dim = 22)
 
   names(sumData) <- c("records ", "maternities", "paternities", "full sibs", "maternal sibs", "maternal half sibs", "paternal sibs", "paternal half sibs", "maternal grandmothers", "maternal grandfathers", "paternal grandmothers", "paternal grandfathers", "maximum pedigree depth", "founders", "mean maternal sibsip size", "mean paternal sibsip size", "non-zero F", "F > 0.125", "mean pairwise relatedness", "pairwise relatedness>=0.125", "pairwise relatedness>=0.25", "pairwise relatedness>=0.5")
@@ -47,6 +47,11 @@ summary.ped_stats <- function(object, ...) {
   sumData[20] <- sum(subset(rc, as.numeric(names(rc)) >= 0.125)) / sum(rc)
   sumData[21] <- sum(subset(rc, as.numeric(names(rc)) >= 0.25)) / sum(rc)
   sumData[22] <- sum(subset(rc, as.numeric(names(rc)) >= 0.5)) / sum(rc)
+
+  if(extended){
+    extra <- c(object$cousinNums,object$auNums)
+    sumData <- c(sumData[1:12], extra, sumData[13:22])
+  }
 
   data.frame(sumData)
 }
