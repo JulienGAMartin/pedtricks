@@ -17,14 +17,17 @@
 #' @export
 #'
 
-vg_samp_var <- function(ped, h2){
-	ped<-fix_ped(ped)
-	A<-nadiv::makeA(ped)
+vg_samp_var <- function(Ped, h2, plot=FALSE){
+	Ped<-fix_Ped(Ped)
+	A<-nadiv::makeA(Ped)
 	lambda <- eigen(A, symmetric=TRUE,only.values=TRUE)$values
-	N <- nrow(ped)
-	sapply(h2, function(x){
+	N <- nrow(Ped)
+	h2_samp_var <- sapply(h2, function(x){
 		a <- sum( (lambda-1)^2 / (1 + x*(lambda-1))^2 )
 		b <- sum( (lambda-1) / (1 + x*(lambda-1)) )
 		2/(a-b^2/N)
 	})	
+
+	if(plot & length(h2)>1) plot(h2_samp_var~h2, xlab="Heritability",ylab="Expected Sampling Variance", main="Expected Sampling Variance of Heritability based on Visscher & Goddard 2016")
+	return(h2_samp_var)
 }
