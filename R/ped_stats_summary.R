@@ -20,34 +20,33 @@
 #' @export
 
 summary.ped_stats <- function(object, extended=FALSE, ...) {
-  sumData <- array(NA, dim = 22)
 
-  names(sumData) <- c("records ", "maternities", "paternities", "full sibs", "maternal sibs", "maternal half sibs", "paternal sibs", "paternal half sibs", "maternal grandmothers", "maternal grandfathers", "paternal grandmothers", "paternal grandfathers", "maximum pedigree depth", "founders", "mean maternal sibsip size", "mean paternal sibsip size", "non-zero F", "F > 0.125", "mean pairwise relatedness", "pairwise relatedness>=0.125", "pairwise relatedness>=0.25", "pairwise relatedness>=0.5")
-
-  sumData[1] <- object$totalSampleSize
-  sumData[2] <- object$totalMaternities
-  sumData[3] <- object$totalPaternities
-  sumData[4] <- object$totalFullSibs
-  sumData[5] <- object$totalMaternalSibs
-  sumData[6] <- object$totalMaternalSibs - object$totalFullSibs
-  sumData[7] <- object$totalPaternalSibs
-  sumData[8] <- object$totalPaternalSibs - object$totalFullSibs
-  sumData[9] <- object$totalMaternalGrandmothers
-  sumData[10] <- object$totalMaternalGrandfathers
-  sumData[11] <- object$totalPaternalGrandmothers
-  sumData[12] <- object$totalPaternalGrandfathers
-  sumData[13] <- max(as.numeric(names(object$pedigreeDepth)))
-  sumData[14] <- object$pedigreeDepth[1]
-  sumData[15] <- mean(object$maternalSibships[, 2])
-  sumData[16] <- mean(object$paternalSibships[, 2])
-  sumData[17] <- sum(object$inbreedingCoefficients != 0 + 0)
-  sumData[18] <- sum(object$inbreedingCoefficients > 0.125 + 0)
   rc <- subset(object$relatednessCategories, is.na(object$relatednessCategories) == FALSE)
-  sumData[19] <- weighted.mean(as.numeric(names(rc)), rc, na.rm = TRUE)
-  sumData[20] <- sum(subset(rc, as.numeric(names(rc)) >= 0.125)) / sum(rc)
-  sumData[21] <- sum(subset(rc, as.numeric(names(rc)) >= 0.25)) / sum(rc)
-  sumData[22] <- sum(subset(rc, as.numeric(names(rc)) >= 0.5)) / sum(rc)
-
+  sumData <-  <- c(
+    "records" = <- object$totalSampleSize
+    "maternities" = object$totalMaternities
+    "paternities" = object$totalPaternities
+    "full sibs" = object$totalFullSibs
+    "maternal sibs" = object$totalMaternalSibs
+    "maternal half sibs" = object$totalMaternalSibs - object$totalFullSibs
+    "paternal sibs" = object$totalPaternalSibs
+    "paternal half sibs" = object$totalPaternalSibs - object$totalFullSibs
+    "maternal grandmothers" = object$totalMaternalGrandmothers
+    "maternal grandfathers" = object$totalMaternalGrandfathers
+    "paternal grandmothers" = object$totalPaternalGrandmothers
+    "paternal grandfathers" = object$totalPaternalGrandfathers
+    "maximum pedigree depth" = max(as.numeric(names(object$pedigreeDepth)))
+    "founders" = object$pedigreeDepth[1]
+    "mean maternal sibship size" = mean(object$maternalSibships[, 2])
+    "mean paternal sibship size" = mean(object$paternalSibships[, 2])
+    "non-zero F" = sum(object$inbreedingCoefficients != 0 + 0)
+    "F > 0.125" = sum(object$inbreedingCoefficients > 0.125 + 0),
+    "mean pairwise relatedness" = weighted.mean(as.numeric(names(rc)), rc, na.rm = TRUE)
+    "pairwise relatedness>=0.125" = sum(subset(rc, as.numeric(names(rc)) >= 0.125)) / sum(rc)
+    "pairwise relatedness>=0.25" = sum(subset(rc, as.numeric(names(rc)) >= 0.25)) / sum(rc)
+    "pairwise relatedness>=0.5" = sum(subset(rc, as.numeric(names(rc)) >= 0.5)) / sum(rc)
+      )
+  
   if(extended){
     extra <- c(object$cousinNums,object$auNums)
     sumData <- c(sumData[1:12], extra, sumData[13:22])
