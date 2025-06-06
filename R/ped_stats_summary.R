@@ -21,8 +21,7 @@
 
 summary.ped_stats <- function(object, extended=FALSE, ...) {
 
-  rc <- subset(object$relatednessCategories, is.na(object$relatednessCategories) == FALSE)
-  sumData <-  <- c(
+  sumData <- c(
     "records" = <- object$totalSampleSize
     "maternities" = object$totalMaternities
     "paternities" = object$totalPaternities
@@ -41,10 +40,11 @@ summary.ped_stats <- function(object, extended=FALSE, ...) {
     "mean paternal sibship size" = mean(object$paternalSibships[, 2])
     "non-zero F" = sum(object$inbreedingCoefficients != 0 + 0)
     "F > 0.125" = sum(object$inbreedingCoefficients > 0.125 + 0),
-    "mean pairwise relatedness" = weighted.mean(as.numeric(names(rc)), rc, na.rm = TRUE)
-    "pairwise relatedness>=0.125" = sum(subset(rc, as.numeric(names(rc)) >= 0.125)) / sum(rc)
-    "pairwise relatedness>=0.25" = sum(subset(rc, as.numeric(names(rc)) >= 0.25)) / sum(rc)
-    "pairwise relatedness>=0.5" = sum(subset(rc, as.numeric(names(rc)) >= 0.5)) / sum(rc)
+    "mean pairwise relatedness" = object$relatednessDistribution["mean_r"]
+    "pairwise relatedness>=0.125" = object$relatednessDistribution["r0.125"]
+    "pairwise relatedness>=0.25" = object$relatednessDistribution["r0.25"]
+    "pairwise relatedness>=0.5" = object$relatednessDistribution["r0.5"]
+    "var pairwise relatedness" = object$relatednessDistribution["var_r"]
       )
   
   if(extended){
@@ -272,30 +272,30 @@ plot.ped_stats <- function(x, lowMem = FALSE, grContrast = FALSE, ...) {
     }
   }
 
-  if (lowMem == FALSE) {
-    relatednessInterval <- as.numeric(names(x$relatednessCategories)[3]) - as.numeric(names(x$relatednessCategories)[2])
-    midBins <- as.numeric(names(x$relatednessCategories))
-    binLabels <- paste(midBins - relatednessInterval / 2, "-", midBins + relatednessInterval / 2, sep = "")
-    binLabels[1] <- paste("0-", relatednessInterval / 2, sep = "")
-    for (i in seq(2, length(binLabels), by = 2)) binLabels[i] <- ""
-    plotbins <- NULL
-    for (i in 1:length(x$relatednessCategories)) {
-      if (is.na(x$relatednessCategories[i]) == FALSE) plotbins <- i
-    }
-    plotbins <- plotbins + 1
-    par(mar = c(10, 4, 4, 2))
-    barplot(x$relatednessCategories, ylab = "Count", xaxt = "n")
-    axis(1, at = (0:(plotbins - 2)) * 1.2 + 0.6, labels = binLabels[1:(plotbins - 1)], las = 3, xlim = c(0, length(binLabels) - 1))
-    mtext("Non-zero pairwise relatednesses       ", 1, 7)
-    par(mar = c(5, 4, 4, 2) + 0.1)
-    mtext("Distribution of relatedness across the pedigree.", side = 1, line = 5)
-    inp <- readline(prompt = "Press <s> to save current plot or press <Enter> to continue...")
-    if (inp == "s") {
-      s <- readline(prompt = "Enter path (including file name but not extension) to which to save image: ")
-      savePlot(paste(s, ".jpeg", sep = ""), type = "jpeg")
-      readline(prompt = "File saved.  Press <Enter> to continue...")
-    }
-  }
+  # if (lowMem == FALSE) {
+  #   relatednessInterval <- as.numeric(names(x$relatednessCategories)[3]) - as.numeric(names(x$relatednessCategories)[2])
+  #   midBins <- as.numeric(names(x$relatednessCategories))
+  #   binLabels <- paste(midBins - relatednessInterval / 2, "-", midBins + relatednessInterval / 2, sep = "")
+  #   binLabels[1] <- paste("0-", relatednessInterval / 2, sep = "")
+  #   for (i in seq(2, length(binLabels), by = 2)) binLabels[i] <- ""
+  #   plotbins <- NULL
+  #   for (i in 1:length(x$relatednessCategories)) {
+  #     if (is.na(x$relatednessCategories[i]) == FALSE) plotbins <- i
+  #   }
+  #   plotbins <- plotbins + 1
+  #   par(mar = c(10, 4, 4, 2))
+  #   barplot(x$relatednessCategories, ylab = "Count", xaxt = "n")
+  #   axis(1, at = (0:(plotbins - 2)) * 1.2 + 0.6, labels = binLabels[1:(plotbins - 1)], las = 3, xlim = c(0, length(binLabels) - 1))
+  #   mtext("Non-zero pairwise relatednesses       ", 1, 7)
+  #   par(mar = c(5, 4, 4, 2) + 0.1)
+  #   mtext("Distribution of relatedness across the pedigree.", side = 1, line = 5)
+  #   inp <- readline(prompt = "Press <s> to save current plot or press <Enter> to continue...")
+  #   if (inp == "s") {
+  #     s <- readline(prompt = "Enter path (including file name but not extension) to which to save image: ")
+  #     savePlot(paste(s, ".jpeg", sep = ""), type = "jpeg")
+  #     readline(prompt = "File saved.  Press <Enter> to continue...")
+  #   }
+  # }
 
   hist(x$maternalSibships[, 2], xlab = "(non-zero) maternal sibship sizes", ylab = "count", main = "")
   inp <- readline(prompt = "Press <s> to save current plot or press <Enter> to continue...")

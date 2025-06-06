@@ -192,24 +192,23 @@ ped_stats <-
 
     matSibships <- as.data.frame(table(as.character(Ped$dam)))
     patSibships <- as.data.frame(table(as.character(Ped$sire)))
+  
+    # summary of relatedness distribution
+  
+    sp<-Matrix::summary(A) # sparse representation of A
+    sp2<-sp[sp[,1]!=sp[,2],] # remove diagonals
+    total_links <- (nrow(Ped) * (nrow(Ped) - 1) / 2 )
 
-    cumulativeRelatedness <- NULL
-    pairwiseRelatedness <- NULL
-    relatednessBin <- NULL
-    if (lowMem == FALSE) {
-      # relatedness classes
-      cutoffs <- seq(-0.0125, 0.9875, by = 0.025)
-      midBins <- seq(0, 0.975, by = 0.025)
-      A <- nadiv::makeA(Ped)
-      pairwiseRelatedness <- A
-      diag(pairwiseRelatedness) <- 0
-      relatednessBin <- table(cut(pairwiseRelatedness@x,cutoffs))
-      names(relatednessBin) <- midBins
-      relatednessBin[1] <- ((totalSampleSize^2 - totalSampleSize) / 2) - sum(relatednessBin[-1])
+    relatednessDistribution<-c(
+      mean_r = sum(sp2[,3])/ total_links,
+      r0.125 = sum(sp2[,3]>=0.125)/ total_links,
+      r0.25 = sum(sp2[,3]>=0.25)/ total_links,
+      r0.5 = sum(sp2[,3]>=0.5)/ total_links,
+      var_r = var(c(sp2[,3], rep(0,total_links-nrow(sp2))))
+    )
+   
 
-      rb <- relatednessBin / sum(relatednessBin)
-      cumulativeRelatedness <- cumsum(rb)
-    }
+  
 
     # MacCluer's pedigree completeness statistics
     missingness <- NULL
@@ -358,8 +357,9 @@ ped_stats <-
       Amatrix = A,
       maternalSibships = matSibships,
       paternalSibships = patSibships,
-      cumulativeRelatedness = cumulativeRelatedness,
-      relatednessCategories = relatednessBin,
+      # cumulativeRelatedness = cumulativeRelatedness,
+      # relatednessCategories = relatednessBin,
+      relatednessDistribution = relatednessDistribution,
       analyzedPedigree = Ped,
       missingness = missingness
     )
