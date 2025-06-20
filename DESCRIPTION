@@ -1,6 +1,6 @@
 Package: pedtricks
 Title: Visualize, Summarize and Simulate Data from Pedigrees
-Version: 0.4.3 
+Version: 0.5.0 
 Authors@R: c(
     person("Julien", "Martin", , "julien.martin@uottawa.ca", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-7726-6809")),
@@ -8,6 +8,8 @@ Authors@R: c(
            comment = c(ORCID = "0000-0002-7962-0071")),
     person("Susan", "Johnston", , "Susan.Johnston@ed.ac.uk", role = c("aut"),
            comment = c(ORCID = "0000-0002-5623-8902")),
+    person("Joel", "Pick", , "joel.l.pick@gmail.com", role = c("aut"),
+           comment = c(ORCID = "0000-0002-6295-3742")),
     person("Michael", "Morrissey", , "michael.morrissey@st-andrews.ac.uk",
            role = c("aut"),
            comment = c(ORCID = "0000-0001-6209-0177"))

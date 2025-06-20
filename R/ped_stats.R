@@ -194,7 +194,7 @@ ped_stats <-
     patSibships <- as.data.frame(table(as.character(Ped$sire)))
   
     # summary of relatedness distribution
-  
+    A <- nadiv::makeA(Ped)
     sp<-Matrix::summary(A) # sparse representation of A
     sp2<-sp[sp[,1]!=sp[,2],] # remove diagonals
     total_links <- (nrow(Ped) * (nrow(Ped) - 1) / 2 )

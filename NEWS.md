@@ -1,3 +1,20 @@
+# pedtricks 0.5
+
+## 0.5.0
+
+- `ped_stats` 
+  - Added more relationships; cousins and aunts/uncles, returned in `cousinNums` and `auNums` slots in `ped_stats` object 
+  - Removed relatedness categories (`cumulativeRelatedness` and `relatednessCategories` from output
+  - Instead now directly outputs mean and variances of relatedness, and proportion >= 0.125, 0.25 and 0.5, which are returned in `relatednessDistribution` slot in `ped_stats` object
+- `summary.ped_stats`
+  - New relationships in `ped_stats` function not output from `summary.ped_stats` by default. Use `extended=TRUE` for them to be included in the output
+- `plot.ped_stats` 
+  - plotting relatedness distribution now slightly different, due to removing `relatednessCategories` from `ped_stats` object. Will plot if A matrix is present on `ped_stats` object 
+- `h2_samp_var`
+  - Added new function to calculate expected sampling variance for $h^2$ from Visscher and Goddard 2016
+  
+
+
 # pedtricks 0.4
 
 ## 0.4.2
