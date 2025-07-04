@@ -101,7 +101,8 @@ micro_sim <-
       names(freqs[[loc]][a])
     }
 
-
+# to add genetic group, we need a group column, genFreqs should be a list of list
+# group info should be provide to assignGenotype function to use different gen freq based on group for founders
     assignGenotype <- function(id, mum, dad, f) {
       maternalGenotype <- NULL
       paternalGenotype <- NULL
