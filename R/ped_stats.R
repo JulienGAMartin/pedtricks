@@ -144,16 +144,38 @@ ped_stats <-
 
     # grandparents
 
-    grandparentData <- Ped
-    grandparentData$maternalGM <- grandparentData$dam[match(grandparentData$dam, grandparentData$id)]
-    grandparentData$maternalGF <- grandparentData$sire[match(grandparentData$dam, grandparentData$id)]
-    grandparentData$paternalGM <- grandparentData$dam[match(grandparentData$sire, grandparentData$id)]
-    grandparentData$paternalGF <- grandparentData$sire[match(grandparentData$sire, grandparentData$id)]
+    gpData <- Ped
+    gpData$maternalGM <- gpData$dam[match(gpData$dam, gpData$id)]
+    gpData$maternalGF <- gpData$sire[match(gpData$dam, gpData$id)]
+    gpData$paternalGM <- gpData$dam[match(gpData$sire, gpData$id)]
+    gpData$paternalGF <- gpData$sire[match(gpData$sire, gpData$id)]
 
-    totalMaternalGM <- sum(table(grandparentData$maternalGM))
-    totalMaternalGF <- sum(table(grandparentData$maternalGF))
-    totalPaternalGM <- sum(table(grandparentData$paternalGM))
-    totalPaternalGF <- sum(table(grandparentData$paternalGF))
+    totalMaternalGM <- sum(table(gpData$maternalGM))
+    totalMaternalGF <- sum(table(gpData$maternalGF))
+    totalPaternalGM <- sum(table(gpData$paternalGM))
+    totalPaternalGF <- sum(table(gpData$paternalGF))
+
+
+    ## parent pairs
+    gpData$pair<-paste(gpData$dam,gpData$sire)
+    gpData$pair<-ifelse(gpData$pair== "NA NA", NA, gpData$pair)
+
+    # grandparent pairs
+    gpData$maternalGP <- paste(gpData$maternalGM,gpData$maternalGF)
+    gpData$paternalGP <- paste(gpData$paternalGM,gpData$paternalGF)
+    gpData$maternalGP<-ifelse(grepl("NA",gpData$maternalGP), NA, gpData$maternalGP)
+    gpData$paternalGP<-ifelse(grepl("NA",gpData$paternalGP), NA, gpData$paternalGP)
+
+
+    # cousins
+
+    cousinNums <- getCousinNums(gpData)
+  
+
+    # aunts/uncles
+
+    auNums <- getAuNums(gpData)
+  
 
     # pedigree depth
 
@@ -170,28 +192,23 @@ ped_stats <-
 
     matSibships <- as.data.frame(table(as.character(Ped$dam)))
     patSibships <- as.data.frame(table(as.character(Ped$sire)))
+  
+    # summary of relatedness distribution
+    A <- nadiv::makeA(Ped)
+    sp<-Matrix::summary(A) # sparse representation of A
+    sp2<-sp[sp[,1]!=sp[,2],] # remove diagonals
+    total_links <- (nrow(Ped) * (nrow(Ped) - 1) / 2 )
 
-    cumulativeRelatedness <- NULL
-    pairwiseRelatedness <- NULL
-    relatednessBin <- NULL
-    if (lowMem == FALSE) {
-      # relatedness classes
-      cutoffs <- seq(-0.0125, 0.9875, by = 0.025)
-      midBins <- seq(0, 0.975, by = 0.025)
-      cumulativeRelatedness <- array(dim = length(midBins))
-      names(cumulativeRelatedness) <- midBins
-      A <- nadiv::makeA(Ped)
-      pairwiseRelatedness <- A
-      diag(pairwiseRelatedness) <- 0
-      relatednessBin <- table(cut(pairwiseRelatedness@x,cutoffs))
-      names(relatednessBin) <- midBins
-      relatednessBin[1] <- ((totalSampleSize^2 - totalSampleSize) / 2) - sum(relatednessBin[-1])
+    relatednessDistribution<-c(
+      mean_r = sum(sp2[,3])/ total_links,
+      r0.125 = sum(sp2[,3]>=0.125)/ total_links,
+      r0.25 = sum(sp2[,3]>=0.25)/ total_links,
+      r0.5 = sum(sp2[,3]>=0.5)/ total_links,
+      var_r = var(c(sp2[,3], rep(0,total_links-nrow(sp2))))
+    )
+   
 
-      rb <- relatednessBin / sum(relatednessBin)
-      for (x in 1:(length(cutoffs) - 1)) {
-        cumulativeRelatedness[x] <- sum(rb[1:x])
-      }
-    }
+  
 
     # MacCluer's pedigree completeness statistics
     missingness <- NULL
@@ -291,7 +308,7 @@ ped_stats <-
         pedDepth <- table(kindepth(temp[, 1], temp[, 2], temp[, 3]))
         for (y in 1:length(pedDepth)) cohortPedgireeDepth[x, names(pedDepth[y])] <- pedDepth[y]
 
-        temp <- subset(grandparentData, as.character(cohorts) == names(table(cohorts))[x])
+        temp <- subset(gpData, as.character(cohorts) == names(table(cohorts))[x])
         cohortMaternalGM[x] <- sum(table(temp$maternalGM))
         cohortMaternalGF[x] <- sum(table(temp$maternalGF))
         cohortPaternalGM[x] <- sum(table(temp$paternalGM))
@@ -333,13 +350,16 @@ ped_stats <-
       totalMaternalGrandfathers = totalMaternalGF,
       totalPaternalGrandmothers = totalPaternalGM,
       totalPaternalGrandfathers = totalPaternalGF,
+      cousinNums = cousinNums,
+      auNums = auNums,
       pedigreeDepth = pedigreeDepth,
       inbreedingCoefficients = reorderInbreeding$inbreeding,
       Amatrix = A,
       maternalSibships = matSibships,
       paternalSibships = patSibships,
-      cumulativeRelatedness = cumulativeRelatedness,
-      relatednessCategories = relatednessBin,
+      # cumulativeRelatedness = cumulativeRelatedness,
+      # relatednessCategories = relatednessBin,
+      relatednessDistribution = relatednessDistribution,
       analyzedPedigree = Ped,
       missingness = missingness
     )
