@@ -10,6 +10,8 @@ h2_samp_var(Ped, h2 = 0.3, plot = FALSE)
 \item{Ped}{A pedigree}
 
 \item{h2}{vector of heritabilities for which the sampling variance is calculated.}
+
+\item{plot}{logical. If TRUE, a plot of the sampling variance as a function of h2 is produced (only if length(h2)>1).}
 }
 \value{
 Returns a vector of sampling variances for each given h2.

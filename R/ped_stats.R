@@ -59,41 +59,89 @@
 #' gryphons_ped_stats$paternitiesByCohort
 #'
 #' summary(gryphons_ped_stats)
-#' 
+#'
 #' plot(gryphons_ped_stats)
-#' 
+#'
 #' @export
 #'
-
 
 ##### NEED TO TEST
 
 ped_stats <-
-  function(Ped, cohorts = NULL, dat = NULL, retain = "informative", includeA = TRUE, lowMem = FALSE) {
+  function(
+    Ped,
+    cohorts = NULL,
+    dat = NULL,
+    retain = "informative",
+    includeA = TRUE,
+    lowMem = FALSE
+  ) {
     names(Ped)[1] <- "id"
     if (names(Ped)[2] != "dam" | names(Ped)[3] != "sire") {
-      if (names(Ped)[3] %in% c("mum", "mom", "mother", "Mum", "Mmom", "Dam", "Mother", "MUM", "MOM", "DAM", "MOTHER")) {
-        message(paste("'mum' appears to be in third column, reordering to 'id','dam','sire'"))
+      if (
+        names(Ped)[3] %in%
+          c(
+            "mum",
+            "mom",
+            "mother",
+            "Mum",
+            "Mmom",
+            "Dam",
+            "Mother",
+            "MUM",
+            "MOM",
+            "DAM",
+            "MOTHER"
+          )
+      ) {
+        message(paste(
+          "'mum' appears to be in third column, reordering to 'id','dam','sire'"
+        ))
         flush.console()
         Ped <- Ped[, c(1, 3, 2)]
       }
-      if (names(Ped)[2] %in% c("mum", "mom", "mother", "Mum", "Mom", "Dam", "Mother", "MUM", "MOM", "DAM", "MOTHER")) {
+      if (
+        names(Ped)[2] %in%
+          c(
+            "mum",
+            "mom",
+            "mother",
+            "Mum",
+            "Mom",
+            "Dam",
+            "Mother",
+            "MUM",
+            "MOM",
+            "DAM",
+            "MOTHER"
+          )
+      ) {
         names(Ped)[2] <- "dam"
         names(Ped)[3] <- "sire"
       }
       if (names(Ped)[2] != "dam" | names(Ped)[3] != "sire") {
-        stop("Unable to identify column names, expecting 'id','dam','sire', or similar")
+        stop(
+          "Unable to identify column names, expecting 'id','dam','sire', or similar"
+        )
       }
     }
 
-    for (x in 1:3) Ped[, x] <- as.character(Ped[, x])
-    if (is.null(dat) == FALSE && is.numeric(dat) == FALSE) dat <- as.character(dat)
+    for (x in 1:3) {
+      Ped[, x] <- as.character(Ped[, x])
+    }
+    if (is.null(dat) == FALSE && is.numeric(dat) == FALSE) {
+      dat <- as.character(dat)
+    }
 
     if (is.null(cohorts) == FALSE && length(Ped[, 1]) != length(cohorts)) {
       stop("Pedigree and cohorts differ in length.")
     }
 
-    if (is.null(dat) == FALSE && is.numeric(dat) && length(Ped[, 1]) != dim(as.data.frame(dat))[1]) {
+    if (
+      is.null(dat) == FALSE &&
+        is.numeric(dat) &&
+        length(Ped[, 1]) != dim(as.data.frame(dat))[1]
+    ) {
       stop("Pedigree and available data differ in length.")
     }
 
@@ -107,7 +155,9 @@ ped_stats <-
         keep <- dat
       }
 
-      if (is.null(cohorts) == FALSE) c <- cbind(Ped$id, cohorts)
+      if (is.null(cohorts) == FALSE) {
+        c <- cbind(Ped$id, cohorts)
+      }
 
       if (retain == "informative") {
         Ped <- prune(Ped, keep, make.base = TRUE)
@@ -115,7 +165,9 @@ ped_stats <-
         Ped <- prune(Ped, keep, make.base = FALSE)
       }
 
-      if (is.null(cohorts) == FALSE) c <- subset(c, c[, 1] %in% Ped[, 1])
+      if (is.null(cohorts) == FALSE) {
+        c <- subset(c, c[, 1] %in% Ped[, 1])
+      }
       if (is.null(cohorts) == FALSE) cohorts <- c[, 2]
     }
 
@@ -131,7 +183,9 @@ ped_stats <-
     # siblings
 
     numPed <- convert_ped(
-      type = "numeric", as.character(Ped$id), as.character(Ped$sire),
+      type = "numeric",
+      as.character(Ped$id),
+      as.character(Ped$sire),
       as.character(Ped$dam),
       missingVal = NA
     )
@@ -155,27 +209,31 @@ ped_stats <-
     totalPaternalGM <- sum(table(gpData$paternalGM))
     totalPaternalGF <- sum(table(gpData$paternalGF))
 
-
     ## parent pairs
-    gpData$pair<-paste(gpData$dam,gpData$sire)
-    gpData$pair<-ifelse(gpData$pair== "NA NA", NA, gpData$pair)
+    gpData$pair <- paste(gpData$dam, gpData$sire)
+    gpData$pair <- ifelse(gpData$pair == "NA NA", NA, gpData$pair)
 
     # grandparent pairs
-    gpData$maternalGP <- paste(gpData$maternalGM,gpData$maternalGF)
-    gpData$paternalGP <- paste(gpData$paternalGM,gpData$paternalGF)
-    gpData$maternalGP<-ifelse(grepl("NA",gpData$maternalGP), NA, gpData$maternalGP)
-    gpData$paternalGP<-ifelse(grepl("NA",gpData$paternalGP), NA, gpData$paternalGP)
-
+    gpData$maternalGP <- paste(gpData$maternalGM, gpData$maternalGF)
+    gpData$paternalGP <- paste(gpData$paternalGM, gpData$paternalGF)
+    gpData$maternalGP <- ifelse(
+      grepl("NA", gpData$maternalGP),
+      NA,
+      gpData$maternalGP
+    )
+    gpData$paternalGP <- ifelse(
+      grepl("NA", gpData$paternalGP),
+      NA,
+      gpData$paternalGP
+    )
 
     # cousins
 
     cousinNums <- getCousinNums(gpData)
-  
 
     # aunts/uncles
 
     auNums <- getAuNums(gpData)
-  
 
     # pedigree depth
 
@@ -186,33 +244,36 @@ ped_stats <-
     orderedPed <- as.data.frame(orderPed(Ped))
     orderedPed$inbreeding <- nadiv::makeDiiF(orderedPed)$f
     reorderInbreeding <- as.data.frame(Ped$id)
-    reorderInbreeding$inbreeding <- orderedPed$inbreeding[match(reorderInbreeding[, 1], orderedPed$id)]
+    reorderInbreeding$inbreeding <- orderedPed$inbreeding[match(
+      reorderInbreeding[, 1],
+      orderedPed$id
+    )]
 
     # sibship sizes
 
     matSibships <- as.data.frame(table(as.character(Ped$dam)))
     patSibships <- as.data.frame(table(as.character(Ped$sire)))
-  
+
     # summary of relatedness distribution
     A <- nadiv::makeA(Ped)
-    sp<-Matrix::summary(A) # sparse representation of A
-    sp2<-sp[sp[,1]!=sp[,2],] # remove diagonals
-    total_links <- (nrow(Ped) * (nrow(Ped) - 1) / 2 )
+    sp <- Matrix::summary(A) # sparse representation of A
+    sp2 <- sp[sp[, 1] != sp[, 2], ] # remove diagonals
+    total_links <- (nrow(Ped) * (nrow(Ped) - 1) / 2)
 
-    relatednessDistribution<-c(
-      mean_r = sum(sp2[,3])/ total_links,
-      r0.125 = sum(sp2[,3]>=0.125)/ total_links,
-      r0.25 = sum(sp2[,3]>=0.25)/ total_links,
-      r0.5 = sum(sp2[,3]>=0.5)/ total_links,
-      var_r = var(c(sp2[,3], rep(0,total_links-nrow(sp2))))
+    relatednessDistribution <- c(
+      mean_r = sum(sp2[, 3]) / total_links,
+      r0.125 = sum(sp2[, 3] >= 0.125) / total_links,
+      r0.25 = sum(sp2[, 3] >= 0.25) / total_links,
+      r0.5 = sum(sp2[, 3] >= 0.5) / total_links,
+      var_r = stats::var(c(sp2[, 3], rep(0, total_links - nrow(sp2))))
     )
-   
-
-  
 
     # MacCluer's pedigree completeness statistics
     missingness <- NULL
-    missingness <- as.data.frame(cbind(as.character(Ped$id), matrix(0, length(Ped[, 1]), max(kindepth(Ped[, 1], Ped[, 2], Ped[, 3])))))
+    missingness <- as.data.frame(cbind(
+      as.character(Ped$id),
+      matrix(0, length(Ped[, 1]), max(kindepth(Ped[, 1], Ped[, 2], Ped[, 3])))
+    ))
     p <- Ped
     for (x in 1:(length(missingness[1, ]) - 1)) {
       pOld <- p
@@ -236,8 +297,9 @@ ped_stats <-
       p <- p[, c(1, 3, 4)]
     }
     missingness[is.na(missingness)] <- 0
-    for (x in 1:(length(missingness[1, ]) - 1)) missingness[, 1 + x] <- missingness[, 1 + x] / (2^x)
-
+    for (x in 1:(length(missingness[1, ]) - 1)) {
+      missingness[, 1 + x] <- missingness[, 1 + x] / (2^x)
+    }
 
     ##### if cohort designations are available
 
@@ -246,7 +308,9 @@ ped_stats <-
       vector.to.design.matrix <- function(f) {
         factors <- as.numeric(as.factor(f))
         design.matrix <- matrix(0, length(factors), nlevels(as.factor(f)))
-        for (x in 1:length(factors)) design.matrix[x, factors[x]] <- 1
+        for (x in 1:length(factors)) {
+          design.matrix[x, factors[x]] <- 1
+        }
         results <- list(design.matrix, levels(as.factor(f)))
         names(results) <- c("DesignMatrix", "FactorLevels")
         results
@@ -285,9 +349,15 @@ ped_stats <-
       names(cohortPaternalGM) <- names(table(cohorts))
       names(cohortPaternalGF) <- names(table(cohorts))
 
-      cohortPedgireeDepth <- matrix(0, length(table(cohorts)), max(as.numeric(names(pedigreeDepth))) + 1)
+      cohortPedgireeDepth <- matrix(
+        0,
+        length(table(cohorts)),
+        max(as.numeric(names(pedigreeDepth))) + 1
+      )
       rownames(cohortPedgireeDepth) <- names(table(cohorts))
-      colnames(cohortPedgireeDepth) <- as.character(0:max(as.numeric(names(pedigreeDepth))))
+      colnames(cohortPedgireeDepth) <- as.character(
+        0:max(as.numeric(names(pedigreeDepth)))
+      )
 
       for (x in 1:length(cohortMaternities)) {
         temp <- subset(Ped, as.character(cohorts) == names(table(cohorts))[x])
@@ -295,7 +365,9 @@ ped_stats <-
         cohortPaternities[x] <- sum(table(temp$sire))
 
         numPed <- convert_ped(
-          type = "numeric", as.character(temp$id), as.character(temp$sire),
+          type = "numeric",
+          as.character(temp$id),
+          as.character(temp$sire),
           as.character(temp$dam),
           missingVal = NA
         )
@@ -304,11 +376,20 @@ ped_stats <-
         cohortMaternalSibs[x] <- sibNums["maternal"]
         cohortPaternalSibs[x] <- sibNums["paternal"]
 
-        temp <- subset(Ped, as.numeric(as.character(cohorts)) <= as.numeric(names(table(cohorts))[x]))
+        temp <- subset(
+          Ped,
+          as.numeric(as.character(cohorts)) <=
+            as.numeric(names(table(cohorts))[x])
+        )
         pedDepth <- table(kindepth(temp[, 1], temp[, 2], temp[, 3]))
-        for (y in 1:length(pedDepth)) cohortPedgireeDepth[x, names(pedDepth[y])] <- pedDepth[y]
+        for (y in 1:length(pedDepth)) {
+          cohortPedgireeDepth[x, names(pedDepth[y])] <- pedDepth[y]
+        }
 
-        temp <- subset(gpData, as.character(cohorts) == names(table(cohorts))[x])
+        temp <- subset(
+          gpData,
+          as.character(cohorts) == names(table(cohorts))[x]
+        )
         cohortMaternalGM[x] <- sum(table(temp$maternalGM))
         cohortMaternalGF[x] <- sum(table(temp$maternalGF))
         cohortPaternalGM[x] <- sum(table(temp$paternalGM))
@@ -321,24 +402,30 @@ ped_stats <-
       rownames(cohortMaternalSibs) <- names(table(cohorts))
       rownames(cohortPaternalSibs) <- names(table(cohorts))
 
-
       matSibships$mumBirthYear <- cohorts[match(matSibships[, 1], Ped$id)]
       patSibships$mumBirthYear <- cohorts[match(patSibships[, 1], Ped$id)]
 
-
-
       # MacCluer's pedigree completeness statistics, averaged by cohort
       cohortPedigreeCompleteness <- NULL
-      cohortPedigreeCompleteness <- matrix(NA, length(table(cohorts)), length(missingness[1, ]) - 1)
+      cohortPedigreeCompleteness <- matrix(
+        NA,
+        length(table(cohorts)),
+        length(missingness[1, ]) - 1
+      )
       for (x in 1:length(table(cohorts))) {
-        subsetMissingness <- subset(missingness, as.character(cohorts) == names(table(cohorts))[x])
+        subsetMissingness <- subset(
+          missingness,
+          as.character(cohorts) == names(table(cohorts))[x]
+        )
         for (y in 1:length(cohortPedigreeCompleteness[1, ])) {
           cohortPedigreeCompleteness[x, y] <- mean(subsetMissingness[, y + 1])
         }
       }
     }
 
-    if (includeA == FALSE) A <- NULL
+    if (includeA == FALSE) {
+      A <- NULL
+    }
     results <- list(
       totalSampleSize = totalSampleSize,
       totalMaternities = totalMaternities,
@@ -391,7 +478,8 @@ ped_stats <-
 #' @section \code{pedigreeStats}: the function has been simplified but only the functionality are still available via \code{ped_stats} and its summary and plot methods
 #' @export
 pedigreeStat <- function() {
-  .Deprecated(ped_stats,
+  .Deprecated(
+    ped_stats,
     msg = "this function from pedantics is deprecated and not working anymore. Please use 'ped_stats()' instead",
   )
 }
