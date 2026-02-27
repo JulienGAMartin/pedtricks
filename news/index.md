@@ -1,0 +1,108 @@
+# Changelog
+
+## pedtricks 0.5
+
+### 0.5.0
+
+- `ped_stats`
+  - Added more relationships; cousins and aunts/uncles, returned in
+    `cousinNums` and `auNums` slots in `ped_stats` object
+  - Removed relatedness categories (`cumulativeRelatedness` and
+    `relatednessCategories` from output
+  - Instead now directly outputs mean and variances of relatedness, and
+    proportion \>= 0.125, 0.25 and 0.5, which are returned in
+    `relatednessDistribution` slot in `ped_stats` object
+- `summary.ped_stats`
+  - New relationships in `ped_stats` function not output from
+    `summary.ped_stats` by default. Use `extended=TRUE` for them to be
+    included in the output
+- `plot.ped_stats`
+  - plotting relatedness distribution now slightly different, due to
+    removing `relatednessCategories` from `ped_stats` object. Will plot
+    if A matrix is present on `ped_stats` object
+- `h2_samp_var`
+  - Added new function to calculate expected sampling variance for
+    $h^{2}$ from Visscher and Goddard 2016
+
+## pedtricks 0.4
+
+### 0.4.2
+
+- more fix for CRAN submission
+
+### 0.4.1
+
+\-`ped_stats`: more optimisation to run even faster. Now running in 0.7s
+on the gryphons pedigree instead of 160s so 210x faster. Loops are slow
+
+### 0.4.0
+
+- `ped_stats`: optimized to run much faster (I think it can even be
+  improved). Now running in 1.6s on the gryphons pedigree instead of
+  160s so 100x faster. Now using sparse matrix format for A and removing
+  some sluggish loops in estimations.
+
+## pedtricks 0.3
+
+### 0.3.2
+
+- [`ggpedigree()`](https://juliengamartin.github.io/pedtricks/reference/ggpedigree.md)
+  - adding functionality to highlight phenotyped individuals with
+    `pheno` argument
+
+### 0.3.1
+
+- [`ggpedigree()`](https://juliengamartin.github.io/pedtricks/reference/ggpedigree.md)
+  - draw pedigree using ggplot2
+  - compatible with dplyr/tidyverse use
+  - return a ggplot object that can be modified with ggplot functions
+  - optimized graph layout with igrah
+- [`draw_pedA()`](https://juliengamartin.github.io/pedtricks/reference/draw_pedA.md)
+  - returns a trellis plot object for visualizing relatedness among
+    pedigreed individuals
+
+### 0.3.0
+
+- [`ggpedigree()`](https://juliengamartin.github.io/pedtricks/reference/ggpedigree.md)
+  - draw pedigree using ggplot2
+  - compatible with dplyr/tidyverse use
+  - return a ggplot object that can be modified with ggplot functions
+
+## pedtricks 0.1
+
+- Initial transfer and update of CRAN archived
+  [`pedantics`](https://CRAN.R-project.org/package=pedantics) package
+  under the new name `pedtricks`.
+
+#### DEPRECATED from `pedantics`
+
+- `rpederr()`and `fpederr()` are not implemented
+- [`pedigreeStats()`](https://juliengamartin.github.io/pedtricks/reference/ped_stats.md)
+  and
+  [`pedStatSummary()`](https://juliengamartin.github.io/pedtricks/reference/pedantics-deprecated.md)
+  have been replaced by
+  [`ped_stats()`](https://juliengamartin.github.io/pedtricks/reference/ped_stats.md)
+  with a [`summary()`](https://rdrr.io/r/base/summary.html) and
+  [`plot()`](https://rdrr.io/r/graphics/plot.default.html) methods to
+  simplify the workflow and allow to get the plots without running the
+  statistics each time
+- `makePedigreeFactor()` and
+  [`makePedigreeNumeric()`](https://juliengamartin.github.io/pedtricks/reference/pedantics-deprecated.md)
+  have been combined in
+  [`convert_ped()`](https://juliengamartin.github.io/pedtricks/reference/convert_ped.md)
+  which convert a pedigree to numeric or factor
+
+#### Small changes
+
+- [`fixPedigree()`](https://juliengamartin.github.io/pedtricks/reference/pedantics-deprecated.md)
+  is now
+  [`fix_ped()`](https://juliengamartin.github.io/pedtricks/reference/fix_ped.md)
+- [`genomesim()`](https://juliengamartin.github.io/pedtricks/reference/pedantics-deprecated.md),
+  [`microsim()`](https://juliengamartin.github.io/pedtricks/reference/pedantics-deprecated.md)
+  and
+  [`phensim()`](https://juliengamartin.github.io/pedtricks/reference/pedantics-deprecated.md)
+  have been renamed as
+  [`genome_sim()`](https://juliengamartin.github.io/pedtricks/reference/genome_sim.md),
+  [`micro_sim()`](https://juliengamartin.github.io/pedtricks/reference/micro_sim.md)
+  and
+  [`phen_sim()`](https://juliengamartin.github.io/pedtricks/reference/phen_sim.md)
