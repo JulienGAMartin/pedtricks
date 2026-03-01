@@ -1,4 +1,6 @@
 .Rproj.user
 docs
 for_cran.md
+cran-comments.md
+CRAN-SUBMISSION
 revdep/
