@@ -17,7 +17,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/JulienGAMartin/pedtricks/blob/main/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/JulienGAMartin/pedtricks/blob/v0.5.0/DESCRIPTION)
 
 Martin J, Wolak M, Johnston S, Pick J, Morrissey M (2026). *pedtricks:
 Visualize, Summarize and Simulate Data from Pedigrees*. R package
